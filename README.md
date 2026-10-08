@@ -15,10 +15,42 @@ A digital whiteboard for tracing algorithm problems by hand — drag in arrays, 
 - Export / import as JSON; everything is saved in your browser (localStorage) — nothing is sent to a server
 - 7 languages: 繁體中文, 简体中文, English, 日本語, 한국어, Français, हिन्दी (auto-detected; switch in the top-left, or use `?lang=en`)
 
+## Practice script (natural language → board → Go)
+
+Open **✎ Practice script** in the left panel. It turns a LeetCode problem into three steps:
+
+1. **Say it** — write one sentence per line and the board builds itself:
+   `array nums = [2,7,11,15]`, `variable target = 9`, `dict seen`, `pointer i at nums[0]`,
+   `x = nums[i]`, `put x -> i into seen`, `move i to 1`, `push c onto st`, `pop st`, `return [seen[need], i]`.
+   Chinese works too (`陣列 a = [1,2,3]`, `把 3 推入 st`, `2 在 seen 裡`, `回傳 true`).
+2. **Trace it** — step through the script line by line; the board shows the state after the selected line.
+   Check lines (`7 is not in seen`, `st is empty`, `x == 2`) are verified against the board, and **Check** replays a
+   reference solution on the inputs that are on the board (pointer path, dict / stack contents, answer).
+   Built-in cases: 1. Two Sum and 20. Valid Parentheses (picked from the board's problem or the `title:` line);
+   other problems run in free mode (check lines and the returned value only).
+3. **Write it in Go** — a skeleton (or the reference solution) with the board's data structures declared, plus a
+   table test that includes the example you traced. `training/go/` holds the output for the two built-in examples.
+
+Every component made by a line belongs to that line: you can drag it, recolor it or copy it (a copy is an ordinary
+component), but it can only be deleted by editing or deleting its line.
+
+Sentences are understood by a local, Jev-style "System One" decider (`src/jev.js`). Like TypeSafe's Jev it never
+writes text: it answers typed questions about the tagged sentence (a **Choice** of intent and component type, a
+**Noul** yes/no for negation, a **Score** for which way a pointer steps) with probabilities and a confidence, all in one
+pass. It is an exemplar matcher over tokens and character trigrams that runs in the browser — no network, no
+weights. `src/nlboard.js` turns the answers into board operations; `src/trainer.js` holds the cases, the checker
+and the Go generator.
+
 ## Project structure
 
 ```
 src/canvas_src.html   # the app (single file: HTML + CSS + JS)
+src/jev.js            # local Jev-style System One decider (Choice / Noul / Score)
+src/nlboard.js        # practice script: sentence → typed questions → board operations
+src/trainer.js        # LeetCode cases, trace checker, Go generator
+tests/run.js          # node tests (engine, interpreter, checker, generated Go via go test)
+tests/e2e.js          # browser test of the practice script (Playwright)
+training/go/          # Go generated from the built-in example traces
 i18n/                 # UI translations; keys are the Traditional Chinese source strings
 data/problems.csv     # LeetCode problem list (id, title, slug, difficulty)
 build.py              # builds public/index.html (embeds problems + translations)
@@ -34,6 +66,12 @@ npx wrangler deploy       # deploy to Cloudflare (needs your own account / domai
 ```
 
 Opening `public/index.html` directly in a browser also works.
+
+```bash
+node tests/run.js                                   # add --write to refresh training/go/
+python3 build.py && NODE_PATH=$(npm root -g) node tests/e2e.js
+(cd training/go && go test ./...)
+```
 
 ## Adding UI text
 

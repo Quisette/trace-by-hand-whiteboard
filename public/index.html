@@ -290,6 +290,58 @@ table.grid th.rax{text-align:center;vertical-align:bottom}
 table.grid .ax{display:inline-block;min-width:12px;padding:0 2px;border-radius:3px}
 .langrow{display:flex;align-items:center;gap:6px;padding:0 6px;color:var(--ui-dim)}
 .langsel{border:1px solid var(--panel-line);background:var(--panel);color:var(--ui-text);border-radius:6px;padding:3px 6px;font-size:12px;cursor:pointer;max-width:100%}
+/* ===== 練習腳本（自然語言 → 白板） ===== */
+.it.owned::after{content:attr(data-line);position:absolute;top:-9px;left:-9px;min-width:18px;height:16px;padding:0 4px;border-radius:8px;background:var(--active);color:var(--active-ink);font:700 10px/16px var(--mono);text-align:center;opacity:0;transition:opacity .12s;pointer-events:none}
+.it.owned:hover::after,.it.owned.sel::after,.it.owned.lnhl::after{opacity:1}
+.it.owned .ctl{display:none!important}
+.app.narrowb #mini{display:none}
+.app.narrowb .dock{left:16px;transform:none}
+.it.owned.lnhl{outline:2px dashed var(--active);outline-offset:4px;border-radius:6px}
+.trainbtn{border:1px solid var(--panel-line);background:var(--panel);color:var(--ui-text);border-radius:6px;padding:5px 8px;font-size:12.5px;font-weight:600;cursor:pointer;text-align:left}
+.trainbtn:hover{border-color:var(--active)}
+.trainbtn[aria-pressed="true"]{background:var(--active);color:var(--active-ink);border-color:var(--active)}
+.trainp{width:380px;flex:none;background:var(--panel);border-left:1px solid var(--panel-line);display:flex;flex-direction:column;min-height:0;color:var(--ui-text)}
+.tphead{display:flex;align-items:center;gap:6px;padding:10px 12px;border-bottom:1px solid var(--panel-line)}
+.tphead b{font-size:14px;flex:1}
+.tphead select{border:1px solid var(--panel-line);background:var(--panel);color:var(--ui-text);border-radius:6px;padding:3px 6px;font-size:12px;max-width:180px}
+.tpx{border:0;background:none;color:var(--ui-dim);font-size:16px;cursor:pointer;padding:0 4px}
+.tptabs{display:flex;gap:2px;padding:8px 10px 0;border-bottom:1px solid var(--panel-line)}
+.tptab{border:0;border-bottom:2px solid transparent;background:none;padding:6px 8px 7px;font-size:12.5px;font-weight:600;color:var(--ui-dim);cursor:pointer}
+.tptab[aria-selected="true"]{color:var(--ui-text);border-bottom-color:var(--active)}
+.tpbody{flex:1;overflow-y:auto;padding:10px 12px 16px;display:flex;flex-direction:column;gap:8px;min-height:0}
+.tphint{font-size:11.5px;color:var(--ui-dim);line-height:1.55}
+.tphint code{font-family:var(--mono);font-size:11px;background:var(--hover);border-radius:4px;padding:0 4px;color:var(--ui-text)}
+.tplines{display:flex;flex-direction:column;border:1px solid var(--panel-line);border-radius:8px;overflow:hidden}
+.tpl{display:grid;grid-template-columns:28px minmax(0,1fr) 18px;column-gap:4px;align-items:center;padding:3px 6px 3px 0;border-top:1px solid var(--panel-line)}
+.tpl:first-child{border-top:0}
+.tpl.cur{background:var(--marker-bg)}
+.tpl.after{opacity:.45}
+.tpl.selc{box-shadow:inset 3px 0 0 var(--active)}
+.tpn{font:600 10.5px var(--mono);color:var(--ui-dim);text-align:right;cursor:pointer;border:0;background:none;padding:0}
+.tpn:hover{color:var(--active)}
+.tpi{border:0;background:transparent;font-family:var(--mono);font-size:12.5px;color:var(--ui-text);padding:4px 4px;min-width:0;width:100%;border-radius:4px}
+.tpi:focus{outline:none;background:var(--hover)}
+.tpst{font:700 12px var(--mono);text-align:center}
+.tpst.ok{color:var(--green)} .tpst.pass{color:var(--green)} .tpst.fail,.tpst.err{color:var(--red)} .tpst.comment{color:var(--ui-dim)}
+.tpsum{grid-column:2/4;font:11px var(--mono);color:var(--ui-dim);padding:0 4px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tpsum .in{color:var(--purple);font-weight:600}
+.tpsum.bad{color:var(--red);white-space:normal}
+.tpbar{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.tpb{border:1px solid var(--panel-line);background:var(--panel);color:var(--ui-text);border-radius:6px;padding:4px 9px;font-size:12.5px;cursor:pointer;white-space:nowrap}
+.tpb:hover{border-color:var(--active)}
+.tpb.pri{background:var(--active);color:var(--active-ink);border-color:var(--active)}
+.tpb:disabled{opacity:.4;cursor:default}
+.tpstep{font:12px var(--mono);color:var(--ui-dim);min-width:64px;text-align:center}
+.tprep{display:flex;flex-direction:column;gap:4px;border:1px solid var(--panel-line);border-radius:8px;padding:8px 10px;font-size:12.5px}
+.tprep .r{display:flex;gap:6px;align-items:baseline;line-height:1.45}
+.tprep .r b{font-family:var(--mono)}
+.tprep .r.ok b{color:var(--green)} .tprep .r.no b{color:var(--red)}
+.tprep .head{font-weight:700}
+.tpcode{width:100%;min-height:260px;flex:1;font-family:var(--mono);font-size:11.5px;line-height:1.5;border:1px solid var(--panel-line);border-radius:8px;padding:8px;background:var(--hover);color:var(--ui-text);white-space:pre;resize:vertical;tab-size:4}
+.tpseg{display:inline-flex;border:1px solid var(--panel-line);border-radius:7px;overflow:hidden}
+.tpseg button{border:0;background:var(--panel);color:var(--ui-text);padding:4px 9px;font-size:12px;cursor:pointer}
+.tpseg button[aria-pressed="true"]{background:var(--ui-text);color:var(--panel)}
+@media (max-width:900px){.trainp{position:absolute;right:0;top:0;bottom:0;z-index:15;width:min(380px,100%);box-shadow:var(--dock-shadow)}}
 </style>
 </head>
 <body>
@@ -301,6 +353,7 @@ table.grid .ax{display:inline-block;min-width:12px;padding:0 2px;border-radius:3
       <button class="boardbtn" id="boardBtn" type="button" title="白板選單：切換、新增、匯出、清空">白板</button>
       <label class="langrow"><span class="sr">語言 / Language</span><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg><select id="langSel" class="langsel" aria-label="Language"></select></label>
       <a class="lclink" id="lcLink" href="#" target="_blank" rel="noopener" hidden>在 LeetCode 看題目 ↗</a>
+      <button class="trainbtn" id="trainBtn" type="button" aria-pressed="false" title="用一句一句的話擺白板、一步一步跑題目，最後寫成 Go">✎ 練習腳本</button>
     </div>
     <div class="pbody" id="tab-comp">
       <label for="psearch" class="sr">搜尋元件</label><input type="search" id="psearch" class="psearch" placeholder="搜尋元件">
@@ -350,11 +403,783 @@ table.grid .ax{display:inline-block;min-width:12px;padding:0 2px;border-radius:3
       <b>畫面</b>：空白鍵＋拖曳或觸控板移動；<kbd>⌘</kbd>＋滾輪縮放；<kbd>⇧1</kbd> 全部看得到、<kbd>⇧0</kbd> 100%。
     </div>
   </div>
+  <aside class="trainp" id="trainp" aria-label="練習腳本" hidden>
+    <div class="tphead"><b>練習腳本</b><label class="sr" for="tpCase">題目</label><select id="tpCase"></select><button class="tpx" id="tpX" type="button" aria-label="關閉練習腳本">×</button></div>
+    <div class="tptabs" role="tablist"><button class="tptab" role="tab" type="button" data-tp="say">① 說出來</button><button class="tptab" role="tab" type="button" data-tp="run">② 跑一遍</button><button class="tptab" role="tab" type="button" data-tp="go">③ 寫成 Go</button></div>
+    <div class="tpbody" id="tpSay">
+      <div class="tphint" id="tpHintSay"></div>
+      <div class="tplines" id="tpLines"></div>
+      <div class="tpbar"><button class="tpb" id="tpAdd" type="button">＋ 一行</button><button class="tpb" id="tpDemo" type="button">載入範例</button><span class="grow"></span><span class="tphint" id="tpModel"></span></div>
+    </div>
+    <div class="tpbody" id="tpRun" hidden>
+      <div class="tphint" id="tpHintRun"></div>
+      <div class="tpbar"><button class="tpb" id="tpFirst" type="button" aria-label="第一步">⏮</button><button class="tpb" id="tpPrev" type="button" aria-label="上一步">◀</button><span class="tpstep" id="tpStep"></span><button class="tpb" id="tpNext" type="button" aria-label="下一步">▶</button><button class="tpb" id="tpLast" type="button" aria-label="最後一步">⏭</button><button class="tpb" id="tpPlay" type="button">▷ 播放</button><span class="grow"></span><button class="tpb pri" id="tpCheck" type="button">對答案</button></div>
+      <div class="tplines" id="tpLines2"></div>
+      <div id="tpReport"></div>
+    </div>
+    <div class="tpbody" id="tpGo" hidden>
+      <div class="tphint" id="tpHintGo"></div>
+      <div class="tpbar"><span class="tpseg"><button type="button" data-gm="skel" aria-pressed="true">骨架</button><button type="button" data-gm="sol" aria-pressed="false">參考解答</button></span><span class="tpseg"><button type="button" data-gf="solution.go" aria-pressed="true">solution.go</button><button type="button" data-gf="solution_test.go" aria-pressed="false">solution_test.go</button></span></div>
+      <textarea class="tpcode" id="tpCode" spellcheck="false" aria-label="Go 程式碼"></textarea>
+      <div class="tpbar"><button class="tpb" id="tpCopy" type="button">複製程式碼</button><button class="tpb" id="tpSave" type="button">下載這個檔案</button></div>
+    </div>
+  </aside>
 </div>
+<script>/* Jev (local) — a small System One decider that runs in the browser.
+ *
+ * TypeSafe's Jev answers *typed questions* about a given state instead of
+ * generating text: a Choice (pick one option, with a probability for each),
+ * a Noul (yes / no probability) or a Score (a value on a range). Every
+ * question is answered in one pass over the same state and there is no
+ * free-text output. This file is a local stand-in with the same contract:
+ *
+ *   Jev.ask({state: 'move PTR to NUM', questions: [
+ *     {id: 'intent', kind: 'choice', options: [{id: 'assign', hints: ['move PTR to NUM']}, ...]},
+ *     {id: 'neg',    kind: 'noul',   yes: ['not', '不'], no: ['is', '在']},
+ *     {id: 'size',   kind: 'score',  range: [0, 10], anchors: [{at: 0, hints: ['empty']}, ...]}
+ *   ]})
+ *   -> {answers: {intent: {choice: 'assign', probs: {...}, confidence: .93}, neg: {p: .08, value: false, confidence: .84}, ...}}
+ *
+ * The "model" is an exemplar matcher: the state and each hint are turned into
+ * token / token-bigram / character-trigram features, a hint's similarity is a
+ * blend of how much of it is present in the state and of their trigram
+ * overlap, and option logits go through a softmax. No network, no weights file.
+ */
+var Jev=(function(){
+  var CJK=/[぀-ヿ㐀-鿿가-힯]/;
+  function half(s){ // 全形 → 半形
+    return String(s).replace(/[！-～]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0xfee0);}).replace(/　/g,' ');
+  }
+  function toks(s){ // 大寫標記（NUM、PTR…）保留，其他轉小寫；中日韓文字一字一個
+    var out=[], re=/[A-Z][A-Z_]+|[a-z0-9_']+|[぀-ヿ㐀-鿿가-힯]|->|=>|==|!=|\+\+|--|\+=|-=|[^\s\w]/g, m;
+    s=half(s).replace(/[A-Za-z0-9_']+/g,function(w){return /^[A-Z][A-Z_]+$/.test(w)?w:w.toLowerCase();});
+    while((m=re.exec(s))) out.push(m[0]);
+    return out;
+  }
+  function feats(s){
+    var t=toks(s), f={}, g={}, n=0, i;
+    for(i=0;i<t.length;i++){f['u:'+t[i]]=1; if(i) f['b:'+t[i-1]+' '+t[i]]=1;}
+    var c=' '+t.join(' ')+' ';
+    for(i=0;i+3<=c.length;i++){g[c.substr(i,3)]=(g[c.substr(i,3)]||0)+1;n++;}
+    return {t:t,f:f,g:g,size:Object.keys(f).length};
+  }
+  var cache={};
+  function hf(h){return cache[h]||(cache[h]=feats(h));}
+  function cos(a,b){var d=0,na=0,nb=0,k;for(k in a){na+=a[k]*a[k];if(b[k])d+=a[k]*b[k];}for(k in b)nb+=b[k]*b[k];return na&&nb?d/Math.sqrt(na*nb):0;}
+  function sim(S,H){ // 0..1
+    if(!H.size) return 0;
+    var hit=0,uh=0,uhit=0,k;
+    for(k in H.f){ if(S.f[k]) hit+=k[0]==='b'?1.4:1; if(k[0]==='u'){uh++; if(S.f[k]) uhit++;} }
+    var wsum=0; for(k in H.f) wsum+=k[0]==='b'?1.4:1;
+    var recall=hit/wsum;                                  // 提示有多少出現在狀態裡
+    var prec=S.size?Math.min(1,uhit/Math.max(1,Object.keys(S.f).filter(function(x){return x[0]==='u';}).length)):0; // 狀態有多少被提示解釋
+    return 0.62*recall+0.18*prec+0.20*cos(S.g,H.g);
+  }
+  function best(S,hints){var b=0;(hints||[]).forEach(function(h){var v=sim(S,hf(h));if(v>b)b=v;});return b;}
+  function softmax(xs,T){var m=Math.max.apply(null,xs),e=xs.map(function(x){return Math.exp((x-m)/T);}),z=e.reduce(function(a,b){return a+b;},0);return e.map(function(x){return x/z;});}
+  function entropyConf(ps){if(ps.length<2)return 1;var h=0;ps.forEach(function(p){if(p>0)h-=p*Math.log(p);});return Math.max(0,1-h/Math.log(ps.length));}
+
+  function answer(S,q){
+    var T=q.temperature||0.07;
+    if(q.kind==='choice'){
+      var opts=q.options||[];
+      if(!opts.length) return {id:q.id,kind:'choice',choice:null,probs:{},confidence:0};
+      var logits=opts.map(function(o){return best(o.state?feats(o.state):S,o.hints)+(o.prior||0);});
+      var ps=softmax(logits,T), probs={}, bi=0;
+      opts.forEach(function(o,i){probs[o.id]=+ps[i].toFixed(4); if(ps[i]>ps[bi]) bi=i;});
+      var sorted=ps.slice().sort(function(a,b){return b-a;});
+      return {id:q.id,kind:'choice',choice:opts[bi].id,probs:probs,confidence:+(0.5*entropyConf(ps)+0.5*(sorted[0]-(sorted[1]||0))).toFixed(3)};
+    }
+    if(q.kind==='noul'){
+      var y=best(S,q.yes)+(q.prior||0), n=best(S,q.no);
+      var p=1/(1+Math.exp(-(y-n)/T*0.6));
+      return {id:q.id,kind:'noul',p:+p.toFixed(4),value:p>0.5,confidence:+Math.abs(2*p-1).toFixed(3)};
+    }
+    if(q.kind==='score'){
+      var an=q.anchors||[], w=softmax(an.map(function(a){return best(S,a.hints);}),T), v=0;
+      an.forEach(function(a,i){v+=a.at*w[i];});
+      var lo=(q.range||[0,1])[0], hi=(q.range||[0,1])[1];
+      return {id:q.id,kind:'score',score:+Math.min(hi,Math.max(lo,v)).toFixed(3),confidence:+entropyConf(w).toFixed(3)};
+    }
+    throw new Error('Jev: unknown question kind '+q.kind);
+  }
+  /* 一次問完：同一個狀態只算一次特徵 */
+  function ask(req){
+    var S=feats(req.state||''), out={};
+    (req.questions||[]).forEach(function(q){out[q.id]=answer(S,q);});
+    return {model:'jev-local-1',answers:out};
+  }
+  return {ask:ask,tokens:toks,similarity:function(a,b){return sim(feats(a),feats(b));},isCJK:function(c){return CJK.test(c);}};
+})();
+if(typeof module!=='undefined'&&module.exports) module.exports=Jev;
+
+/* NLBoard — natural-language script → whiteboard components.
+ *
+ * Every script line is one sentence ("array nums = [2,7,11,15]", "move i to 1",
+ * "把 2 推入 stack"). A line is lexed, tagged against what is already on the
+ * board (a known pointer name becomes PTR, a number NUM …) and that tagged
+ * state goes to Jev (see jev.js), which answers typed questions in a single
+ * pass: which intent, which component type, is it negated, which way to step.
+ * The answers pick a deterministic handler that changes the board model.
+ *
+ * Ownership: a component made by a line is keyed by that line's id. Editing
+ * the line updates it in place; deleting the line removes it. The page only
+ * lets the user move such components, never delete them directly.
+ *
+ * replay(lines, step) re-runs the whole script from scratch, so the board is
+ * always exactly what the script says, and `step` shows the board as it was
+ * right after that line (stepping through a trace).
+ */
+var NLBoard=(function(J){
+  var TAG={array:'ARR',string:'STRG',pointer:'PTR',var:'VAR',stack:'STK',queue:'QUE',dict:'MAP',set:'SET',title:'TXT',note:'TXT'};
+  var CONTAINERS=['stack','queue','set','array','string','dict'];
+
+  /* ---------- 詞法 ---------- */
+  var KW=(('a an the of with at to into onto in on from by as be is are was it its this that then now and or so let set make create new add put push pop append enqueue dequeue insert remove delete erase '+
+    'move moves moved advance step increment decrement inc dec go goes left right next back forward update becomes become becoming change changes store record mark marked highlight unmark done visited cross '+
+    'return returns answer result output is isn not no yes check verify whether does contains contain has empty top front pointer pointers array list string str var variable variables stack queue deque '+
+    'dict map hashmap hash dictionary set hashset title note comment problem called named name value values key keys index at cell element item one equal equals same true false null none nil len size '+
+    'we our i\'ll ill should must first last call push_back pop_back popleft get still keep found find need needed').split(' ')).reduce(function(m,w){m[w]=1;return m;},{});
+  var SOFT={i:1,x:1,j:1,k:1,need:1,top:1,left:1,right:1,result:1,answer:1,cur:1,prev:1,next:1,first:1,last:1,set:0}; // 常被拿來當名字的字
+  function half(s){return String(s).replace(/[！-～]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0xfee0);}).replace(/　/g,' ').replace(/[「『“”]/g,'"').replace(/[」』]/g,'"').replace(/[，、]/g,',').replace(/[。；]/g,' ');}
+  function lex(text){
+    var s=half(text), out=[], i=0, m;
+    while(i<s.length){
+      var c=s[i], rest=s.slice(i);
+      if(/\s/.test(c)){i++;continue;}
+      if(c==='"'||c==="'"){var j=s.indexOf(c,i+1); if(j<0) j=s.length; out.push({k:'str',v:s.slice(i+1,j),s:i,e:Math.min(s.length,j+1)}); i=j+1; continue;}
+      if(c==='['){
+        var prev=out[out.length-1], idx=prev&&!prev.sp&&(prev.k==='id'||prev.k==='word'||prev.v===']'||prev.v===')')&&s[i-1]&&!/\s/.test(s[i-1]);
+        if(!idx){ // 字面清單：整段收成一個 list
+          var d=0,j2=i; for(;j2<s.length;j2++){if(s[j2]==='[')d++; else if(s[j2]===']'){d--; if(!d) break;}}
+          out.push({k:'list',v:s.slice(i,j2+1),s:i,e:j2+1}); i=j2+1; continue; }
+      }
+      if((m=rest.match(/^\d+(\.\d+)?/))){out.push({k:'num',v:m[0],s:i,e:i+m[0].length}); i+=m[0].length; continue;}
+      if((m=rest.match(/^[A-Za-z_][A-Za-z0-9_]*(?:'[a-z]+)?/))){out.push({k:'id',v:m[0],s:i,e:i+m[0].length}); i+=m[0].length; continue;}
+      if((m=rest.match(/^(->|=>|==|!=|<=|>=|\+\+|--|\+=|-=|→)/))){out.push({k:'sym',v:m[0]==='→'?'->':m[0],s:i,e:i+m[0].length}); i+=m[0].length; continue;}
+      if(J.isCJK(c)){out.push({k:'cjk',v:c,s:i,e:i+1}); i++; continue;}
+      out.push({k:'sym',v:c,s:i,e:i+1}); i++;
+    }
+    return out;
+  }
+  /* 依照板子上已經有的東西貼標籤 */
+  function tag(toks,st){
+    toks.forEach(function(t,n){
+      if(t.k!=='id') return;
+      var low=t.v.toLowerCase(), c=st.byName[t.v], nx=toks[n+1], pv=toks[n-1];
+      if(c){t.k='comp';t.c=c;return;}
+      if(low==='true'||low==='false'){t.k='bool';return;}
+      if(low==='len'&&nx&&nx.v==='('){t.k='fn';return;}
+      var assignish=nx&&nx.k==='sym'&&['=','+=','-=','++','--','['].indexOf(nx.v)>=0&&!(nx.v==='['&&KW[low]&&!SOFT[low]);
+      var named=pv&&pv.k!=='comp'&&['called','named','array','list','string','pointer','var','variable','stack','queue','dict','map','hashmap','set','hashset','deque','let'].indexOf(pv.v.toLowerCase())>=0&&!KW[low];
+      if(KW[low]&&!assignish&&!named){t.k='word';t.v=low;return;}
+      t.k='id';
+    });
+    return toks;
+  }
+  function stateText(toks){
+    return toks.map(function(t){
+      return t.k==='num'?'NUM':t.k==='str'?'STR':t.k==='list'?'LIST':t.k==='id'?'ID':t.k==='bool'?'BOOL':t.k==='comp'?TAG[t.c.type]:t.v;
+    }).join(' ');
+  }
+
+  /* ---------- Jev 的題目 ---------- */
+  var INTENTS={
+    create:['array ID = LIST','array ID LIST','make an array ID with LIST','create array ID','new array ID','list ID = LIST','string ID = STR','string ID','new stack ID','stack ID','empty stack ID','make a stack called ID','queue ID','create a queue ID','dict ID','make a dict called ID','hash map ID','map ID','set ID','a set ID','make a set called ID','variable ID = NUM','var ID = NUM','variable ID','pointer ID at ARR [ NUM ]','pointer ID on ARR','pointer ID at NUM','pointer ID','add a pointer ID','title','title :','problem :','note','note :','comment :',
+      '陣 列 ID = LIST','数 组 ID = LIST','建 立 陣 列 ID','新 增 堆 疊 ID','堆 疊 ID','栈 ID','佇 列 ID','队 列 ID','字 典 ID','建 立 字 典 ID','集 合 ID','變 數 ID = NUM','变 量 ID = NUM','字 串 ID = STR','指 標 ID 指 向 ARR [ NUM ]','指 针 ID','題 目 :','便 利 貼 :','筆 記'],
+    assign:['ID = NUM','ID = ARR [ PTR ]','ID = STRG [ PTR ]','VAR = STRG [ PTR ]','ID = VAR - ID','VAR = NUM','VAR = VAR - VAR','VAR = ARR [ PTR ]','set VAR to NUM','set ID to NUM','let VAR be NUM','VAR becomes NUM','update VAR to NUM','change VAR to NUM','PTR = NUM','move PTR to NUM','PTR moves to NUM','move PTR to index NUM','advance PTR','increment PTR','PTR ++','PTR += NUM','PTR --','decrement PTR','move PTR right','move PTR left','step PTR forward','ARR [ NUM ] = NUM','VAR += NUM','VAR ++','ID = STR',
+      '把 VAR 設 為 NUM','VAR 改 成 NUM','PTR 移 到 NUM','PTR 往 右','PTR 往 左','PTR 右 移','PTR 指 向 NUM','PTR 前 進'],
+    push:['push NUM to STK','push NUM onto STK','push ARR [ PTR ] onto STK','push STR onto STK','STK push NUM','STK . push ( NUM )','append NUM to ARR','append NUM to QUE','enqueue NUM','enqueue NUM into QUE','add NUM to QUE','add NUM to SET','SET add NUM','SET . add ( NUM )','insert NUM into SET','push','append','enqueue',
+      '把 NUM 推 入 STK','NUM 推 入 STK','推 入 STK','把 NUM 放 進 SET','NUM 加 入 QUE','NUM 加 入 SET','加 入 SET','壓 入 STK','压 入'],
+    pop:['pop STK','pop from STK','pop the top of STK','STK . pop ( )','STK pop','pop QUE','dequeue QUE','dequeue','pop front of QUE','QUE . popleft ( )','pop STR from STK','pop',
+      '彈 出 STK','STK 彈 出','弹 出','從 QUE 取 出','出 隊'],
+    put:['put NUM -> NUM into MAP','put NUM : NUM in MAP','put VAR -> PTR into MAP','put ID -> PTR into MAP','MAP [ NUM ] = NUM','MAP [ VAR ] = PTR','store NUM -> NUM in MAP','record NUM : NUM in MAP','add NUM : NUM to MAP','add NUM -> NUM to MAP','MAP put NUM NUM','put',
+      '把 NUM : NUM 放 進 MAP','把 VAR -> PTR 放 進 MAP','MAP 記 下 NUM -> NUM','存 入 MAP'],
+    remove:['remove NUM from SET','remove NUM from MAP','delete NUM from MAP','delete key NUM from MAP','erase NUM from SET','SET remove NUM','remove',
+      '從 SET 移 除 NUM','SET 刪 掉 NUM','刪 除 MAP NUM'],
+    mark:['highlight ARR [ NUM ]','highlight ARR [ PTR ]','mark ARR [ PTR ] as done','mark ARR [ NUM ] done','cross out ARR [ NUM ]','highlight ARR NUM','mark STRG [ PTR ]',
+      '標 記 ARR [ NUM ]','ARR [ NUM ] 標 黃','劃 掉 ARR [ NUM ]'],
+    assert:['NUM in MAP','NUM is in MAP','NUM is not in MAP','VAR not in MAP','VAR is not in MAP','ID is in MAP','check NUM in SET','is NUM in MAP ?','VAR in SET','VAR == NUM','VAR is NUM','PTR is NUM','VAR != NUM','STK is empty','STK is not empty','check STK is empty','check VAR == NUM','ARR [ PTR ] == NUM',
+      'NUM 在 MAP 裡','VAR 在 MAP 裡','NUM 不 在 MAP 裡','VAR 不 在 MAP','STK 是 空 的','STK 不 是 空 的','VAR 等 於 NUM'],
+    ret:['return LIST','return NUM','return BOOL','return [ MAP [ VAR ] , PTR ]','return VAR','answer is LIST','answer : LIST','the answer is BOOL','result = LIST','output LIST','return true','return false',
+      '回 傳 LIST','回 傳 BOOL','返 回 LIST','答 案 是 LIST','答 案 :']
+  };
+  var CTYPES={
+    array:['array','list','nums','陣 列','数 组','列 表','配 列','배 열'],
+    string:['string','str','STR','字 串','字 符 串','文 字 列'],
+    pointer:['pointer','index','ptr','cursor','指 標','指 针','索 引','ポ イ ン タ'],
+    var:['variable','var','let','變 數','变 量','変 数','변 수'],
+    stack:['stack','堆 疊','栈','堆 栈','ス タ ッ ク','스 택'],
+    queue:['queue','deque','佇 列','队 列','キ ュ ー','큐'],
+    dict:['dict','map','hashmap','hash map','dictionary','字 典','雜 湊','哈 希 表','映 射','辞 書'],
+    set:['set','hashset','a set','集 合'],
+    title:['title','problem','題 目','标 题','標 題','题 目'],
+    note:['note','comment','sticky','便 利 貼','筆 記','說 明','备 注','メ モ']
+  };
+  var NEG={yes:['not','isn\'t','is not','not in','no','!=','false','不','沒 有','没 有','非','不 在','不 是'],no:['is','in','yes','==','在','是','有']};
+  var DELTA=[{at:1,hints:['increment PTR','PTR ++','advance PTR','move PTR right','move PTR forward','step PTR forward','PTR moves right','next','PTR 往 右','PTR 右 移','PTR 前 進','下 一 格']},
+             {at:-1,hints:['decrement PTR','PTR --','move PTR left','move PTR back','PTR moves left','PTR 往 左','PTR 左 移','PTR 後 退','上 一 格']},
+             {at:0,hints:['set PTR to NUM','PTR = NUM','move PTR to NUM','PTR 移 到 NUM']}];
+  function spaced(h){return h;} // 範例裡的中日韓字已經用空白隔開
+  function questions(){
+    return [
+      {id:'intent',kind:'choice',options:Object.keys(INTENTS).map(function(k){return {id:k,hints:INTENTS[k].map(spaced)};})},
+      {id:'ctype',kind:'choice',options:Object.keys(CTYPES).map(function(k){return {id:k,hints:CTYPES[k]};})},
+      {id:'neg',kind:'noul',yes:NEG.yes,no:NEG.no,prior:-0.04},
+      {id:'delta',kind:'score',range:[-1,1],anchors:DELTA}
+    ];
+  }
+  function decide(stateTxt){return J.ask({state:stateTxt,questions:questions()}).answers;}
+
+  /* ---------- 值 ---------- */
+  function num(v){if(typeof v==='number')return v; if(typeof v==='string'&&/^-?\d+(\.\d+)?$/.test(v.trim()))return +v; return v;}
+  function fmt(v){
+    if(v===undefined) return '';
+    if(v===null) return 'null';
+    if(Array.isArray(v)) return '['+v.map(fmt).join(',')+']';
+    if(typeof v==='object') return '{'+Object.keys(v).map(function(k){return k+':'+fmt(v[k]);}).join(', ')+'}';
+    return String(v);
+  }
+  function same(a,b){return fmt(num(a))===fmt(num(b));}
+  function listVals(src){ // "[2, 7, 11]" → ['2','7','11']
+    var inner=src.replace(/^\s*\[|\]\s*$/g,'').trim(); if(!inner) return [];
+    var out=[],d=0,cur='',q=null;
+    for(var i=0;i<inner.length;i++){var c=inner[i];
+      if(q){cur+=c; if(c===q) q=null; continue;}
+      if(c==='"'||c==="'"){q=c;cur+=c;continue;}
+      if(c==='['){d++;} if(c===']'){d--;}
+      if(c===','&&!d){out.push(cur.trim());cur='';continue;}
+      cur+=c;}
+    if(cur.trim()) out.push(cur.trim());
+    return out.map(function(x){return x.replace(/^["']|["']$/g,'');});
+  }
+  function compValue(c){
+    switch(c.type){
+      case 'var': return num(c.value);
+      case 'pointer': return c.idx;
+      case 'dict': var o={}; c.rows.forEach(function(r){o[r[0]]=num(r[1]);}); return o;
+      case 'title': case 'note': return c.text;
+      default: return c.cells.map(num);
+    }
+  }
+  /* 小小的運算式：+ - * / % 比較、索引、len()、清單 */
+  function evaluate(toks,st){
+    var p=0;
+    function peek(){return toks[p];}
+    function eat(v){if(toks[p]&&toks[p].v===v){p++;return true;}return false;}
+    function fail(m){throw new Error(m);}
+    function primary(){
+      var t=toks[p++]; if(!t) fail('missing value');
+      if(t.k==='num') return +t.v;
+      if(t.k==='str') return t.v;
+      if(t.k==='bool') return t.v.toLowerCase()==='true';
+      if(t.k==='list') return listVals(t.v).map(function(x){
+        try{var sub=tag(lex(x),st); return sub.length===1&&sub[0].k==='id'?x:evaluate(sub,st);}catch(e){return num(x);}});
+      if(t.k==='comp') return compValue(t.c);
+      if(t.k==='fn'){eat('(');var v=expr();eat(')');return v&&v.length!=null?v.length:Object.keys(v||{}).length;}
+      if(t.v==='('){var v2=expr();eat(')');return v2;}
+      if(t.k==='word'&&(t.v==='null'||t.v==='none'||t.v==='nil')) return null;
+      if(t.k==='id') fail('unknown name "'+t.v+'"');
+      fail('cannot read "'+t.v+'"');
+    }
+    function post(){var v=primary();
+      while(peek()&&peek().v==='['){p++;var i=expr();eat(']');
+        if(Array.isArray(v)||typeof v==='string'){if(typeof i!=='number'||i<0||i>=v.length) fail('index '+fmt(i)+' is out of range'); v=num(v[i]);}
+        else if(v&&typeof v==='object'){if(!(String(i) in v)) fail('key '+fmt(i)+' is not in the dict'); v=v[String(i)];}
+        else fail('cannot index '+fmt(v));}
+      return v;}
+    function unary(){if(eat('-'))return -unary(); return post();}
+    function mul(){var v=unary();for(;;){if(eat('*'))v=v*unary();else if(eat('/'))v=Math.trunc(v/unary());else if(eat('%'))v=v%unary();else return v;}}
+    function add(){var v=mul();for(;;){if(eat('+'))v=v+mul();else if(eat('-'))v=v-mul();else return v;}}
+    function cmp(){var v=add(),t=peek();if(t&&['==','!=','<','>','<=','>='].indexOf(t.v)>=0){p++;var w=add();
+      return t.v==='=='?same(v,w):t.v==='!='?!same(v,w):t.v==='<'?v<w:t.v==='>'?v>w:t.v==='<='?v<=w:v>=w;}return v;}
+    function expr(){return cmp();}
+    var list=[]; // 逗號分隔 → 清單
+    if(!toks.length) fail('missing value');
+    list.push(expr()); while(eat(',')) list.push(expr());
+    if(p<toks.length) fail('did not understand "'+toks.slice(p).map(function(t){return t.v;}).join(' ')+'"');
+    return list.length>1?list:list[0];
+  }
+
+  /* ---------- 狀態 ---------- */
+  function newState(){return {comps:[],byName:{},answer:undefined,events:[],ptrColor:0};}
+  function cloneState(st){var c=JSON.parse(JSON.stringify(st)); c.byName={}; c.comps.forEach(function(x){if(x.name)c.byName[x.name]=x;}); return c;}
+  function addComp(st,c){
+    if(c.name&&st.byName[c.name]&&c.type!=='title'&&c.type!=='note') throw new Error('"'+c.name+'" already exists');
+    st.comps.push(c); if(c.name) st.byName[c.name]=c; return c;}
+  function blank(type,key,line,name){
+    var c={key:key,line:line,type:type,name:name||''};
+    if(type==='var') c.value='';
+    else if(type==='pointer'){c.target=null;c.idx=0;}
+    else if(type==='dict') c.rows=[];
+    else if(type==='title'||type==='note') c.text='';
+    else c.cells=[];
+    if(type==='array'||type==='string'){c.hl=[];c.done=[];}
+    return c;
+  }
+
+  /* ---------- 找出句子裡的各個部分 ---------- */
+  var FILL={a:1,an:1,the:1,of:1,value:1,values:1,it:1,its:1,then:1,now:1,so:1,and:1,we:1,on:1,onto:1,into:1,in:1,to:1,at:1,from:1,with:1,'.':1,'?':1,'!':1,'(':0,')':0,
+    push:1,pop:1,append:1,enqueue:1,dequeue:1,add:1,insert:1,put:1,store:1,record:1,remove:1,delete:1,erase:1,key:1,check:1,is:1,does:1,contain:1,contains:1,has:1,whether:1,not:1,no:1,yes:1,
+    popleft:1,push_back:1,pop_back:1,get:1,top:1,front:1,element:1,item:1,cell:1,index:1,still:1,found:1,find:1,need:1,needed:1};
+  var CJKFILL='把將将推入進进放加到在裡里中的了取出從从刪删除移掉存記记下壓压彈弹嗎吗是不沒没有呢個个也還还並并';
+  function trimParens(ts){ // st.push(3) → 3
+    while(ts.length>=2&&ts[0].v==='('&&ts[ts.length-1].v===')') ts=ts.slice(1,-1);
+    if(ts.length===2&&ts[0].v==='('&&ts[1].v===')') return [];
+    if(ts.length&&ts[0].v===')') ts=ts.slice(1);
+    return ts;
+  }
+  function comps(toks,types){return toks.filter(function(t){return t.k==='comp'&&(!types||types.indexOf(t.c.type)>=0);});}
+  function at(toks,v){for(var i=0;i<toks.length;i++)if(toks[i].v===v&&toks[i].k==='sym')return i;return -1;}
+  function wordAt(toks,ws){for(var i=0;i<toks.length;i++)if((toks[i].k==='word'||toks[i].k==='cjk'||toks[i].k==='id')&&ws.indexOf(toks[i].v.toLowerCase())>=0)return i;return -1;}
+  function cjkSeq(toks,seq){ // 找連續的中文詞
+    var s=toks.map(function(t){return t.k==='cjk'?t.v:'\u0000';}).join(''), i=s.indexOf(seq); if(i<0) return -1; return i;}
+  function rawAfter(text,toks,i){return i<toks.length?half(text).slice(toks[i].s).trim():'';}
+  function exprToks(toks,from,to){ // [from, to) 之間能算的部分
+    var ts=toks.slice(from,to==null?toks.length:to).filter(function(t){return !(t.k==='word'&&FILL[t.v])&&!(t.k==='cjk')&&!(t.k==='sym'&&(t.v==='?'||t.v==='!'));});
+    while(ts.length&&ts[ts.length-1].k==='sym'&&ts[ts.length-1].v==='.') ts.pop();
+    return ts;
+  }
+
+  /* ---------- 每種意圖的處理 ---------- */
+  var H={};
+  H.create=function(L,toks,st,ans){
+    var type=ans.ctype.choice, text=L.text;
+    // 類型字要真的出現（避免「i = 3」被當成建立）
+    var typeWordIdx=-1;
+    toks.forEach(function(t,i){if(typeWordIdx<0&&(t.k==='word'||t.k==='cjk'||t.k==='id')){var lw=t.v.toLowerCase();
+      for(var ty in CTYPES){ if(CTYPES[ty].some(function(h){return h.replace(/ /g,'')===lw||(t.k==='cjk'&&h.replace(/ /g,'').indexOf(lw)===0&&cjkSeq(toks,h.replace(/ /g,''))>=0);})){ typeWordIdx=i; if(ty!==type&&ans.ctype.probs[ty]>0.05) type=ty; break; } } }});
+    if(typeWordIdx<0) return null;
+    if(type==='title'||type==='note'){
+      var after=typeWordIdx+1; if(toks[after]&&toks[after].k==='sym'&&toks[after].v===':') after++;
+      if(toks[typeWordIdx].k==='cjk'){var seq=CTYPES[type].map(function(h){return h.replace(/ /g,'');}).filter(function(h){return cjkSeq(toks,h)>=0;})[0]||'';after=typeWordIdx+seq.length; if(toks[after]&&toks[after].v===':')after++;}
+      var c=addComp(st,blank(type,L.id,L.id,'')); c.text=rawAfter(text,toks,after).replace(/^[:：]\s*/,''); return {sum:'+ '+type,comp:c};
+    }
+    // 名字：類型字後面第一個沒見過的名字；或 called / named 後面那個
+    var name=null, ni=-1;
+    toks.forEach(function(t,i){if(name==null&&t.k==='id'&&i>typeWordIdx-1&&!(toks[i-1]&&toks[i-1].v==='[')){name=t.v;ni=i;}});
+    if(name==null) toks.forEach(function(t,i){if(name==null&&t.k==='id'){name=t.v;ni=i;}});
+    if(name==null){ // 沒有名字：用類型當名字（stack、seen…）
+      var auto={array:'arr',string:'s',pointer:'p',var:'v',stack:'stack',queue:'queue',dict:'map',set:'set'}[type]||type, k=1, base=auto; while(st.byName[auto]) auto=base+(++k); name=auto;}
+    var c2=addComp(st,blank(type,L.id,L.id,name));
+    var eq=at(toks,'='), rest=toks.slice(eq>=0?eq+1:ni+1);
+    var lit=rest.filter(function(t){return t.k==='list'||t.k==='str';})[0];
+    if(type==='array'||type==='stack'||type==='queue'||type==='set'||type==='string'){
+      var vals=[];
+      if(lit&&lit.k==='list') vals=listVals(lit.v);
+      else if(lit&&lit.k==='str') vals=type==='string'||type==='array'?lit.v.split(''):[lit.v];
+      else vals=rest.filter(function(t){return t.k==='num'||t.k==='bool';}).map(function(t){return t.v;});
+      if(type==='string'&&vals.length===1&&vals[0].length>1) vals=vals[0].split('');
+      if(type==='set') vals=vals.filter(function(v,i){return vals.indexOf(v)===i;});
+      c2.cells=vals.map(String);
+      return {sum:'+ '+type+' '+name+(vals.length?' '+fmt(vals):''),comp:c2};
+    }
+    if(type==='dict'){
+      if(lit&&lit.k==='list') c2.rows=listVals(lit.v).map(function(p){var kv=p.split(/\s*(?::|->)\s*/);return [kv[0],kv[1]||''];});
+      var br=half(text).match(/\{([^}]*)\}/); if(br) c2.rows=br[1].split(',').filter(function(x){return x.trim();}).map(function(p){var kv=p.split(/\s*(?::|->)\s*/);return [kv[0].trim(),(kv[1]||'').trim()];});
+      return {sum:'+ dict '+name,comp:c2};
+    }
+    if(type==='var'){
+      var et=exprToks(toks,eq>=0?eq+1:ni+1); if(et.length){var v=evaluate(et,st); c2.value=fmt(v);}
+      return {sum:'+ var '+name+(c2.value!==''?' = '+c2.value:''),comp:c2};
+    }
+    if(type==='pointer'){
+      var arr=comps(toks,['array','string'])[0], arrs=st.comps.filter(function(x){return x.type==='array'||x.type==='string';});
+      if(!arr&&arrs.length===1) arr={c:arrs[0]};
+      if(!arr) throw new Error('which array does "'+name+'" point into? e.g. "pointer '+name+' at nums[0]"');
+      c2.target=arr.c.key; c2.color=[2,1,3,4][st.ptrColor++%4];
+      var ai=toks.indexOf(arr), idx=0;
+      if(toks[ai+1]&&toks[ai+1].v==='['){var close=toks.indexOf(toks.filter(function(t,i){return i>ai&&t.v===']';})[0]); idx=evaluate(toks.slice(ai+2,close),st);}
+      else {var nt=exprToks(toks,Math.max(ni,ai)+1).filter(function(t){return t.k!=='comp';}); if(nt.length) idx=evaluate(nt,st);}
+      if(typeof idx!=='number') throw new Error('pointer index must be a number');
+      c2.idx=idx; st.events.push({t:'move',ptr:c2.name,arr:arr.c.name,idx:idx,line:L.id});
+      return {sum:'+ pointer '+name+' → '+arr.c.name+'['+idx+']',comp:c2};
+    }
+    return null;
+  };
+  function setValue(c,v,st,L){
+    if(c.type==='var'){c.value=fmt(v);return c.name+' = '+c.value;}
+    if(c.type==='pointer'){if(typeof v!=='number')throw new Error(c.name+' is a pointer, give it an index'); c.idx=v; var a=keyed(st,c.target); st.events.push({t:'move',ptr:c.name,arr:a?a.name:null,idx:v,line:L.id}); return c.name+' → '+(a?a.name:'')+'['+v+']';}
+    if(c.type==='array'||c.type==='string'||c.type==='stack'||c.type==='queue'||c.type==='set'){c.cells=(Array.isArray(v)?v:[v]).map(fmt);return c.name+' = '+fmt(v);}
+    throw new Error('cannot assign to '+c.type+' "'+c.name+'"');
+  }
+  function keyed(st,key){for(var i=0;i<st.comps.length;i++)if(st.comps[i].key===key)return st.comps[i];return null;}
+  H.assign=function(L,toks,st,ans){
+    var ops=['=','+=','-=','++','--'], oi=-1;
+    toks.forEach(function(t,i){if(oi<0&&t.k==='sym'&&ops.indexOf(t.v)>=0)oi=i;});
+    var lhs, rhs=null, op='=';
+    if(oi>=0){
+      op=toks[oi].v; lhs=toks.slice(0,oi).filter(function(t){return !(t.k==='word'&&(t.v==='let'||t.v==='set'||t.v==='now'||t.v==='then'||t.v==='so'))&&t.k!=='cjk';});
+      rhs=exprToks(toks,oi+1);
+    } else {
+      // set X to E / move X to E / X becomes E / 把 X 設為 E / X 移到 E
+      var ti=-1; toks.forEach(function(t,i){if(ti<0&&(t.k==='comp'||t.k==='id'))ti=i;});
+      if(ti<0) return null;
+      lhs=[toks[ti]];
+      if(toks[ti+1]&&toks[ti+1].v==='['){var cl=-1;for(var q=ti+1;q<toks.length;q++)if(toks[q].v===']'){cl=q;break;} if(cl>0){lhs=toks.slice(ti,cl+1);ti=cl;}}
+      var si=-1; for(var k=ti+1;k<toks.length;k++){var w=toks[k].v.toLowerCase(); if(['to','be','becomes','as','at','=','is'].indexOf(w)>=0||toks[k].k==='cjk'&&'為为成到向'.indexOf(w)>=0){si=k;}else if(si>=0)break;}
+      if(si>=0){rhs=exprToks(toks,si+1);}
+      if(!rhs||!rhs.length){
+        var d=ans.delta.score; if(Math.abs(d)<0.5) return null;
+        op=d>0?'++':'--';
+      }
+    }
+    if(!lhs.length) return null;
+    var tgt=lhs[0];
+    // MAP[k] = v → 放進字典
+    if(lhs.length>1&&lhs[1].v==='['){
+      var key=evaluate(lhs.slice(2,lhs.length-1),st), val=evaluate(rhs,st);
+      if(tgt.k!=='comp') throw new Error('no component named "'+tgt.v+'"');
+      if(tgt.c.type==='dict'){putKV(tgt.c,key,val);st.events.push({t:'put',map:tgt.c.name,k:fmt(key),v:fmt(val),line:L.id});return {sum:tgt.c.name+'['+fmt(key)+'] = '+fmt(val)};}
+      if(tgt.c.cells){if(typeof key!=='number'||key<0||key>=tgt.c.cells.length)throw new Error('index '+fmt(key)+' is out of range'); tgt.c.cells[key]=fmt(val); return {sum:tgt.c.name+'['+key+'] = '+fmt(val)};}
+      throw new Error('cannot index "'+tgt.c.name+'"');
+    }
+    if(tgt.k==='comp'){
+      var cur=compValue(tgt.c), v;
+      if(op==='++') v=cur+1; else if(op==='--') v=cur-1;
+      else {v=evaluate(rhs,st); if(op==='+=') v=num(cur)+v; if(op==='-=') v=num(cur)-v;}
+      return {sum:setValue(tgt.c,v,st,L)};
+    }
+    if(tgt.k==='id'){ // 沒見過的名字：第一次給值就建立
+      if(op!=='=') throw new Error('"'+tgt.v+'" has no value yet');
+      var lit=rhs.length===1&&(rhs[0].k==='list'||rhs[0].k==='str')?rhs[0]:null, c;
+      if(lit&&lit.k==='list'){c=addComp(st,blank('array',L.id,L.id,tgt.v));c.cells=listVals(lit.v);return {sum:'+ array '+tgt.v+' '+fmt(c.cells),comp:c};}
+      if(lit&&lit.k==='str'&&lit.v.length>1){c=addComp(st,blank('string',L.id,L.id,tgt.v));c.cells=lit.v.split('');return {sum:'+ string '+tgt.v,comp:c};}
+      var val2=evaluate(rhs,st); c=addComp(st,blank('var',L.id,L.id,tgt.v)); c.value=fmt(val2); return {sum:'+ var '+tgt.v+' = '+c.value,comp:c};
+    }
+    return null;
+  };
+  function putKV(c,k,v){k=fmt(k);v=fmt(v);var r=c.rows.filter(function(x){return x[0]===k;})[0]; if(r) r[1]=v; else c.rows.push([k,v]);}
+  H.push=function(L,toks,st){
+    var box=comps(toks,['stack','queue','set','array','string'])[0]; if(!box) return null;
+    var rest=toks.filter(function(t){return t!==box;});
+    // st.push(x) 形式
+    var bi=toks.indexOf(box); if(toks[bi+1]&&toks[bi+1].v==='.'){rest=toks.slice(bi+3);}
+    var et=trimParens(exprToks(rest,0)); if(!et.length) throw new Error('push what? e.g. "push 3 onto '+box.c.name+'"');
+    var v=evaluate(et,st), vals=Array.isArray(v)&&et.length>1&&at(et,',')>=0?v:[v];
+    vals.forEach(function(x){var s=fmt(x); if(box.c.type==='set'&&box.c.cells.indexOf(s)>=0) return; box.c.cells.push(s); st.events.push({t:'push',box:box.c.name,v:s,line:L.id});});
+    return {sum:box.c.name+' ← '+vals.map(fmt).join(', ')};
+  };
+  H.pop=function(L,toks,st){
+    var box=comps(toks,['stack','queue','array'])[0]; if(!box) return null;
+    if(!box.c.cells.length) throw new Error(box.c.name+' is empty, nothing to pop');
+    var v=box.c.type==='queue'?box.c.cells.shift():box.c.cells.pop();
+    st.events.push({t:'pop',box:box.c.name,v:v,line:L.id});
+    var bi=toks.indexOf(box), et=trimParens(exprToks(toks.filter(function(t,i){return t!==box&&!(i===bi+1&&t.v==='.')&&!(t.k==='id'&&/^pop|^dequeue|^popleft/.test(t.v));}),0));
+    if(et.length){var want; try{want=evaluate(et,st);}catch(e){want=undefined;} if(want!==undefined&&!same(want,v)) return {sum:box.c.name+' → '+v,check:false,msg:'popped '+v+', not '+fmt(want)};}
+    return {sum:box.c.name+' → '+v};
+  };
+  H.put=function(L,toks,st){
+    var box=comps(toks,['dict'])[0]; if(!box) return null;
+    if(toks[toks.indexOf(box)+1]&&toks[toks.indexOf(box)+1].v==='[') return H.assign(L,toks,st,{delta:{score:0}});
+    var rest=exprToks(toks.filter(function(t){return t!==box;}),0), si=-1;
+    rest.forEach(function(t,i){if(si<0&&t.k==='sym'&&['->','=>',':',','].indexOf(t.v)>=0)si=i;});
+    if(si<0) rest.forEach(function(t,i){if(si<0&&t.k==='word'&&t.v==='as')si=i;});
+    if(si<0) throw new Error('put what? e.g. "put x -> i into '+box.c.name+'"');
+    var k=evaluate(rest.slice(0,si),st), v=evaluate(rest.slice(si+1),st);
+    putKV(box.c,k,v); st.events.push({t:'put',map:box.c.name,k:fmt(k),v:fmt(v),line:L.id});
+    return {sum:box.c.name+'['+fmt(k)+'] = '+fmt(v)};
+  };
+  H.remove=function(L,toks,st){
+    var box=comps(toks,['set','dict','stack','queue','array'])[0]; if(!box) return null;
+    var et=trimParens(exprToks(toks.filter(function(t){return t!==box;}),0)); var v=fmt(evaluate(et,st));
+    if(box.c.type==='dict'){var n=box.c.rows.length; box.c.rows=box.c.rows.filter(function(r){return r[0]!==v;}); if(n===box.c.rows.length) throw new Error(v+' is not a key of '+box.c.name);}
+    else {var i=box.c.cells.indexOf(v); if(i<0) throw new Error(v+' is not in '+box.c.name); box.c.cells.splice(i,1);}
+    st.events.push({t:'remove',box:box.c.name,v:v,line:L.id});
+    return {sum:box.c.name+' − '+v};
+  };
+  H.mark=function(L,toks,st){
+    var arr=comps(toks,['array','string'])[0]; if(!arr) return null;
+    if(wordAt(toks,['highlight','mark','marked','done','visited','cross'])<0&&!toks.some(function(t){return t.k==='cjk'&&'標标記记劃划淡黃黄'.indexOf(t.v)>=0;})) return null;
+    var ai=toks.indexOf(arr), idx;
+    if(toks[ai+1]&&toks[ai+1].v==='['){var close=-1;for(var q=ai+1;q<toks.length;q++)if(toks[q].v===']'){close=q;break;} idx=evaluate(toks.slice(ai+2,close),st);}
+    else {var p=comps(toks,['pointer'])[0]; idx=p?p.c.idx:evaluate(exprToks(toks,ai+1).filter(function(t){return t.k==='num';}),st);}
+    var done=wordAt(toks,['done','visited','cross','劃','划','淡'])>=0||cjkSeq(toks,'劃掉')>=0;
+    var list=done?arr.c.done:arr.c.hl; if(list.indexOf(idx)<0) list.push(idx);
+    return {sum:(done?'✓ ':'★ ')+arr.c.name+'['+idx+']'};
+  };
+  H.assert=function(L,toks,st,ans){
+    var neg=ans.neg.value, box=comps(toks,['dict','set','stack','queue','array','string'])[0];
+    var empty=wordAt(toks,['empty'])>=0||cjkSeq(toks,'空')>=0;
+    if(box&&empty){var n=box.c.type==='dict'?box.c.rows.length:box.c.cells.length, ok=(n===0)!==neg;
+      return {sum:(neg?'¬ ':'')+box.c.name+' empty?',check:ok,msg:ok?'':box.c.name+' has '+n+' item(s)'};}
+    var inIdx=wordAt(toks,['in','contains','has'])>=0||cjkSeq(toks,'在')>=0||cjkSeq(toks,'裡')>=0;
+    if(box&&inIdx&&toks.indexOf(box)>0){
+      var et=exprToks(toks.slice(0,toks.indexOf(box)),0).filter(function(t){return !(t.k==='word');});
+      // 「need 7 is not in seen」：名字和數字都寫了 → 兩個都要對
+      var parts=[]; if(et.length>1&&et[0].k==='comp'&&et[1].k==='num'){parts=[[et[0]],[et[1]]];} else parts=[et];
+      var vals=parts.map(function(p){return evaluate(p,st);});
+      if(vals.length===2&&!same(vals[0],vals[1])) return {sum:'check',check:false,msg:parts[0][0].v+' is '+fmt(vals[0])+', not '+fmt(vals[1])};
+      var v=fmt(vals[0]), has=box.c.type==='dict'?box.c.rows.some(function(r){return r[0]===v;}):box.c.cells.indexOf(v)>=0, ok2=has!==neg;
+      return {sum:v+(neg?' ∉ ':' ∈ ')+box.c.name,check:ok2,msg:ok2?'':v+(has?' is':' is not')+' in '+box.c.name};
+    }
+    var cut=-1, cutLen=1; toks.forEach(function(t,i){if(cut<0&&((t.k==='sym'&&['==','!=','='].indexOf(t.v)>=0)||(t.k==='word'&&(t.v==='is'||t.v==='equals'))||(t.k==='cjk'&&t.v==='等')))cut=i;});
+    if(cut<0) return null;
+    if(toks[cut].v==='等'&&toks[cut+1]&&'於于'.indexOf(toks[cut+1].v)>=0) cutLen=2;
+    var a=exprToks(toks.slice(0,cut).filter(function(t){return !(t.k==='word');}),0), b=exprToks(toks.slice(cut+cutLen).filter(function(t){return !(t.k==='word'&&t.v!=='null'&&t.v!=='none');}),0);
+    if(!a.length||!b.length) return null;
+    var va=evaluate(a,st), vb=evaluate(b,st), eq=same(va,vb), neg2=neg||toks[cut].v==='!=', ok3=eq!==neg2;
+    return {sum:fmt(va)+(neg2?' ≠ ':' = ')+fmt(vb),check:ok3,msg:ok3?'':'board says '+a.map(function(t){return t.v;}).join('')+' = '+fmt(va)};
+  };
+  H.ret=function(L,toks,st){
+    var i=wordAt(toks,['return','returns','answer','result','output']), from=i+1;
+    if(i<0){var c=cjkSeq(toks,'回傳'); if(c<0)c=cjkSeq(toks,'返回'); if(c<0)c=cjkSeq(toks,'答案'); if(c<0) return null; from=c+2;}
+    while(toks[from]&&((toks[from].k==='word'&&['is','=','be'].indexOf(toks[from].v)>=0)||toks[from].v===':'||toks[from].v==='='||toks[from].k==='cjk')) from++;
+    var et=exprToks(toks,from); if(!et.length) throw new Error('return what?');
+    var v=evaluate(et,st); st.answer=v;
+    var c2=keyed(st,L.id)||st.byName['return']||addComp(st,blank('var',L.id,L.id,'return')); c2.value=fmt(v); c2.ret=true;
+    st.events.push({t:'return',v:fmt(v),line:L.id});
+    return {sum:'return '+fmt(v),comp:c2};
+  };
+
+  /* ---------- 一行 ---------- */
+  var ORDER=['create','assign','push','pop','put','remove','mark','assert','ret'];
+  function runLine(L,st){
+    var text=(L.text||'').trim();
+    if(!text) return {status:'blank'};
+    if(/^(#|\/\/)/.test(text)) return {status:'comment'};
+    var toks=tag(lex(text),st), state=stateText(toks), ans=decide(state);
+    var probs=ans.intent.probs, tried=ORDER.slice().sort(function(a,b){return probs[b]-probs[a];}), lastErr=null;
+    for(var n=0;n<tried.length;n++){
+      var intent=tried[n]; if(probs[intent]<0.02&&n>0) break;
+      var snap=JSON.stringify(st);
+      toks=tag(lex(text),st);
+      try{
+        var r=H[intent](L,toks,st,ans);
+        if(r){
+          var res={status:r.check===false?'fail':r.check===true?'pass':'ok',intent:intent,p:probs[intent],confidence:ans.intent.confidence,sum:r.sum,msg:r.msg||'',state:state,alt:n};
+          if(r.check===true) res.msg='';
+          return res;
+        }
+      }catch(e){ lastErr=lastErr||{intent:intent,msg:e.message}; }
+      restore(st,snap);
+    }
+    return {status:'err',intent:lastErr?lastErr.intent:tried[0],p:probs[tried[0]],confidence:ans.intent.confidence,sum:'',msg:lastErr?lastErr.msg:'could not understand this line',state:state};
+  }
+  function restore(st,snap){var o=JSON.parse(snap); for(var k in o) st[k]=o[k]; st.byName={}; st.comps.forEach(function(c){if(c.name)st.byName[c.name]=c;});}
+
+  /* lines: [{id,text}]；step：看到第幾行（含）為止的板子，null＝全部 */
+  function replay(lines,step){
+    var st=newState(), results=[], at=step!=null&&step<0?newState():null;
+    lines.forEach(function(L,i){
+      var r=runLine(L,st); r.id=L.id; r.n=i; results.push(r);
+      if(step!=null&&i===step) at=cloneState(st);
+    });
+    var board=step!=null&&at?at:st;
+    return {results:results,state:st,board:board};
+  }
+  return {replay:replay,runLine:runLine,lex:lex,tag:tag,stateText:stateText,evaluate:evaluate,fmt:fmt,num:num,same:same,newState:newState,decide:decide,TAG:TAG};
+})(typeof Jev!=='undefined'?Jev:require('./jev.js'));
+if(typeof module!=='undefined'&&module.exports) module.exports=NLBoard;
+
+/* Trainer — LeetCode practice on top of an NLBoard script.
+ *
+ *  1. describe: the script builds the board (NLBoard + Jev)
+ *  2. trace:    step through the script; check() replays a reference solution on
+ *               the inputs that are on the board and compares it with the trace
+ *  3. go:       goCode() turns the board into a Go skeleton (or the reference
+ *               solution) plus a table test that includes the traced example
+ */
+var Trainer=(function(NL){
+  var fmt=NL.fmt;
+  function ints(c){if(!c||!c.cells)return null;var v=c.cells.map(function(x){return /^-?\d+$/.test(x)?+x:NaN;});return v.some(isNaN)?null:v;}
+  function find(st,types,name){var cs=st.comps.filter(function(c){return types.indexOf(c.type)>=0;});return cs.filter(function(c){return c.name===name;})[0]||cs[0]||null;}
+  function moves(st,arr){var out=[];st.events.forEach(function(e){if(e.t==='move'&&e.arr===arr&&(out.length===0||out[out.length-1].idx!==e.idx))out.push(e);});return out;}
+  function sorted(a){return Array.isArray(a)?a.slice().sort(function(x,y){return x-y;}):a;}
+  function goStr(s){return JSON.stringify(s);}
+
+  var CASES={};
+  CASES['two-sum']={
+    id:1, slug:'two-sum', title:'Two Sum',
+    inputs:function(st){
+      var arr=find(st,['array'],'nums'), nums=ints(arr), t=st.byName.target;
+      if(!nums) return {err:'need an int array (e.g. "array nums = [2,7,11,15]")'};
+      if(!t||t.type!=='var'||!/^-?\d+$/.test(t.value)) return {err:'need a variable target (e.g. "variable target = 9")'};
+      return {nums:nums,target:+t.value,arr:arr.name};
+    },
+    solve:function(inp){
+      var seen={}, visits=[], steps=[];
+      for(var i=0;i<inp.nums.length;i++){
+        visits.push(i); var x=inp.nums[i], need=inp.target-x;
+        if(String(need) in seen){steps.push({i:i,x:x,need:need,hit:true});return {answer:[seen[need],i],visits:visits,seen:Object.assign({},seen),steps:steps};}
+        steps.push({i:i,x:x,need:need,hit:false}); seen[x]=i;
+      }
+      return {answer:null,visits:visits,seen:seen,steps:steps};
+    },
+    demo:function(inp){
+      var ref=this.solve(inp), L=['title: 1. Two Sum (target = '+inp.target+')','array nums = ['+inp.nums.join(', ')+']','variable target = '+inp.target,'dict seen','pointer i at nums[0]'];
+      ref.steps.forEach(function(s,k){
+        if(k) L.push('move i to '+s.i);
+        L.push('x = nums[i]','need = target - x');
+        if(s.hit) L.push('need '+s.need+' is in seen','return [seen[need], i]');
+        else L.push('need '+s.need+' is not in seen','put x -> i into seen');
+      });
+      return L;
+    },
+    compare:function(ref,st,inp,out){
+      var mv=moves(st,inp.arr).map(function(e){return e.idx;});
+      if(mv.length){
+        var bad=-1; for(var k=0;k<mv.length;k++) if(mv[k]!==ref.visits[k]){bad=k;break;}
+        out.push(bad<0?{ok:true,msg:'pointer path '+fmt(mv)+' matches the one-pass scan'}:{ok:false,msg:'pointer path '+fmt(mv)+' differs from the scan '+fmt(ref.visits)+' at step '+bad});
+      }
+      var d=st.comps.filter(function(c){return c.type==='dict';})[0];
+      if(d){var mine={};d.rows.forEach(function(r){mine[r[0]]=r[1];});
+        var ok=fmt(mine)===fmt(ref.seen);
+        out.push({ok:ok,msg:ok?'dict '+d.name+' = '+fmt(mine)+' matches':'dict '+d.name+' is '+fmt(mine)+', the reference has '+fmt(ref.seen)+' when it answers'});}
+    },
+    sameAnswer:function(a,b){return Array.isArray(a)&&Array.isArray(b)&&fmt(sorted(a))===fmt(sorted(b));},
+    go:{
+      fn:'twoSum', sig:'func twoSum(nums []int, target int) []int', params:['nums','target'], zero:'nil',
+      solution:['seen := map[int]int{}','for i, x := range nums {','\tif j, ok := seen[target-x]; ok {','\t\treturn []int{j, i}','\t}','\tseen[x] = i','}','return nil'],
+      tests:[{nums:[3,2,4],target:6,want:[1,2]},{nums:[3,3],target:6,want:[0,1]}],
+      fields:['nums []int','target int','want []int'],
+      lit:function(t){return '{'+['[]int{'+t.nums.join(', ')+'}',t.target,t.want?'[]int{'+t.want.join(', ')+'}':'nil'].join(', ')+'}';},
+      call:'got := twoSum(append([]int(nil), c.nums...), c.target)',
+      check:['sort.Ints(got)','want := append([]int(nil), c.want...)','sort.Ints(want)','if !reflect.DeepEqual(got, want) {','\tt.Errorf("twoSum(%v, %d) = %v, want %v", c.nums, c.target, got, c.want)','}'],
+      imports:['reflect','sort','testing']
+    }
+  };
+  var PAIR={')':'(',']':'[','}':'{'};
+  CASES['valid-parentheses']={
+    id:20, slug:'valid-parentheses', title:'Valid Parentheses',
+    inputs:function(st){
+      var s=find(st,['string','array'],'s');
+      if(!s||!s.cells.length||s.cells.some(function(c){return '()[]{}'.indexOf(c)<0||c.length!==1;})) return {err:'need a string of brackets (e.g. s = "([)]")'};
+      return {s:s.cells.join(''),str:s.name};
+    },
+    solve:function(inp){
+      var st=[], ops=[], steps=[];
+      for(var i=0;i<inp.s.length;i++){var c=inp.s[i];
+        if(!PAIR[c]){st.push(c);ops.push({t:'push',v:c});steps.push({i:i,c:c,push:true});continue;}
+        if(!st.length){steps.push({i:i,c:c,empty:true});return {answer:false,ops:ops,steps:steps};}
+        var top=st.pop(); ops.push({t:'pop',v:top});
+        if(top!==PAIR[c]){steps.push({i:i,c:c,pop:top,bad:true});return {answer:false,ops:ops,steps:steps};}
+        steps.push({i:i,c:c,pop:top});
+      }
+      steps.push({end:true,left:st.length});
+      return {answer:st.length===0,ops:ops,steps:steps};
+    },
+    demo:function(inp){
+      var ref=this.solve(inp), L=['title: 20. Valid Parentheses','s = '+goStr(inp.s),'stack st','pointer i at s[0]'];
+      ref.steps.forEach(function(s,k){
+        if(s.end){L.push(s.left?'st is not empty':'st is empty','return '+(s.left?'false':'true'));return;}
+        if(k) L.push('move i to '+s.i);
+        L.push('c = s[i]');
+        if(s.push) L.push('push c onto st');
+        else if(s.empty) L.push('st is empty','return false');
+        else {L.push('pop '+goStr(s.pop)+' from st'); if(s.bad) L.push('# '+s.c+' does not close '+s.pop,'return false');}
+      });
+      return L;
+    },
+    compare:function(ref,st,inp,out){
+      var stk=st.comps.filter(function(c){return c.type==='stack';})[0]; if(!stk) return;
+      var mine=st.events.filter(function(e){return (e.t==='push'||e.t==='pop')&&e.box===stk.name;}).map(function(e){return e.t+' '+e.v;});
+      var want=ref.ops.map(function(o){return o.t+' '+o.v;}), bad=-1;
+      for(var k=0;k<Math.max(mine.length,want.length);k++) if(mine[k]!==want[k]){bad=k;break;}
+      out.push(bad<0?{ok:true,msg:'stack operations match ('+mine.length+')'}:{ok:false,msg:'stack op #'+(bad+1)+': you did "'+(mine[bad]||'nothing')+'", the reference does "'+(want[bad]||'nothing')+'"'});
+    },
+    sameAnswer:function(a,b){return a===b;},
+    go:{
+      fn:'isValid', sig:'func isValid(s string) bool', params:['s'], zero:'false',
+      solution:['pair := map[byte]byte{\')\': \'(\', \']\': \'[\', \'}\': \'{\'}','st := []byte{}','for i := 0; i < len(s); i++ {','\tc := s[i]','\topen, closing := pair[c]','\tif !closing {','\t\tst = append(st, c)','\t\tcontinue','\t}',
+        '\tif len(st) == 0 || st[len(st)-1] != open {','\t\treturn false','\t}','\tst = st[:len(st)-1]','}','return len(st) == 0'],
+      tests:[{s:'()',want:true},{s:'()[]{}',want:true},{s:'(]',want:false},{s:'([)]',want:false},{s:'{[]}',want:true},{s:']',want:false}],
+      fields:['s string','want bool'],
+      lit:function(t){return '{'+goStr(t.s)+', '+t.want+'}';},
+      call:'got := isValid(c.s)',
+      check:['if got != c.want {','\tt.Errorf("isValid(%q) = %v, want %v", c.s, got, c.want)','}'],
+      imports:['testing']
+    }
+  };
+  function byPid(pid){for(var k in CASES)if(CASES[k].id===pid)return k;return null;}
+  /* 沒選題目時，從標題猜：「title: 1. Two Sum」 */
+  function guess(st){
+    var t=st.comps.filter(function(c){return c.type==='title';}).map(function(c){return c.text;}).join(' ').toLowerCase();
+    for(var k in CASES){var C=CASES[k]; if(new RegExp('(^|\\D)'+C.id+'\\s*\\.').test(t)||t.indexOf(C.title.toLowerCase())>=0||t.indexOf(C.slug)>=0) return k;}
+    return null;
+  }
+
+  /* 對答案：輸入取自板子，參考解答跑一次，和你的追蹤比 */
+  function check(caseId,run){
+    var st=run.state, out=[]; caseId=caseId||guess(st); var C=CASES[caseId];
+    var fails=run.results.filter(function(r){return r.status==='fail';}), errs=run.results.filter(function(r){return r.status==='err';});
+    out.push(errs.length?{ok:false,msg:errs.length+' line(s) could not be put on the board',lines:errs.map(function(r){return r.id;})}:{ok:true,msg:'every line was understood'});
+    var nChecks=run.results.filter(function(r){return r.status==='pass'||r.status==='fail';}).length;
+    if(nChecks) out.push(fails.length?{ok:false,msg:fails.length+' of '+nChecks+' check line(s) disagree with the board',lines:fails.map(function(r){return r.id;})}:{ok:true,msg:'all '+nChecks+' check line(s) hold on the board'});
+    if(!C){
+      out.push(st.answer===undefined?{ok:false,msg:'no "return …" line yet'}:{ok:true,msg:'your answer: '+fmt(st.answer)});
+      return {items:out,ok:out.every(function(x){return x.ok;})};
+    }
+    var inp=C.inputs(st);
+    if(inp.err){out.push({ok:false,msg:inp.err});return {items:out,ok:false};}
+    var ref=C.solve(inp);
+    C.compare(ref,st,inp,out);
+    if(st.answer===undefined) out.push({ok:false,msg:'no "return …" line yet; the reference answer is hidden until you return one'});
+    else out.push(C.sameAnswer(st.answer,ref.answer)?{ok:true,msg:'answer '+fmt(st.answer)+' is correct'}:{ok:false,msg:'answer '+fmt(st.answer)+' is wrong; expected '+fmt(ref.answer)});
+    return {items:out,ok:out.every(function(x){return x.ok;}),inputs:inp,ref:ref,caseId:caseId};
+  }
+
+  /* ---------- Go ---------- */
+  function goType(vals,str){
+    if(!vals.length) return str?'byte':'int';
+    if(vals.every(function(v){return /^-?\d+$/.test(v);})) return 'int';
+    if(vals.every(function(v){return v==='true'||v==='false';})) return 'bool';
+    if(str&&vals.every(function(v){return v.length===1;})) return 'byte';
+    return 'string';
+  }
+  function alignFields(fs){var w=Math.max.apply(null,fs.map(function(f){return f.split(' ')[0].length;}));return fs.map(function(f){var p=f.split(' ');return p[0]+Array(w-p[0].length+2).join(' ')+p.slice(1).join(' ');});}
+  function goVal(v,t){return t==='int'||t==='bool'?v:t==='byte'?"'"+(v==='\''?'\\\'':v)+"'":goStr(v);}
+  function decls(st,params,isStr){
+    var D=[], used=[], loops=[];
+    function put(code,note){if(note)D.push('// '+note);D.push(code);}
+    st.comps.forEach(function(c){
+      if(!c.name||params.indexOf(c.name)>=0||c.ret||c.type==='title'||c.type==='note') return;
+      var n=c.name.replace(/\W/g,'_');
+      if(c.type==='dict'){var kt=goType(c.rows.map(function(r){return r[0];}),isStr),vt=goType(c.rows.map(function(r){return r[1];}),isStr);put(n+' := map['+kt+']'+vt+'{}','dict "'+c.name+'" on your board');used.push(n);}
+      else if(c.type==='set'){put(n+' := map['+goType(c.cells,isStr)+']bool{}','set "'+c.name+'" on your board');used.push(n);}
+      else if(c.type==='stack'||c.type==='queue'){put(n+' := []'+goType(c.cells,isStr)+'{}',c.type+' "'+c.name+'"'+(c.type==='stack'?': push = append, pop = '+n+'[:len('+n+')-1]':': pop front = '+n+'[1:]'));used.push(n);}
+      else if(c.type==='array'||c.type==='string'){var t=goType(c.cells,c.type==='string');put(n+' := []'+t+'{'+c.cells.map(function(v){return goVal(v,t);}).join(', ')+'}');used.push(n);}
+      else if(c.type==='pointer'){var a=st.comps.filter(function(x){return x.key===c.target;})[0]; loops.push({n:n,over:a?a.name:null});}
+      else if(c.type==='var'){var vt2=goType([c.value],isStr);put('var '+n+' '+vt2,c.name+' = '+c.value+' at the end of your trace');used.push(n);}
+    });
+    return {D:D,used:used,loops:loops};
+  }
+  function goCode(caseId,run,lines,opts){
+    opts=opts||{}; var st=run.state; caseId=caseId||guess(st); var C=CASES[caseId];
+    var trace=lines.filter(function(l){return l.text.trim();}).map(function(l){return '//\t'+l.text.trim();});
+    if(!C){
+      var d0=decls(st,[],false), body=d0.D.concat(d0.used.map(function(n){return '_ = '+n;}));
+      return {'solution.go':['package solution','','// Whiteboard trace:','//'].concat(trace,['func solve() {'],body.map(function(x){return '\t'+x;}),['}','']).join('\n'),
+              'solution_test.go':['package solution','','import "testing"','','func TestSolve(t *testing.T) {','\tsolve() // TODO: compare with the answer you traced: '+fmt(st.answer),'}',''].join('\n')};
+    }
+    var G=C.go, inp=C.inputs(st), body2;
+    if(opts.solution) body2=G.solution;
+    else {
+      var d=decls(st,G.params,caseId==='valid-parentheses');
+      body2=d.D.slice();
+      d.loops.forEach(function(l){
+        if(l.over&&G.params.indexOf(l.over)>=0) body2.push('// pointer "'+l.n+'" walks '+l.over,'for '+l.n+' := 0; '+l.n+' < len('+l.over+'); '+l.n+'++ {','\t_ = '+l.n,'\t// TODO: one iteration of your trace','}');
+        else {body2.push('// pointer "'+l.n+'"','var '+l.n+' int');d.used.push(l.n);}
+      });
+      G.params.forEach(function(p){d.used.push(p);});
+      body2=body2.concat(d.used.map(function(n){return '_ = '+n;}),['// TODO: write the loop body from your trace','return '+G.zero]);
+    }
+    var cases=[];
+    if(!inp.err){var ref=C.solve(inp), ex=Object.assign({},inp,{want:ref.answer});
+      cases.push('\t\t'+G.lit(ex)+', // traced on your whiteboard'+(st.answer!==undefined&&!C.sameAnswer(st.answer,ref.answer)?' (your trace said '+fmt(st.answer)+')':''));}
+    G.tests.forEach(function(t){cases.push('\t\t'+G.lit(t)+',');});
+    var sol=['package solution','','// '+C.id+'. '+C.title+' — https://leetcode.com/problems/'+C.slug+'/','//','// Whiteboard trace:','//'].concat(trace,[G.sig+' {'],body2.map(function(x){return '\t'+x;}),['}','']).join('\n');
+    var test=['package solution','','import (',G.imports.map(function(i){return '\t"'+i+'"';}).join('\n'),')','','func Test'+G.fn[0].toUpperCase()+G.fn.slice(1)+'(t *testing.T) {','\tcases := []struct {',alignFields(G.fields).map(function(f){return '\t\t'+f;}).join('\n'),'\t}{'].concat(cases,['\t}','\tfor _, c := range cases {','\t\t'+G.call],G.check.map(function(x){return '\t\t'+x;}),['\t}','}','']).join('\n');
+    return {'solution.go':sol,'solution_test.go':test};
+  }
+  return {CASES:CASES,byPid:byPid,guess:guess,check:check,goCode:goCode,demo:function(caseId,inp){return CASES[caseId].demo(inp);}};
+})(typeof NLBoard!=='undefined'?NLBoard:require('./nlboard.js'));
+if(typeof module!=='undefined'&&module.exports) module.exports=Trainer;
+</script>
 <script>
 (function(){
 /* ---------- 多國語系 ---------- */
-var I18N={"zh-CN":{"__help__":"<button type=\"button\" id=\"helpX\" aria-label=\"关闭说明\">×</button>\n      <b>基本</b>：在左侧点一下或拖动组件到画布。选中组件后，<b>＋</b> 和 <b>×</b> 会直接出现在组件上；拖动上方灰色栏可以移动。<br>\n      <b>输入</b>：数组输入 <kbd>2 7 11</kbd>（空格或逗号跳到下一格）；字符串每输入一个字自动跳一格；空格子按 <kbd>⌫</kbd> 回到上一格。<br>\n      <b>框选</b>：在空白处拖动。<kbd>⌥</kbd>（Alt）＋拖动＝拖出一份副本、<kbd>⌘D</kbd> 整组复制到下面、<kbd>⌘C</kbd>/<kbd>⌘V</kbd> 粘贴到鼠标位置、<kbd>Delete</kbd> 删除、<kbd>Shift</kbd>＋点组件加选。<br>\n      <b>形状</b>：下方工具栏的矩形 <kbd>R</kbd>、圆形 <kbd>O</kbd>、直线 <kbd>L</kbd>、箭头 <kbd>⇧L</kbd>，拖动画出来，按住 <kbd>Shift</kbd> 画正方形／正圆／45 度。点一下形状就能选中、拖动、换颜色。<br>\n      <b>图层</b>：选中后 <kbd>⌘]</kbd> 上移一层、<kbd>⌘[</kbd> 下移一层、<kbd>⌘⌥]</kbd> 置于顶层、<kbd>⌘⌥[</kbd> 置于底层（工具栏也有 ⤒ ⤓）。<br>\n      <b>标记</b>：<kbd>Shift</kbd>＋点格子＝标黄，<kbd>Alt</kbd>＋点格子＝变淡。<br>\n      <b>画布</b>：空格键＋拖动或触控板移动；<kbd>⌘</kbd>＋滚轮缩放；<kbd>⇧1</kbd> 显示全部、<kbd>⇧0</kbd> 100%。","手動跑題白板":"手动跑题白板","瀏覽器空間滿了，這次沒有存到。可以刪掉幾個舊白板，或用匯出備份。":"浏览器存储空间已满，这次没有保存成功。可以删掉几个旧白板，或者先导出备份。","欄 1":"列 1","欄 2":"列 2","欄 3":"列 3","名稱":"名称","刪除":"删除","加一格":"加一格","（空的）":"（空）","標題":"标题","程式碼":"代码","文字":"文本","便利貼":"便利贴","字串":"字符串","陣列":"数组","堆疊":"栈","↓ 頂端":"↓ 栈顶","＋ 推入":"＋ 入栈","佇列":"队列","前端":"队头","尾端":"队尾","＋ 加入":"＋ 入队","字典":"字典","刪除這筆":"删除这条","集合":"集合","二維陣列":"二维数组","欄":"列","列":"行","刪除第 {n} 欄":"删除第 {n} 列","刪除第 {n} 列":"删除第 {n} 行","加一欄":"加一列","加一列":"加一行","＋ 列":"＋ 行","值":"值","加左子節點":"加左子节点","加右子節點":"加右子节点","接下一個":"接下一个","加一個相鄰節點":"加一个相邻节点","表格":"表格","刪除這一欄":"删除这一列","刪除這一列":"删除这一行","＋ 新增一列":"＋ 新增一行","移到最上層":"置于顶层","移到最下層":"置于底层","往上一層":"上移一层","往下一層":"下移一层","已經有左子節點了":"已经有左子节点了","已經有右子節點了":"已经有右子节点了","已複製一份，改有變的地方就好":"已复制一份，只改有变化的地方就行","填充":"填充","不填":"无填充","清除底色":"清除底色","底色":"底色","→ 有箭頭":"→ 有箭头","— 沒箭頭":"— 无箭头","反轉":"反转","已選 {n} 個":"已选 {n} 个","邊框":"边框","線條":"线条","線條顏色":"线条颜色","移到最上層（":"置于顶层（","移到最下層（":"置于底层（","刪除（":"删除（","大標題":"大标题","一般":"普通","箭頭朝":"箭头朝","上":"上","右":"右","下":"下","左":"左","（按 R 旋轉）\">":"（按 R 旋转）\">","顏色":"颜色","這格":"这格","第 {n} 格":"第 {n} 格","全部格子":"全部格子","整理這棵樹":"整理这棵树","加一個指標。":"加一个指针。","＋點格子＝標黃，":"＋点格子＝标黄，","＋點格子＝變淡":"＋点格子＝变淡","＋指標":"＋指针","清除標記":"清除标记","；往上一層":"；上移一层","；往下一層":"；下移一层","複製一份（":"复制一份（","複製一份":"复制一份","從這裡拉一條線":"从这里拉一条线","連線":"连线","點另一個元件，連過去":"点另一个组件，连过去","已複製一份放在下面":"已复制一份放在下面","已複製 {n} 個，按 ⌘V 貼上":"已复制 {n} 个，按 ⌘V 粘贴","已複製一份":"已复制一份","先點起點，再點終點":"先点起点，再点终点","題目：":"题目：","步":"步","說明":"说明","起點":"起点","20. 有效的括號":"20. 有效的括号","讀到":"读到","決定":"决定","堆疊放：還沒關的左括號\n右括號：只跟頂端比":"栈里放：还没闭合的左括号\n右括号：只跟栈顶比","在 seen 裡？":"在 seen 里？","否":"否","二元樹：root = [3,9,20,null,null,15,7]":"二叉树：root = [3,9,20,null,null,15,7]","鏈結串列：head = [1,2,3,4,5]":"链表：head = [1,2,3,4,5]","DP：dp[i][j] 代表…":"DP：dp[i][j] 表示…","狀態：\n轉移：dp[i][j] = \n起點：\n答案在哪一格：":"状态：\n转移：dp[i][j] = \n起点：\n答案在哪一格：","圖：從 A 出發":"图：从 A 出发","白板":"白板","未命名白板 {n}":"未命名白板 {n}","已開一個「{name}」的白板":"已新建“{name}”白板","已開一個新白板":"已新建一个白板","剛剛":"刚刚","{n} 分鐘前":"{n} 分钟前","今天 {t}":"今天 {t}","我的白板":"我的白板","關閉":"关闭","＋ 空白白板":"＋ 空白白板","或":"或","題號或題名":"题号或题目名","輸入題號或題名，例：":"输入题号或题目名，例如：","＋ 這一題的白板":"＋ 这道题的白板","搜尋白板":"搜索白板","搜尋已存的白板":"搜索已保存的白板","題目 #{n}":"题目 #{n}","空白":"空白","{n} 個元件":"{n} 个组件","目前這個":"当前","開啟":"打开","改名":"重命名","複製":"复制","找不到符合的白板。":"没有找到匹配的白板。","還沒有存任何白板。":"还没有保存任何白板。","找不到這一題，請輸入題號（例：20）或完整題名。":"找不到这道题，请输入题号（例如：20）或完整题目名。","新名稱":"新名称","{name}（複製）":"{name}（副本）","已複製":"已复制","確定刪除？":"确定删除？","已刪除":"已删除","我的白板…":"我的白板…","＋ 新的空白白板":"＋ 新建空白白板","匯出／匯入…":"导出／导入…","清空這個白板":"清空这个白板","再按一次確定清空":"再按一次确认清空","已清空，可以按 ⌘Z 找回來":"已清空，可以按 ⌘Z 撤销","放大":"放大","縮小":"缩小","縮放到 100%":"缩放到 100%","全部看得到":"显示全部","清空畫板":"清空画板","已清空，可以按復原找回來":"已清空，可以按撤销找回来","匯出／匯入":"导出／导入","複製下面的內容存起來；要還原時，把內容貼回來按「匯入」。":"复制下面的内容保存起来；需要恢复时，把内容粘贴回来再点“导入”。","畫板內容":"画板内容","匯入":"导入","已匯入":"已导入","內容格式不對，沒有匯入":"内容格式不正确，未导入","我的第一個白板":"我的第一个白板","元件":"组件","白板選單：切換、新增、匯出、清空":"白板菜单：切换、新建、导出、清空","搜尋元件":"搜索组件","指標":"指针","變數":"变量","樹節點":"树节点","串列節點":"链表节点","圖節點":"图节点","工具":"工具","選取（V）":"选择（V）","選取":"选择","移動畫面（H，或按住空白鍵）":"移动画布（H，或按住空格键）","移動畫面":"移动画布","連線（C）":"连线（C）","畫筆（P）":"画笔（P）","畫筆":"画笔","橡皮擦（E）：按住拖過去，碰到的筆跡都會擦掉":"橡皮擦（E）：按住拖过去，碰到的笔迹都会被擦掉","擦筆跡":"擦笔迹","矩形（R）。按住 Shift 畫正方形":"矩形（R）。按住 Shift 画正方形","矩形":"矩形","圓形（O）。按住 Shift 畫正圓":"圆形（O）。按住 Shift 画正圆","圓形":"圆形","直線（L）。按住 Shift 對齊 45 度":"直线（L）。按住 Shift 对齐 45 度","直線":"直线","箭頭（⇧L）。按住 Shift 對齊 45 度":"箭头（⇧L）。按住 Shift 对齐 45 度","箭頭":"箭头","畫筆和形狀的顏色":"画笔和形状的颜色","復原（⌘Z）":"撤销（⌘Z）","復原":"撤销","重做（⇧⌘Z）":"重做（⇧⌘Z）","重做":"重做","整張畫布的預覽，點一下跳到那裡":"整张画布的预览，点一下跳到那里","縮小（⌘−）":"缩小（⌘−）","縮放選單":"缩放菜单","放大（⌘＋）":"放大（⌘＋）","全部看得到（⇧1）":"显示全部（⇧1）","操作說明":"操作说明","語言 / Language":"语言 / Language","在 LeetCode 看題目 ↗":"在 LeetCode 看题目 ↗","線性":"线性","查表":"查表","節點":"节点","點一下放到畫面中間，或直接拖到畫布上。":"点一下放到画布中间，或直接拖到画布上。"},"en":{"__help__":"<button type=\"button\" id=\"helpX\" aria-label=\"Close help\">×</button>\n      <b>Basics</b>: click or drag a component from the left onto the canvas. When a component is selected, <b>＋</b> and <b>×</b> appear right on it; drag the gray bar on top to move it.<br>\n      <b>Typing</b>: in an array type <kbd>2 7 11</kbd> (space or comma jumps to the next cell); in a string each character fills its own cell; press <kbd>⌫</kbd> in an empty cell to go back one cell.<br>\n      <b>Select</b>: drag on empty space. <kbd>⌥</kbd> (Alt) + drag = drag out a copy, <kbd>⌘D</kbd> duplicates the group below, <kbd>⌘C</kbd>/<kbd>⌘V</kbd> pastes at the mouse position, <kbd>Delete</kbd> deletes, <kbd>Shift</kbd> + click a component to add it to the selection.<br>\n      <b>Shapes</b>: in the bottom toolbar, rectangle <kbd>R</kbd>, circle <kbd>O</kbd>, line <kbd>L</kbd>, arrow <kbd>⇧L</kbd>; drag to draw, hold <kbd>Shift</kbd> for a square / perfect circle / 45°. Click a shape to select, move, or recolor it.<br>\n      <b>Layers</b>: with something selected, <kbd>⌘]</kbd> bring forward, <kbd>⌘[</kbd> send backward, <kbd>⌘⌥]</kbd> bring to front, <kbd>⌘⌥[</kbd> send to back (also ⤒ ⤓ in the toolbar).<br>\n      <b>Highlight</b>: <kbd>Shift</kbd> + click a cell = yellow, <kbd>Alt</kbd> + click a cell = faded.<br>\n      <b>View</b>: Space + drag or trackpad to pan; <kbd>⌘</kbd> + scroll wheel to zoom; <kbd>⇧1</kbd> fit all, <kbd>⇧0</kbd> 100%.","手動跑題白板":"Trace-by-Hand Whiteboard","瀏覽器空間滿了，這次沒有存到。可以刪掉幾個舊白板，或用匯出備份。":"Browser storage is full, so this wasn't saved. Delete some old boards or export a backup.","欄 1":"Column 1","欄 2":"Column 2","欄 3":"Column 3","名稱":"Name","刪除":"Delete","加一格":"Add a cell","（空的）":"(empty)","標題":"Title","程式碼":"Code","文字":"Text","便利貼":"Sticky note","字串":"String","陣列":"Array","堆疊":"Stack","↓ 頂端":"↓ Top","＋ 推入":"＋ Push","佇列":"Queue","前端":"Front","尾端":"Rear","＋ 加入":"＋ Add","字典":"Dictionary","刪除這筆":"Delete this entry","集合":"Set","二維陣列":"2D array","欄":"Column","列":"Row","刪除第 {n} 欄":"Delete column {n}","刪除第 {n} 列":"Delete row {n}","加一欄":"Add a column","加一列":"Add a row","＋ 列":"＋ Row","值":"Value","加左子節點":"Add left child","加右子節點":"Add right child","接下一個":"Add next node","加一個相鄰節點":"Add a neighbor node","表格":"Table","刪除這一欄":"Delete this column","刪除這一列":"Delete this row","＋ 新增一列":"＋ Add row","移到最上層":"Bring to front","移到最下層":"Send to back","往上一層":"Bring forward","往下一層":"Send backward","已經有左子節點了":"Already has a left child","已經有右子節點了":"Already has a right child","已複製一份，改有變的地方就好":"Duplicated. Just edit what changed","填充":"Fill","不填":"No fill","清除底色":"Clear background","底色":"Background","→ 有箭頭":"→ With arrow","— 沒箭頭":"— No arrow","反轉":"Reverse","已選 {n} 個":"{n} selected","邊框":"Border","線條":"Line","線條顏色":"Line color","移到最上層（":"Bring to front (","移到最下層（":"Send to back (","刪除（":"Delete (","大標題":"Heading","一般":"Normal","箭頭朝":"Arrow points","上":"Up","右":"Right","下":"Down","左":"Left","（按 R 旋轉）\">":" (press R to rotate)\">","顏色":"Color","這格":"This cell","第 {n} 格":"Cell {n}","全部格子":"All cells","整理這棵樹":"Tidy up this tree","加一個指標。":"Add a pointer.","＋點格子＝標黃，":"＋click a cell = yellow, ","＋點格子＝變淡":"＋click a cell = faded","＋指標":"＋Pointer","清除標記":"Clear highlights","；往上一層":"; bring forward","；往下一層":"; send backward","複製一份（":"Duplicate (","複製一份":"Duplicate","從這裡拉一條線":"Drag a line from here","連線":"Connect","點另一個元件，連過去":"Click another component to connect","已複製一份放在下面":"Duplicated below","已複製 {n} 個，按 ⌘V 貼上":"Copied {n}, press ⌘V to paste","已複製一份":"Duplicated","先點起點，再點終點":"Click the start, then the end","題目：":"Problem: ","步":"Step","說明":"Notes","起點":"Start","20. 有效的括號":"20. Valid Parentheses","讀到":"Read","決定":"Decision","堆疊放：還沒關的左括號\n右括號：只跟頂端比":"Stack holds: unclosed open brackets\nClosing bracket: compare with top only","在 seen 裡？":"In seen?","否":"No","二元樹：root = [3,9,20,null,null,15,7]":"Binary tree: root = [3,9,20,null,null,15,7]","鏈結串列：head = [1,2,3,4,5]":"Linked list: head = [1,2,3,4,5]","DP：dp[i][j] 代表…":"DP: dp[i][j] means…","狀態：\n轉移：dp[i][j] = \n起點：\n答案在哪一格：":"State:\nTransition: dp[i][j] = \nBase case:\nAnswer is in cell:","圖：從 A 出發":"Graph: start from A","白板":"Whiteboard","未命名白板 {n}":"Untitled board {n}","已開一個「{name}」的白板":"Opened a board for \"{name}\"","已開一個新白板":"Opened a new board","剛剛":"Just now","{n} 分鐘前":"{n} min ago","今天 {t}":"Today {t}","我的白板":"My boards","關閉":"Close","＋ 空白白板":"＋ Blank board","或":"or","題號或題名":"Problem number or title","輸入題號或題名，例：":"Enter a problem number or title, e.g. ","＋ 這一題的白板":"＋ Board for this problem","搜尋白板":"Search boards","搜尋已存的白板":"Search saved boards","題目 #{n}":"Problem #{n}","空白":"Blank","{n} 個元件":"{n} components","目前這個":"Current","開啟":"Open","改名":"Rename","複製":"Duplicate","找不到符合的白板。":"No matching boards.","還沒有存任何白板。":"No saved boards yet.","找不到這一題，請輸入題號（例：20）或完整題名。":"Problem not found. Enter a number (e.g. 20) or the full title.","新名稱":"New name","{name}（複製）":"{name} (copy)","已複製":"Duplicated","確定刪除？":"Delete this board?","已刪除":"Deleted","我的白板…":"My boards…","＋ 新的空白白板":"＋ New blank board","匯出／匯入…":"Export / import…","清空這個白板":"Clear this board","再按一次確定清空":"Click again to clear","已清空，可以按 ⌘Z 找回來":"Cleared. Press ⌘Z to undo","放大":"Zoom in","縮小":"Zoom out","縮放到 100%":"Zoom to 100%","全部看得到":"Fit all","清空畫板":"Clear canvas","已清空，可以按復原找回來":"Cleared. Press undo to restore","匯出／匯入":"Export / import","複製下面的內容存起來；要還原時，把內容貼回來按「匯入」。":"Copy the content below to save it. To restore, paste it back and click \"Import\".","畫板內容":"Board content","匯入":"Import","已匯入":"Imported","內容格式不對，沒有匯入":"Invalid format, nothing imported","我的第一個白板":"My first board","元件":"Components","白板選單：切換、新增、匯出、清空":"Board menu: switch, new, export, clear","搜尋元件":"Search components","指標":"Pointer","變數":"Variable","樹節點":"Tree node","串列節點":"List node","圖節點":"Graph node","工具":"Tools","選取（V）":"Select (V)","選取":"Select","移動畫面（H，或按住空白鍵）":"Pan (H, or hold Space)","移動畫面":"Pan","連線（C）":"Connect (C)","畫筆（P）":"Pen (P)","畫筆":"Pen","橡皮擦（E）：按住拖過去，碰到的筆跡都會擦掉":"Eraser (E): drag over strokes to erase them","擦筆跡":"Eraser","矩形（R）。按住 Shift 畫正方形":"Rectangle (R). Hold Shift for a square","矩形":"Rectangle","圓形（O）。按住 Shift 畫正圓":"Circle (O). Hold Shift for a perfect circle","圓形":"Circle","直線（L）。按住 Shift 對齊 45 度":"Line (L). Hold Shift to snap to 45°","直線":"Line","箭頭（⇧L）。按住 Shift 對齊 45 度":"Arrow (⇧L). Hold Shift to snap to 45°","箭頭":"Arrow","畫筆和形狀的顏色":"Pen and shape color","復原（⌘Z）":"Undo (⌘Z)","復原":"Undo","重做（⇧⌘Z）":"Redo (⇧⌘Z)","重做":"Redo","整張畫布的預覽，點一下跳到那裡":"Canvas overview. Click to jump there","縮小（⌘−）":"Zoom out (⌘−)","縮放選單":"Zoom menu","放大（⌘＋）":"Zoom in (⌘＋)","全部看得到（⇧1）":"Fit all (⇧1)","操作說明":"Help","語言 / Language":"語言 / Language","在 LeetCode 看題目 ↗":"View on LeetCode ↗","線性":"Linear","查表":"Lookup","節點":"Nodes","點一下放到畫面中間，或直接拖到畫布上。":"Click to place in the center, or drag onto the canvas."},"ja":{"__help__":"<button type=\"button\" id=\"helpX\" aria-label=\"ヘルプを閉じる\">×</button>\n      <b>基本</b>：左のパネルからクリックまたはドラッグでキャンバスに配置。選択すると <b>＋</b> と <b>×</b> が要素の上に表示されます。上部の灰色のバーをドラッグすると移動できます。<br>\n      <b>入力</b>：配列は <kbd>2 7 11</kbd> のように入力（スペースかカンマで次のマスへ）。文字列は1文字ごとに自動で次のマスへ。空のマスで <kbd>⌫</kbd> を押すと前のマスに戻ります。<br>\n      <b>範囲選択</b>：空いている所をドラッグ。<kbd>⌥</kbd>（Alt）＋ドラッグ＝複製をドラッグ、<kbd>⌘D</kbd> でまとめて下に複製、<kbd>⌘C</kbd>/<kbd>⌘V</kbd> でマウス位置に貼り付け、<kbd>Delete</kbd> で削除、<kbd>Shift</kbd>＋クリックで選択に追加。<br>\n      <b>図形</b>：下のツールバーの四角形 <kbd>R</kbd>、円 <kbd>O</kbd>、直線 <kbd>L</kbd>、矢印 <kbd>⇧L</kbd> をドラッグで描画。<kbd>Shift</kbd> を押しながらで正方形／正円／45度。図形をクリックすると選択・移動・色の変更ができます。<br>\n      <b>レイヤー</b>：選択して <kbd>⌘]</kbd> で1つ前面へ、<kbd>⌘[</kbd> で1つ背面へ、<kbd>⌘⌥]</kbd> で最前面、<kbd>⌘⌥[</kbd> で最背面（ツールバーの ⤒ ⤓ でも可）。<br>\n      <b>マーク</b>：<kbd>Shift</kbd>＋マスをクリック＝黄色、<kbd>Alt</kbd>＋マスをクリック＝薄く表示。<br>\n      <b>表示</b>：スペース＋ドラッグまたはトラックパッドで移動。<kbd>⌘</kbd>＋スクロールでズーム。<kbd>⇧1</kbd> で全体表示、<kbd>⇧0</kbd> で 100%。","手動跑題白板":"手で追うアルゴリズムホワイトボード","瀏覽器空間滿了，這次沒有存到。可以刪掉幾個舊白板，或用匯出備份。":"ブラウザの保存容量がいっぱいで、今回は保存できませんでした。古いボードを削除するか、エクスポートでバックアップしてください。","欄 1":"列 1","欄 2":"列 2","欄 3":"列 3","名稱":"名前","刪除":"削除","加一格":"マスを追加","（空的）":"（空）","標題":"タイトル","程式碼":"コード","文字":"テキスト","便利貼":"付箋","字串":"文字列","陣列":"配列","堆疊":"スタック","↓ 頂端":"↓ トップ","＋ 推入":"＋ プッシュ","佇列":"キュー","前端":"先頭","尾端":"末尾","＋ 加入":"＋ 追加","字典":"辞書","刪除這筆":"この項目を削除","集合":"集合","二維陣列":"2次元配列","欄":"列","列":"行","刪除第 {n} 欄":"{n} 列目を削除","刪除第 {n} 列":"{n} 行目を削除","加一欄":"列を追加","加一列":"行を追加","＋ 列":"＋ 行","值":"値","加左子節點":"左の子を追加","加右子節點":"右の子を追加","接下一個":"次をつなぐ","加一個相鄰節點":"隣接ノードを追加","表格":"表","刪除這一欄":"この列を削除","刪除這一列":"この行を削除","＋ 新增一列":"＋ 行を追加","移到最上層":"最前面へ","移到最下層":"最背面へ","往上一層":"前面へ","往下一層":"背面へ","已經有左子節點了":"左の子はすでにあります","已經有右子節點了":"右の子はすでにあります","已複製一份，改有變的地方就好":"複製しました。変わった所だけ直せばOK","填充":"塗り","不填":"塗りなし","清除底色":"背景色をクリア","底色":"背景色","→ 有箭頭":"→ 矢印あり","— 沒箭頭":"— 矢印なし","反轉":"反転","已選 {n} 個":"{n} 個選択中","邊框":"枠線","線條":"線","線條顏色":"線の色","移到最上層（":"最前面へ（","移到最下層（":"最背面へ（","刪除（":"削除（","大標題":"大見出し","一般":"標準","箭頭朝":"矢印の向き","上":"上","右":"右","下":"下","左":"左","（按 R 旋轉）\">":"（R で回転）\">","顏色":"色","這格":"このマス","第 {n} 格":"{n} マス目","全部格子":"全マス","整理這棵樹":"この木を整列","加一個指標。":"ポインタを追加。","＋點格子＝標黃，":"＋マスをクリック＝黄色、","＋點格子＝變淡":"＋マスをクリック＝薄く","＋指標":"＋ポインタ","清除標記":"マークをクリア","；往上一層":"；前面へ","；往下一層":"；背面へ","複製一份（":"複製（","複製一份":"複製","從這裡拉一條線":"ここから線を引く","連線":"接続","點另一個元件，連過去":"別の要素をクリックしてつなぐ","已複製一份放在下面":"下に複製しました","已複製 {n} 個，按 ⌘V 貼上":"{n} 個コピーしました。⌘V で貼り付け","已複製一份":"複製しました","先點起點，再點終點":"始点をクリックしてから終点をクリック","題目：":"問題：","步":"ステップ","說明":"説明","起點":"始点","20. 有效的括號":"20. Valid Parentheses（有効な括弧）","讀到":"読んだ文字","決定":"判断","堆疊放：還沒關的左括號\n右括號：只跟頂端比":"スタックに入れる：まだ閉じていない開き括弧\n閉じ括弧：トップとだけ比べる","在 seen 裡？":"seen にある？","否":"いいえ","二元樹：root = [3,9,20,null,null,15,7]":"二分木：root = [3,9,20,null,null,15,7]","鏈結串列：head = [1,2,3,4,5]":"連結リスト：head = [1,2,3,4,5]","DP：dp[i][j] 代表…":"DP：dp[i][j] の意味は…","狀態：\n轉移：dp[i][j] = \n起點：\n答案在哪一格：":"状態：\n遷移：dp[i][j] = \n初期値：\n答えはどのマス：","圖：從 A 出發":"グラフ：A から出発","白板":"ホワイトボード","未命名白板 {n}":"無題のボード {n}","已開一個「{name}」的白板":"「{name}」のボードを開きました","已開一個新白板":"新しいボードを開きました","剛剛":"たった今","{n} 分鐘前":"{n} 分前","今天 {t}":"今日 {t}","我的白板":"マイボード","關閉":"閉じる","＋ 空白白板":"＋ 空のボード","或":"または","題號或題名":"問題番号または問題名","輸入題號或題名，例：":"問題番号か問題名を入力（例：","＋ 這一題的白板":"＋ この問題のボード","搜尋白板":"ボードを検索","搜尋已存的白板":"保存したボードを検索","題目 #{n}":"問題 #{n}","空白":"空","{n} 個元件":"{n} 個の要素","目前這個":"現在のボード","開啟":"開く","改名":"名前を変更","複製":"複製","找不到符合的白板。":"一致するボードが見つかりません。","還沒有存任何白板。":"保存したボードはまだありません。","找不到這一題，請輸入題號（例：20）或完整題名。":"問題が見つかりません。問題番号（例：20）か正式な問題名を入力してください。","新名稱":"新しい名前","{name}（複製）":"{name}（コピー）","已複製":"複製しました","確定刪除？":"削除しますか？","已刪除":"削除しました","我的白板…":"マイボード…","＋ 新的空白白板":"＋ 新しい空のボード","匯出／匯入…":"エクスポート／インポート…","清空這個白板":"このボードをクリア","再按一次確定清空":"もう一度押すとクリアします","已清空，可以按 ⌘Z 找回來":"クリアしました。⌘Z で元に戻せます","放大":"拡大","縮小":"縮小","縮放到 100%":"100% に戻す","全部看得到":"全体表示","清空畫板":"ボードをクリア","已清空，可以按復原找回來":"クリアしました。元に戻すで復元できます","匯出／匯入":"エクスポート／インポート","複製下面的內容存起來；要還原時，把內容貼回來按「匯入」。":"下の内容をコピーして保存してください。復元するときは内容を貼り付けて「インポート」を押します。","畫板內容":"ボードの内容","匯入":"インポート","已匯入":"インポートしました","內容格式不對，沒有匯入":"形式が正しくないため、インポートしませんでした","我的第一個白板":"はじめてのボード","元件":"要素","白板選單：切換、新增、匯出、清空":"ボードメニュー：切り替え・新規・エクスポート・クリア","搜尋元件":"要素を検索","指標":"ポインタ","變數":"変数","樹節點":"木のノード","串列節點":"リストノード","圖節點":"グラフノード","工具":"ツール","選取（V）":"選択（V）","選取":"選択","移動畫面（H，或按住空白鍵）":"画面移動（H、またはスペースを押したまま）","移動畫面":"画面移動","連線（C）":"接続（C）","畫筆（P）":"ペン（P）","畫筆":"ペン","橡皮擦（E）：按住拖過去，碰到的筆跡都會擦掉":"消しゴム（E）：ドラッグでなぞった線を消します","擦筆跡":"線を消す","矩形（R）。按住 Shift 畫正方形":"四角形（R）。Shift で正方形","矩形":"四角形","圓形（O）。按住 Shift 畫正圓":"円（O）。Shift で正円","圓形":"円","直線（L）。按住 Shift 對齊 45 度":"直線（L）。Shift で 45 度に揃える","直線":"直線","箭頭（⇧L）。按住 Shift 對齊 45 度":"矢印（⇧L）。Shift で 45 度に揃える","箭頭":"矢印","畫筆和形狀的顏色":"ペンと図形の色","復原（⌘Z）":"元に戻す（⌘Z）","復原":"元に戻す","重做（⇧⌘Z）":"やり直し（⇧⌘Z）","重做":"やり直し","整張畫布的預覽，點一下跳到那裡":"キャンバス全体のプレビュー。クリックでその場所へ移動","縮小（⌘−）":"縮小（⌘−）","縮放選單":"ズームメニュー","放大（⌘＋）":"拡大（⌘＋）","全部看得到（⇧1）":"全体表示（⇧1）","操作說明":"操作説明","語言 / Language":"言語 / Language","在 LeetCode 看題目 ↗":"LeetCode で問題を見る ↗","線性":"線形","查表":"ルックアップ","節點":"ノード","點一下放到畫面中間，或直接拖到畫布上。":"クリックで画面中央に配置、またはキャンバスへ直接ドラッグ。"},"ko":{"__help__":"<button type=\"button\" id=\"helpX\" aria-label=\"도움말 닫기\">×</button>\n      <b>기본</b>: 왼쪽에서 요소를 클릭하거나 캔버스로 드래그하세요. 요소를 선택하면 <b>＋</b>와 <b>×</b>가 요소 위에 바로 나타나고, 위쪽 회색 막대를 드래그하면 이동할 수 있습니다.<br>\n      <b>입력</b>: 배열은 <kbd>2 7 11</kbd>처럼 입력(공백이나 쉼표로 다음 칸 이동). 문자열은 한 글자마다 자동으로 다음 칸으로 이동. 빈 칸에서 <kbd>⌫</kbd>를 누르면 이전 칸으로 돌아갑니다.<br>\n      <b>범위 선택</b>: 빈 곳에서 드래그. <kbd>⌥</kbd>(Alt)＋드래그＝복사본 끌어내기, <kbd>⌘D</kbd> 선택 전체를 아래에 복제, <kbd>⌘C</kbd>/<kbd>⌘V</kbd> 마우스 위치에 붙여넣기, <kbd>Delete</kbd> 삭제, <kbd>Shift</kbd>＋요소 클릭으로 추가 선택.<br>\n      <b>도형</b>: 아래 도구 막대의 사각형 <kbd>R</kbd>, 원 <kbd>O</kbd>, 직선 <kbd>L</kbd>, 화살표 <kbd>⇧L</kbd>를 드래그해서 그립니다. <kbd>Shift</kbd>를 누르면 정사각형/정원/45도. 도형을 클릭하면 선택, 이동, 색 변경이 가능합니다.<br>\n      <b>레이어</b>: 선택 후 <kbd>⌘]</kbd> 한 단계 앞으로, <kbd>⌘[</kbd> 한 단계 뒤로, <kbd>⌘⌥]</kbd> 맨 앞으로, <kbd>⌘⌥[</kbd> 맨 뒤로(도구 막대에도 ⤒ ⤓ 있음).<br>\n      <b>표시</b>: <kbd>Shift</kbd>＋칸 클릭＝노란색 표시, <kbd>Alt</kbd>＋칸 클릭＝흐리게.<br>\n      <b>화면</b>: 스페이스바＋드래그 또는 트랙패드로 이동, <kbd>⌘</kbd>＋스크롤로 확대/축소, <kbd>⇧1</kbd> 전체 보기, <kbd>⇧0</kbd> 100%.","手動跑題白板":"손으로 따라가는 알고리즘 화이트보드","瀏覽器空間滿了，這次沒有存到。可以刪掉幾個舊白板，或用匯出備份。":"브라우저 저장 공간이 가득 차서 이번에는 저장되지 않았습니다. 오래된 보드를 몇 개 삭제하거나 내보내기로 백업하세요.","欄 1":"열 1","欄 2":"열 2","欄 3":"열 3","名稱":"이름","刪除":"삭제","加一格":"칸 추가","（空的）":"(비어 있음)","標題":"제목","程式碼":"코드","文字":"텍스트","便利貼":"메모","字串":"문자열","陣列":"배열","堆疊":"스택","↓ 頂端":"↓ 꼭대기","＋ 推入":"＋ 푸시","佇列":"큐","前端":"앞","尾端":"뒤","＋ 加入":"＋ 추가","字典":"딕셔너리","刪除這筆":"이 항목 삭제","集合":"집합","二維陣列":"2차원 배열","欄":"열","列":"행","刪除第 {n} 欄":"{n}번째 열 삭제","刪除第 {n} 列":"{n}번째 행 삭제","加一欄":"열 추가","加一列":"행 추가","＋ 列":"＋ 행","值":"값","加左子節點":"왼쪽 자식 추가","加右子節點":"오른쪽 자식 추가","接下一個":"다음 노드 연결","加一個相鄰節點":"인접 노드 추가","表格":"표","刪除這一欄":"이 열 삭제","刪除這一列":"이 행 삭제","＋ 新增一列":"＋ 행 추가","移到最上層":"맨 앞으로","移到最下層":"맨 뒤로","往上一層":"한 단계 앞으로","往下一層":"한 단계 뒤로","已經有左子節點了":"이미 왼쪽 자식이 있습니다","已經有右子節點了":"이미 오른쪽 자식이 있습니다","已複製一份，改有變的地方就好":"복사했습니다. 바뀐 부분만 고치세요","填充":"채우기","不填":"채우지 않음","清除底色":"배경색 지우기","底色":"배경색","→ 有箭頭":"→ 화살표 있음","— 沒箭頭":"— 화살표 없음","反轉":"반전","已選 {n} 個":"{n}개 선택됨","邊框":"테두리","線條":"선","線條顏色":"선 색","移到最上層（":"맨 앞으로 (","移到最下層（":"맨 뒤로 (","刪除（":"삭제 (","大標題":"큰 제목","一般":"보통","箭頭朝":"화살표 방향","上":"위","右":"오른쪽","下":"아래","左":"왼쪽","（按 R 旋轉）\">":"(R 키로 회전)\">","顏色":"색","這格":"이 칸","第 {n} 格":"{n}번째 칸","全部格子":"모든 칸","整理這棵樹":"트리 정리","加一個指標。":"포인터 추가.","＋點格子＝標黃，":"＋칸 클릭＝노란색 표시, ","＋點格子＝變淡":"＋칸 클릭＝흐리게","＋指標":"＋포인터","清除標記":"표시 지우기","；往上一層":"; 한 단계 앞으로","；往下一層":"; 한 단계 뒤로","複製一份（":"복제 (","複製一份":"복제","從這裡拉一條線":"여기서 선 끌기","連線":"연결","點另一個元件，連過去":"다른 요소를 클릭해 연결하세요","已複製一份放在下面":"아래에 복제했습니다","已複製 {n} 個，按 ⌘V 貼上":"{n}개 복사됨, ⌘V로 붙여넣기","已複製一份":"복제했습니다","先點起點，再點終點":"시작점을 클릭한 다음 끝점을 클릭하세요","題目：":"문제: ","步":"단계","說明":"설명","起點":"시작","20. 有效的括號":"20. Valid Parentheses","讀到":"읽은 문자","決定":"판단","堆疊放：還沒關的左括號\n右括號：只跟頂端比":"스택: 아직 닫히지 않은 여는 괄호\n닫는 괄호: 꼭대기와만 비교","在 seen 裡？":"seen에 있나?","否":"아니요","二元樹：root = [3,9,20,null,null,15,7]":"이진 트리: root = [3,9,20,null,null,15,7]","鏈結串列：head = [1,2,3,4,5]":"연결 리스트: head = [1,2,3,4,5]","DP：dp[i][j] 代表…":"DP: dp[i][j]의 의미는…","狀態：\n轉移：dp[i][j] = \n起點：\n答案在哪一格：":"상태: \n전이: dp[i][j] = \n초기값: \n정답 칸: ","圖：從 A 出發":"그래프: A에서 출발","白板":"화이트보드","未命名白板 {n}":"제목 없는 보드 {n}","已開一個「{name}」的白板":"「{name}」 보드를 열었습니다","已開一個新白板":"새 보드를 열었습니다","剛剛":"방금","{n} 分鐘前":"{n}분 전","今天 {t}":"오늘 {t}","我的白板":"내 보드","關閉":"닫기","＋ 空白白板":"＋ 빈 보드","或":"또는","題號或題名":"문제 번호 또는 제목","輸入題號或題名，例：":"문제 번호나 제목 입력, 예: ","＋ 這一題的白板":"＋ 이 문제 보드","搜尋白板":"보드 검색","搜尋已存的白板":"저장된 보드 검색","題目 #{n}":"문제 #{n}","空白":"비어 있음","{n} 個元件":"요소 {n}개","目前這個":"현재 보드","開啟":"열기","改名":"이름 바꾸기","複製":"복제","找不到符合的白板。":"일치하는 보드가 없습니다.","還沒有存任何白板。":"저장된 보드가 아직 없습니다.","找不到這一題，請輸入題號（例：20）或完整題名。":"문제를 찾을 수 없습니다. 문제 번호(예: 20)나 전체 제목을 입력하세요.","新名稱":"새 이름","{name}（複製）":"{name} (사본)","已複製":"복제했습니다","確定刪除？":"삭제할까요?","已刪除":"삭제했습니다","我的白板…":"내 보드…","＋ 新的空白白板":"＋ 새 빈 보드","匯出／匯入…":"내보내기/가져오기…","清空這個白板":"이 보드 비우기","再按一次確定清空":"한 번 더 누르면 비워집니다","已清空，可以按 ⌘Z 找回來":"비웠습니다. ⌘Z로 되돌릴 수 있습니다","放大":"확대","縮小":"축소","縮放到 100%":"100%로 보기","全部看得到":"전체 보기","清空畫板":"보드 비우기","已清空，可以按復原找回來":"비웠습니다. 실행 취소로 되돌릴 수 있습니다","匯出／匯入":"내보내기/가져오기","複製下面的內容存起來；要還原時，把內容貼回來按「匯入」。":"아래 내용을 복사해 보관하세요. 복원하려면 내용을 다시 붙여넣고 「가져오기」를 누르세요.","畫板內容":"보드 내용","匯入":"가져오기","已匯入":"가져왔습니다","內容格式不對，沒有匯入":"형식이 올바르지 않아 가져오지 못했습니다","我的第一個白板":"내 첫 번째 보드","元件":"요소","白板選單：切換、新增、匯出、清空":"보드 메뉴: 전환, 새로 만들기, 내보내기, 비우기","搜尋元件":"요소 검색","指標":"포인터","變數":"변수","樹節點":"트리 노드","串列節點":"리스트 노드","圖節點":"그래프 노드","工具":"도구","選取（V）":"선택 (V)","選取":"선택","移動畫面（H，或按住空白鍵）":"화면 이동 (H 또는 스페이스바 누른 채)","移動畫面":"화면 이동","連線（C）":"연결 (C)","畫筆（P）":"펜 (P)","畫筆":"펜","橡皮擦（E）：按住拖過去，碰到的筆跡都會擦掉":"지우개 (E): 누른 채 드래그하면 닿는 필기가 지워집니다","擦筆跡":"필기 지우기","矩形（R）。按住 Shift 畫正方形":"사각형 (R). Shift를 누르면 정사각형","矩形":"사각형","圓形（O）。按住 Shift 畫正圓":"원 (O). Shift를 누르면 정원","圓形":"원","直線（L）。按住 Shift 對齊 45 度":"직선 (L). Shift를 누르면 45도 맞춤","直線":"직선","箭頭（⇧L）。按住 Shift 對齊 45 度":"화살표 (⇧L). Shift를 누르면 45도 맞춤","箭頭":"화살표","畫筆和形狀的顏色":"펜과 도형 색","復原（⌘Z）":"실행 취소 (⌘Z)","復原":"실행 취소","重做（⇧⌘Z）":"다시 실행 (⇧⌘Z)","重做":"다시 실행","整張畫布的預覽，點一下跳到那裡":"전체 캔버스 미리보기, 클릭하면 그 위치로 이동","縮小（⌘−）":"축소 (⌘−)","縮放選單":"확대/축소 메뉴","放大（⌘＋）":"확대 (⌘＋)","全部看得到（⇧1）":"전체 보기 (⇧1)","操作說明":"사용법","語言 / Language":"언어 / Language","在 LeetCode 看題目 ↗":"LeetCode에서 문제 보기 ↗","線性":"선형","查表":"조회","節點":"노드","點一下放到畫面中間，或直接拖到畫布上。":"클릭하면 화면 가운데에 놓이고, 캔버스로 바로 드래그할 수도 있습니다."},"fr":{"__help__":"<button type=\"button\" id=\"helpX\" aria-label=\"Fermer l’aide\">×</button>\n      <b>Bases</b> : cliquez ou glissez un composant depuis la gauche vers le canevas. Une fois un composant sélectionné, <b>＋</b> et <b>×</b> apparaissent directement dessus ; glissez la barre grise du haut pour le déplacer.<br>\n      <b>Saisie</b> : dans un tableau, tapez <kbd>2 7 11</kbd> (espace ou virgule pour passer à la case suivante) ; dans une chaîne, chaque caractère passe à la case suivante ; dans une case vide, <kbd>⌫</kbd> revient à la case précédente.<br>\n      <b>Sélection</b> : glissez sur une zone vide. <kbd>⌥</kbd> (Alt) + glisser = faire glisser une copie, <kbd>⌘D</kbd> duplique le groupe en dessous, <kbd>⌘C</kbd>/<kbd>⌘V</kbd> colle à la position de la souris, <kbd>Delete</kbd> supprime, <kbd>Shift</kbd> + clic sur un composant l’ajoute à la sélection.<br>\n      <b>Formes</b> : dans la barre d’outils du bas, rectangle <kbd>R</kbd>, cercle <kbd>O</kbd>, ligne <kbd>L</kbd>, flèche <kbd>⇧L</kbd> ; glissez pour dessiner, maintenez <kbd>Shift</kbd> pour un carré / cercle parfait / 45°. Cliquez sur une forme pour la sélectionner, la déplacer ou changer sa couleur.<br>\n      <b>Calques</b> : après sélection, <kbd>⌘]</kbd> monte d’un niveau, <kbd>⌘[</kbd> descend d’un niveau, <kbd>⌘⌥]</kbd> tout au-dessus, <kbd>⌘⌥[</kbd> tout en dessous (aussi ⤒ ⤓ dans la barre d’outils).<br>\n      <b>Marquage</b> : <kbd>Shift</kbd> + clic sur une case = jaune, <kbd>Alt</kbd> + clic sur une case = estompé.<br>\n      <b>Vue</b> : barre d’espace + glisser ou pavé tactile pour se déplacer ; <kbd>⌘</kbd> + molette pour zoomer ; <kbd>⇧1</kbd> tout afficher, <kbd>⇧0</kbd> 100 %.","手動跑題白板":"Tableau blanc pour dérouler à la main","瀏覽器空間滿了，這次沒有存到。可以刪掉幾個舊白板，或用匯出備份。":"L’espace du navigateur est plein, rien n’a été enregistré. Supprimez quelques anciens tableaux blancs ou faites une sauvegarde via l’export.","欄 1":"Colonne 1","欄 2":"Colonne 2","欄 3":"Colonne 3","名稱":"Nom","刪除":"Supprimer","加一格":"Ajouter une case","（空的）":"(vide)","標題":"Titre","程式碼":"Code","文字":"Texte","便利貼":"Post-it","字串":"Chaîne","陣列":"Tableau","堆疊":"Pile","↓ 頂端":"↓ Sommet","＋ 推入":"＋ Empiler","佇列":"File","前端":"Tête","尾端":"Queue","＋ 加入":"＋ Ajouter","字典":"Dictionnaire","刪除這筆":"Supprimer cette entrée","集合":"Ensemble","二維陣列":"Tableau 2D","欄":"Colonne","列":"Ligne","刪除第 {n} 欄":"Supprimer la colonne {n}","刪除第 {n} 列":"Supprimer la ligne {n}","加一欄":"Ajouter une colonne","加一列":"Ajouter une ligne","＋ 列":"＋ Ligne","值":"Valeur","加左子節點":"Ajouter un enfant gauche","加右子節點":"Ajouter un enfant droit","接下一個":"Ajouter le suivant","加一個相鄰節點":"Ajouter un nœud voisin","表格":"Table","刪除這一欄":"Supprimer cette colonne","刪除這一列":"Supprimer cette ligne","＋ 新增一列":"＋ Nouvelle ligne","移到最上層":"Mettre au premier plan","移到最下層":"Mettre à l’arrière-plan","往上一層":"Monter d’un niveau","往下一層":"Descendre d’un niveau","已經有左子節點了":"Il y a déjà un enfant gauche","已經有右子節點了":"Il y a déjà un enfant droit","已複製一份，改有變的地方就好":"Copie créée, modifiez seulement ce qui change","填充":"Remplissage","不填":"Sans remplissage","清除底色":"Effacer le fond","底色":"Fond","→ 有箭頭":"→ Avec flèche","— 沒箭頭":"— Sans flèche","反轉":"Inverser","已選 {n} 個":"{n} sélectionné(s)","邊框":"Bordure","線條":"Trait","線條顏色":"Couleur du trait","移到最上層（":"Mettre au premier plan (","移到最下層（":"Mettre à l’arrière-plan (","刪除（":"Supprimer (","大標題":"Grand titre","一般":"Normal","箭頭朝":"Flèche vers","上":"Haut","右":"Droite","下":"Bas","左":"Gauche","（按 R 旋轉）\">":"(R pour pivoter)\">","顏色":"Couleur","這格":"Cette case","第 {n} 格":"Case {n}","全部格子":"Toutes les cases","整理這棵樹":"Réorganiser cet arbre","加一個指標。":"Ajouter un pointeur.","＋點格子＝標黃，":"＋clic sur une case = jaune, ","＋點格子＝變淡":"＋clic sur une case = estompé","＋指標":"＋Pointeur","清除標記":"Effacer les marques","；往上一層":" ; monter d’un niveau","；往下一層":" ; descendre d’un niveau","複製一份（":"Dupliquer (","複製一份":"Dupliquer","從這裡拉一條線":"Tirer un lien d’ici","連線":"Lien","點另一個元件，連過去":"Cliquez sur un autre composant pour le relier","已複製一份放在下面":"Copie placée en dessous","已複製 {n} 個，按 ⌘V 貼上":"{n} copié(s), ⌘V pour coller","已複製一份":"Copie créée","先點起點，再點終點":"Cliquez d’abord le départ, puis l’arrivée","題目：":"Problème : ","步":"Étape","說明":"Explication","起點":"Départ","20. 有效的括號":"20. Valid Parentheses","讀到":"Lu","決定":"Décision","堆疊放：還沒關的左括號\n右括號：只跟頂端比":"La pile contient : les parenthèses ouvrantes pas encore fermées\nParenthèse fermante : comparer seulement au sommet","在 seen 裡？":"Dans seen ?","否":"Non","二元樹：root = [3,9,20,null,null,15,7]":"Arbre binaire : root = [3,9,20,null,null,15,7]","鏈結串列：head = [1,2,3,4,5]":"Liste chaînée : head = [1,2,3,4,5]","DP：dp[i][j] 代表…":"DP : dp[i][j] représente…","狀態：\n轉移：dp[i][j] = \n起點：\n答案在哪一格：":"État :\nTransition : dp[i][j] = \nCas de base :\nCase de la réponse :","圖：從 A 出發":"Graphe : à partir de A","白板":"Tableau blanc","未命名白板 {n}":"Tableau blanc sans titre {n}","已開一個「{name}」的白板":"Tableau blanc « {name} » ouvert","已開一個新白板":"Nouveau tableau blanc ouvert","剛剛":"À l’instant","{n} 分鐘前":"Il y a {n} min","今天 {t}":"Aujourd’hui {t}","我的白板":"Mes tableaux blancs","關閉":"Fermer","＋ 空白白板":"＋ Tableau blanc vierge","或":"ou","題號或題名":"Numéro ou titre du problème","輸入題號或題名，例：":"Saisissez un numéro ou un titre, ex. : ","＋ 這一題的白板":"＋ Tableau blanc pour ce problème","搜尋白板":"Rechercher un tableau blanc","搜尋已存的白板":"Rechercher dans les tableaux enregistrés","題目 #{n}":"Problème #{n}","空白":"Vierge","{n} 個元件":"{n} composant(s)","目前這個":"Actuel","開啟":"Ouvrir","改名":"Renommer","複製":"Dupliquer","找不到符合的白板。":"Aucun tableau blanc ne correspond.","還沒有存任何白板。":"Aucun tableau blanc enregistré pour l’instant.","找不到這一題，請輸入題號（例：20）或完整題名。":"Problème introuvable, saisissez un numéro (ex. : 20) ou le titre complet.","新名稱":"Nouveau nom","{name}（複製）":"{name} (copie)","已複製":"Dupliqué","確定刪除？":"Confirmer la suppression ?","已刪除":"Supprimé","我的白板…":"Mes tableaux blancs…","＋ 新的空白白板":"＋ Nouveau tableau blanc vierge","匯出／匯入…":"Exporter / Importer…","清空這個白板":"Vider ce tableau blanc","再按一次確定清空":"Cliquez encore pour confirmer","已清空，可以按 ⌘Z 找回來":"Vidé, ⌘Z pour récupérer","放大":"Zoom avant","縮小":"Zoom arrière","縮放到 100%":"Zoom à 100 %","全部看得到":"Tout afficher","清空畫板":"Vider le canevas","已清空，可以按復原找回來":"Vidé, utilisez Annuler pour récupérer","匯出／匯入":"Exporter / Importer","複製下面的內容存起來；要還原時，把內容貼回來按「匯入」。":"Copiez le contenu ci-dessous pour le conserver ; pour restaurer, collez-le ici et cliquez sur « Importer ».","畫板內容":"Contenu du canevas","匯入":"Importer","已匯入":"Importé","內容格式不對，沒有匯入":"Format invalide, rien n’a été importé","我的第一個白板":"Mon premier tableau blanc","元件":"Composants","白板選單：切換、新增、匯出、清空":"Menu tableau blanc : changer, créer, exporter, vider","搜尋元件":"Rechercher un composant","指標":"Pointeur","變數":"Variable","樹節點":"Nœud d’arbre","串列節點":"Nœud de liste","圖節點":"Nœud de graphe","工具":"Outils","選取（V）":"Sélection (V)","選取":"Sélection","移動畫面（H，或按住空白鍵）":"Déplacer la vue (H, ou maintenir la barre d’espace)","移動畫面":"Déplacer la vue","連線（C）":"Lien (C)","畫筆（P）":"Crayon (P)","畫筆":"Crayon","橡皮擦（E）：按住拖過去，碰到的筆跡都會擦掉":"Gomme (E) : maintenez et glissez, les traits touchés sont effacés","擦筆跡":"Effacer les traits","矩形（R）。按住 Shift 畫正方形":"Rectangle (R). Maintenez Shift pour un carré","矩形":"Rectangle","圓形（O）。按住 Shift 畫正圓":"Cercle (O). Maintenez Shift pour un cercle parfait","圓形":"Cercle","直線（L）。按住 Shift 對齊 45 度":"Ligne (L). Maintenez Shift pour aligner à 45°","直線":"Ligne","箭頭（⇧L）。按住 Shift 對齊 45 度":"Flèche (⇧L). Maintenez Shift pour aligner à 45°","箭頭":"Flèche","畫筆和形狀的顏色":"Couleur du crayon et des formes","復原（⌘Z）":"Annuler (⌘Z)","復原":"Annuler","重做（⇧⌘Z）":"Rétablir (⇧⌘Z)","重做":"Rétablir","整張畫布的預覽，點一下跳到那裡":"Aperçu de tout le canevas, cliquez pour y aller","縮小（⌘−）":"Zoom arrière (⌘−)","縮放選單":"Menu du zoom","放大（⌘＋）":"Zoom avant (⌘＋)","全部看得到（⇧1）":"Tout afficher (⇧1)","操作說明":"Aide","語言 / Language":"Langue / Language","在 LeetCode 看題目 ↗":"Voir le problème sur LeetCode ↗","線性":"Linéaire","查表":"Recherche","節點":"Nœuds","點一下放到畫面中間，或直接拖到畫布上。":"Cliquez pour placer au centre de la vue, ou glissez directement sur le canevas."},"hi":{"__help__":"<button type=\"button\" id=\"helpX\" aria-label=\"सहायता बंद करें\">×</button>\n      <b>बेसिक</b>: बाईं ओर से किसी component पर क्लिक करें या उसे canvas पर खींचें। Component चुनने पर <b>＋</b> और <b>×</b> सीधे उसी पर दिखते हैं; ऊपर की ग्रे पट्टी खींचकर उसे move करें।<br>\n      <b>इनपुट</b>: Array में <kbd>2 7 11</kbd> टाइप करें (space या comma से अगला सेल); String में हर अक्षर अपने-आप अगले सेल में जाता है; खाली सेल में <kbd>⌫</kbd> दबाने पर पिछले सेल पर लौटें।<br>\n      <b>बॉक्स से चुनें</b>: खाली जगह पर ड्रैग करें। <kbd>⌥</kbd> (Alt) ＋ ड्रैग = कॉपी खींचें, <kbd>⌘D</kbd> पूरे समूह की कॉपी नीचे, <kbd>⌘C</kbd>/<kbd>⌘V</kbd> माउस की जगह पर पेस्ट, <kbd>Delete</kbd> हटाएं, <kbd>Shift</kbd> ＋ क्लिक से चुनाव में जोड़ें।<br>\n      <b>आकृतियाँ</b>: नीचे के टूलबार में आयत <kbd>R</kbd>, वृत्त <kbd>O</kbd>, रेखा <kbd>L</kbd>, तीर <kbd>⇧L</kbd> — ड्रैग करके बनाएं; <kbd>Shift</kbd> दबाए रखें तो वर्ग / पूरा वृत्त / 45 डिग्री। आकृति पर क्लिक करके चुनें, खिसकाएं, रंग बदलें।<br>\n      <b>लेयर</b>: चुनने के बाद <kbd>⌘]</kbd> एक लेयर ऊपर, <kbd>⌘[</kbd> एक लेयर नीचे, <kbd>⌘⌥]</kbd> सबसे ऊपर, <kbd>⌘⌥[</kbd> सबसे नीचे (टूलबार में भी ⤒ ⤓ हैं)।<br>\n      <b>मार्क करें</b>: <kbd>Shift</kbd> ＋ सेल पर क्लिक = पीला, <kbd>Alt</kbd> ＋ सेल पर क्लिक = फीका।<br>\n      <b>व्यू</b>: Space ＋ ड्रैग या ट्रैकपैड से move करें; <kbd>⌘</kbd> ＋ स्क्रॉल से Zoom; <kbd>⇧1</kbd> सब कुछ दिखाएं, <kbd>⇧0</kbd> 100%।","手動跑題白板":"हाथ से ट्रेस करने वाला व्हाइटबोर्ड","瀏覽器空間滿了，這次沒有存到。可以刪掉幾個舊白板，或用匯出備份。":"ब्राउज़र की स्टोरेज भर गई है, इस बार सेव नहीं हुआ। कुछ पुराने व्हाइटबोर्ड हटाएं या Export करके बैकअप लें।","欄 1":"कॉलम 1","欄 2":"कॉलम 2","欄 3":"कॉलम 3","名稱":"नाम","刪除":"हटाएं","加一格":"एक सेल जोड़ें","（空的）":"(खाली)","標題":"शीर्षक","程式碼":"Code","文字":"टेक्स्ट","便利貼":"स्टिकी नोट","字串":"String","陣列":"Array","堆疊":"Stack","↓ 頂端":"↓ टॉप","＋ 推入":"＋ Push","佇列":"Queue","前端":"फ्रंट","尾端":"रियर","＋ 加入":"＋ जोड़ें","字典":"Dictionary","刪除這筆":"यह एंट्री हटाएं","集合":"Set","二維陣列":"2D Array","欄":"कॉलम","列":"पंक्ति","刪除第 {n} 欄":"कॉलम {n} हटाएं","刪除第 {n} 列":"पंक्ति {n} हटाएं","加一欄":"एक कॉलम जोड़ें","加一列":"एक पंक्ति जोड़ें","＋ 列":"＋ पंक्ति","值":"मान","加左子節點":"बायां child node जोड़ें","加右子節點":"दायां child node जोड़ें","接下一個":"अगला जोड़ें","加一個相鄰節點":"एक पड़ोसी Node जोड़ें","表格":"टेबल","刪除這一欄":"यह कॉलम हटाएं","刪除這一列":"यह पंक्ति हटाएं","＋ 新增一列":"＋ नई पंक्ति","移到最上層":"सबसे ऊपर ले जाएं","移到最下層":"सबसे नीचे ले जाएं","往上一層":"एक लेयर ऊपर","往下一層":"एक लेयर नीचे","已經有左子節點了":"बायां child node पहले से है","已經有右子節點了":"दायां child node पहले से है","已複製一份，改有變的地方就好":"कॉपी बन गई, बस जो बदला है वह ठीक करें","填充":"भरें","不填":"न भरें","清除底色":"बैकग्राउंड हटाएं","底色":"बैकग्राउंड","→ 有箭頭":"→ तीर के साथ","— 沒箭頭":"— बिना तीर","反轉":"उलटें","已選 {n} 個":"{n} चुने गए","邊框":"बॉर्डर","線條":"रेखा","線條顏色":"रेखा का रंग","移到最上層（":"सबसे ऊपर ले जाएं（","移到最下層（":"सबसे नीचे ले जाएं（","刪除（":"हटाएं（","大標題":"बड़ा शीर्षक","一般":"सामान्य","箭頭朝":"तीर की दिशा","上":"ऊपर","右":"दाएं","下":"नीचे","左":"बाएं","（按 R 旋轉）\">":"（घुमाने के लिए R दबाएं）\">","顏色":"रंग","這格":"यह सेल","第 {n} 格":"सेल {n}","全部格子":"सभी सेल","整理這棵樹":"इस tree को व्यवस्थित करें","加一個指標。":"Pointer जोड़ें।","＋點格子＝標黃，":"＋सेल पर क्लिक = पीला, ","＋點格子＝變淡":"＋सेल पर क्लिक = फीका","＋指標":"＋Pointer","清除標記":"मार्क हटाएं","；往上一層":"; एक लेयर ऊपर","；往下一層":"; एक लेयर नीचे","複製一份（":"कॉपी बनाएं（","複製一份":"कॉपी बनाएं","從這裡拉一條線":"यहाँ से एक लाइन खींचें","連線":"कनेक्ट","點另一個元件，連過去":"दूसरे component पर क्लिक करके जोड़ें","已複製一份放在下面":"कॉपी नीचे रख दी गई","已複製 {n} 個，按 ⌘V 貼上":"{n} कॉपी हुए, पेस्ट करने के लिए ⌘V दबाएं","已複製一份":"कॉपी बन गई","先點起點，再點終點":"पहले शुरुआती बिंदु पर, फिर अंतिम बिंदु पर क्लिक करें","題目：":"प्रश्न: ","步":"स्टेप","說明":"विवरण","起點":"शुरुआत","20. 有效的括號":"20. Valid Parentheses","讀到":"पढ़ा","決定":"निर्णय","堆疊放：還沒關的左括號\n右括號：只跟頂端比":"Stack में: अभी तक बंद न हुए खुले ब्रैकेट\nबंद ब्रैकेट: सिर्फ टॉप से मिलाएं","在 seen 裡？":"seen में है?","否":"नहीं","二元樹：root = [3,9,20,null,null,15,7]":"Binary Tree: root = [3,9,20,null,null,15,7]","鏈結串列：head = [1,2,3,4,5]":"Linked List: head = [1,2,3,4,5]","DP：dp[i][j] 代表…":"DP: dp[i][j] का मतलब…","狀態：\n轉移：dp[i][j] = \n起點：\n答案在哪一格：":"State: \nTransition: dp[i][j] = \nBase case: \nजवाब किस सेल में: ","圖：從 A 出發":"Graph: A से शुरू","白板":"व्हाइटबोर्ड","未命名白板 {n}":"बिना नाम का व्हाइटबोर्ड {n}","已開一個「{name}」的白板":"\"{name}\" का व्हाइटबोर्ड खोला गया","已開一個新白板":"नया व्हाइटबोर्ड खोला गया","剛剛":"अभी-अभी","{n} 分鐘前":"{n} मिनट पहले","今天 {t}":"आज {t}","我的白板":"मेरे व्हाइटबोर्ड","關閉":"बंद करें","＋ 空白白板":"＋ खाली व्हाइटबोर्ड","或":"या","題號或題名":"प्रश्न नंबर या नाम","輸入題號或題名，例：":"प्रश्न नंबर या नाम डालें, जैसे: ","＋ 這一題的白板":"＋ इस प्रश्न का व्हाइटबोर्ड","搜尋白板":"व्हाइटबोर्ड खोजें","搜尋已存的白板":"सेव किए गए व्हाइटबोर्ड खोजें","題目 #{n}":"प्रश्न #{n}","空白":"खाली","{n} 個元件":"{n} components","目前這個":"मौजूदा","開啟":"खोलें","改名":"नाम बदलें","複製":"कॉपी बनाएं","找不到符合的白板。":"कोई मिलता-जुलता व्हाइटबोर्ड नहीं मिला।","還沒有存任何白板。":"अभी तक कोई व्हाइटबोर्ड सेव नहीं है।","找不到這一題，請輸入題號（例：20）或完整題名。":"यह प्रश्न नहीं मिला, प्रश्न नंबर (जैसे: 20) या पूरा नाम डालें।","新名稱":"नया नाम","{name}（複製）":"{name} (कॉपी)","已複製":"कॉपी बन गई","確定刪除？":"पक्का हटाएं?","已刪除":"हटा दिया गया","我的白板…":"मेरे व्हाइटबोर्ड…","＋ 新的空白白板":"＋ नया खाली व्हाइटबोर्ड","匯出／匯入…":"Export / Import…","清空這個白板":"यह व्हाइटबोर्ड खाली करें","再按一次確定清空":"खाली करने के लिए फिर से दबाएं","已清空，可以按 ⌘Z 找回來":"खाली कर दिया, ⌘Z से वापस ला सकते हैं","放大":"Zoom in","縮小":"Zoom out","縮放到 100%":"100% पर Zoom","全部看得到":"सब कुछ दिखाएं","清空畫板":"बोर्ड खाली करें","已清空，可以按復原找回來":"खाली कर दिया, Undo से वापस ला सकते हैं","匯出／匯入":"Export / Import","複製下面的內容存起來；要還原時，把內容貼回來按「匯入」。":"नीचे का कंटेंट कॉपी करके सेव कर लें; वापस लाने के लिए उसे यहाँ पेस्ट करके \"Import\" दबाएं।","畫板內容":"बोर्ड का कंटेंट","匯入":"Import","已匯入":"Import हो गया","內容格式不對，沒有匯入":"फ़ॉर्मेट गलत है, Import नहीं हुआ","我的第一個白板":"मेरा पहला व्हाइटबोर्ड","元件":"Components","白板選單：切換、新增、匯出、清空":"व्हाइटबोर्ड मेनू: बदलें, नया, Export, खाली करें","搜尋元件":"Component खोजें","指標":"Pointer","變數":"Variable","樹節點":"Tree Node","串列節點":"List Node","圖節點":"Graph Node","工具":"टूल","選取（V）":"चुनें (V)","選取":"चुनें","移動畫面（H，或按住空白鍵）":"व्यू खिसकाएं (H, या Space दबाए रखें)","移動畫面":"व्यू खिसकाएं","連線（C）":"कनेक्ट (C)","畫筆（P）":"पेन (P)","畫筆":"पेन","橡皮擦（E）：按住拖過去，碰到的筆跡都會擦掉":"इरेज़र (E): दबाकर ऊपर से खींचें, छूने वाली सारी लिखावट मिट जाएगी","擦筆跡":"लिखावट मिटाएं","矩形（R）。按住 Shift 畫正方形":"आयत (R)। Shift दबाकर वर्ग बनाएं","矩形":"आयत","圓形（O）。按住 Shift 畫正圓":"वृत्त (O)। Shift दबाकर पूरा वृत्त बनाएं","圓形":"वृत्त","直線（L）。按住 Shift 對齊 45 度":"रेखा (L)। Shift दबाकर 45 डिग्री पर align करें","直線":"रेखा","箭頭（⇧L）。按住 Shift 對齊 45 度":"तीर (⇧L)। Shift दबाकर 45 डिग्री पर align करें","箭頭":"तीर","畫筆和形狀的顏色":"पेन और आकृतियों का रंग","復原（⌘Z）":"पूर्ववत करें (⌘Z)","復原":"पूर्ववत करें","重做（⇧⌘Z）":"फिर से करें (⇧⌘Z)","重做":"फिर से करें","整張畫布的預覽，點一下跳到那裡":"पूरे canvas का प्रीव्यू, क्लिक करके वहाँ जाएं","縮小（⌘−）":"Zoom out (⌘−)","縮放選單":"Zoom मेनू","放大（⌘＋）":"Zoom in (⌘＋)","全部看得到（⇧1）":"सब कुछ दिखाएं (⇧1)","操作說明":"सहायता","語言 / Language":"भाषा / Language","在 LeetCode 看題目 ↗":"LeetCode पर प्रश्न देखें ↗","線性":"लीनियर","查表":"लुकअप","節點":"Node","點一下放到畫面中間，或直接拖到畫布上。":"क्लिक करके स्क्रीन के बीच में रखें, या सीधे canvas पर खींचें।"}};
+var I18N={"zh-CN":{"__help__":"<button type=\"button\" id=\"helpX\" aria-label=\"关闭说明\">×</button>\n      <b>基本</b>：在左侧点一下或拖动组件到画布。选中组件后，<b>＋</b> 和 <b>×</b> 会直接出现在组件上；拖动上方灰色栏可以移动。<br>\n      <b>输入</b>：数组输入 <kbd>2 7 11</kbd>（空格或逗号跳到下一格）；字符串每输入一个字自动跳一格；空格子按 <kbd>⌫</kbd> 回到上一格。<br>\n      <b>框选</b>：在空白处拖动。<kbd>⌥</kbd>（Alt）＋拖动＝拖出一份副本、<kbd>⌘D</kbd> 整组复制到下面、<kbd>⌘C</kbd>/<kbd>⌘V</kbd> 粘贴到鼠标位置、<kbd>Delete</kbd> 删除、<kbd>Shift</kbd>＋点组件加选。<br>\n      <b>形状</b>：下方工具栏的矩形 <kbd>R</kbd>、圆形 <kbd>O</kbd>、直线 <kbd>L</kbd>、箭头 <kbd>⇧L</kbd>，拖动画出来，按住 <kbd>Shift</kbd> 画正方形／正圆／45 度。点一下形状就能选中、拖动、换颜色。<br>\n      <b>图层</b>：选中后 <kbd>⌘]</kbd> 上移一层、<kbd>⌘[</kbd> 下移一层、<kbd>⌘⌥]</kbd> 置于顶层、<kbd>⌘⌥[</kbd> 置于底层（工具栏也有 ⤒ ⤓）。<br>\n      <b>标记</b>：<kbd>Shift</kbd>＋点格子＝标黄，<kbd>Alt</kbd>＋点格子＝变淡。<br>\n      <b>画布</b>：空格键＋拖动或触控板移动；<kbd>⌘</kbd>＋滚轮缩放；<kbd>⇧1</kbd> 显示全部、<kbd>⇧0</kbd> 100%。","手動跑題白板":"手动跑题白板","瀏覽器空間滿了，這次沒有存到。可以刪掉幾個舊白板，或用匯出備份。":"浏览器存储空间已满，这次没有保存成功。可以删掉几个旧白板，或者先导出备份。","欄 1":"列 1","欄 2":"列 2","欄 3":"列 3","名稱":"名称","刪除":"删除","加一格":"加一格","（空的）":"（空）","標題":"标题","程式碼":"代码","文字":"文本","便利貼":"便利贴","字串":"字符串","陣列":"数组","堆疊":"栈","↓ 頂端":"↓ 栈顶","＋ 推入":"＋ 入栈","佇列":"队列","前端":"队头","尾端":"队尾","＋ 加入":"＋ 入队","字典":"字典","刪除這筆":"删除这条","集合":"集合","二維陣列":"二维数组","欄":"列","列":"行","刪除第 {n} 欄":"删除第 {n} 列","刪除第 {n} 列":"删除第 {n} 行","加一欄":"加一列","加一列":"加一行","＋ 列":"＋ 行","值":"值","加左子節點":"加左子节点","加右子節點":"加右子节点","接下一個":"接下一个","加一個相鄰節點":"加一个相邻节点","表格":"表格","刪除這一欄":"删除这一列","刪除這一列":"删除这一行","＋ 新增一列":"＋ 新增一行","移到最上層":"置于顶层","移到最下層":"置于底层","往上一層":"上移一层","往下一層":"下移一层","已經有左子節點了":"已经有左子节点了","已經有右子節點了":"已经有右子节点了","已複製一份，改有變的地方就好":"已复制一份，只改有变化的地方就行","填充":"填充","不填":"无填充","清除底色":"清除底色","底色":"底色","→ 有箭頭":"→ 有箭头","— 沒箭頭":"— 无箭头","反轉":"反转","已選 {n} 個":"已选 {n} 个","邊框":"边框","線條":"线条","線條顏色":"线条颜色","移到最上層（":"置于顶层（","移到最下層（":"置于底层（","刪除（":"删除（","大標題":"大标题","一般":"普通","箭頭朝":"箭头朝","上":"上","右":"右","下":"下","左":"左","（按 R 旋轉）\">":"（按 R 旋转）\">","顏色":"颜色","這格":"这格","第 {n} 格":"第 {n} 格","全部格子":"全部格子","整理這棵樹":"整理这棵树","加一個指標。":"加一个指针。","＋點格子＝標黃，":"＋点格子＝标黄，","＋點格子＝變淡":"＋点格子＝变淡","＋指標":"＋指针","清除標記":"清除标记","；往上一層":"；上移一层","；往下一層":"；下移一层","複製一份（":"复制一份（","複製一份":"复制一份","從這裡拉一條線":"从这里拉一条线","連線":"连线","點另一個元件，連過去":"点另一个组件，连过去","已複製一份放在下面":"已复制一份放在下面","已複製 {n} 個，按 ⌘V 貼上":"已复制 {n} 个，按 ⌘V 粘贴","已複製一份":"已复制一份","先點起點，再點終點":"先点起点，再点终点","題目：":"题目：","步":"步","說明":"说明","起點":"起点","20. 有效的括號":"20. 有效的括号","讀到":"读到","決定":"决定","堆疊放：還沒關的左括號\n右括號：只跟頂端比":"栈里放：还没闭合的左括号\n右括号：只跟栈顶比","在 seen 裡？":"在 seen 里？","否":"否","二元樹：root = [3,9,20,null,null,15,7]":"二叉树：root = [3,9,20,null,null,15,7]","鏈結串列：head = [1,2,3,4,5]":"链表：head = [1,2,3,4,5]","DP：dp[i][j] 代表…":"DP：dp[i][j] 表示…","狀態：\n轉移：dp[i][j] = \n起點：\n答案在哪一格：":"状态：\n转移：dp[i][j] = \n起点：\n答案在哪一格：","圖：從 A 出發":"图：从 A 出发","白板":"白板","未命名白板 {n}":"未命名白板 {n}","已開一個「{name}」的白板":"已新建“{name}”白板","已開一個新白板":"已新建一个白板","剛剛":"刚刚","{n} 分鐘前":"{n} 分钟前","今天 {t}":"今天 {t}","我的白板":"我的白板","關閉":"关闭","＋ 空白白板":"＋ 空白白板","或":"或","題號或題名":"题号或题目名","輸入題號或題名，例：":"输入题号或题目名，例如：","＋ 這一題的白板":"＋ 这道题的白板","搜尋白板":"搜索白板","搜尋已存的白板":"搜索已保存的白板","題目 #{n}":"题目 #{n}","空白":"空白","{n} 個元件":"{n} 个组件","目前這個":"当前","開啟":"打开","改名":"重命名","複製":"复制","找不到符合的白板。":"没有找到匹配的白板。","還沒有存任何白板。":"还没有保存任何白板。","找不到這一題，請輸入題號（例：20）或完整題名。":"找不到这道题，请输入题号（例如：20）或完整题目名。","新名稱":"新名称","{name}（複製）":"{name}（副本）","已複製":"已复制","確定刪除？":"确定删除？","已刪除":"已删除","我的白板…":"我的白板…","＋ 新的空白白板":"＋ 新建空白白板","匯出／匯入…":"导出／导入…","清空這個白板":"清空这个白板","再按一次確定清空":"再按一次确认清空","已清空，可以按 ⌘Z 找回來":"已清空，可以按 ⌘Z 撤销","放大":"放大","縮小":"缩小","縮放到 100%":"缩放到 100%","全部看得到":"显示全部","清空畫板":"清空画板","已清空，可以按復原找回來":"已清空，可以按撤销找回来","匯出／匯入":"导出／导入","複製下面的內容存起來；要還原時，把內容貼回來按「匯入」。":"复制下面的内容保存起来；需要恢复时，把内容粘贴回来再点“导入”。","畫板內容":"画板内容","匯入":"导入","已匯入":"已导入","內容格式不對，沒有匯入":"内容格式不正确，未导入","我的第一個白板":"我的第一个白板","元件":"组件","白板選單：切換、新增、匯出、清空":"白板菜单：切换、新建、导出、清空","搜尋元件":"搜索组件","指標":"指针","變數":"变量","樹節點":"树节点","串列節點":"链表节点","圖節點":"图节点","工具":"工具","選取（V）":"选择（V）","選取":"选择","移動畫面（H，或按住空白鍵）":"移动画布（H，或按住空格键）","移動畫面":"移动画布","連線（C）":"连线（C）","畫筆（P）":"画笔（P）","畫筆":"画笔","橡皮擦（E）：按住拖過去，碰到的筆跡都會擦掉":"橡皮擦（E）：按住拖过去，碰到的笔迹都会被擦掉","擦筆跡":"擦笔迹","矩形（R）。按住 Shift 畫正方形":"矩形（R）。按住 Shift 画正方形","矩形":"矩形","圓形（O）。按住 Shift 畫正圓":"圆形（O）。按住 Shift 画正圆","圓形":"圆形","直線（L）。按住 Shift 對齊 45 度":"直线（L）。按住 Shift 对齐 45 度","直線":"直线","箭頭（⇧L）。按住 Shift 對齊 45 度":"箭头（⇧L）。按住 Shift 对齐 45 度","箭頭":"箭头","畫筆和形狀的顏色":"画笔和形状的颜色","復原（⌘Z）":"撤销（⌘Z）","復原":"撤销","重做（⇧⌘Z）":"重做（⇧⌘Z）","重做":"重做","整張畫布的預覽，點一下跳到那裡":"整张画布的预览，点一下跳到那里","縮小（⌘−）":"缩小（⌘−）","縮放選單":"缩放菜单","放大（⌘＋）":"放大（⌘＋）","全部看得到（⇧1）":"显示全部（⇧1）","操作說明":"操作说明","語言 / Language":"语言 / Language","在 LeetCode 看題目 ↗":"在 LeetCode 看题目 ↗","線性":"线性","查表":"查表","節點":"节点","點一下放到畫面中間，或直接拖到畫布上。":"点一下放到画布中间，或直接拖到画布上。","練習腳本":"练习脚本","✎ 練習腳本":"✎ 练习脚本","用一句一句的話擺白板、一步一步跑題目，最後寫成 Go":"用一句一句的话摆白板、一步一步跑题目，最后写成 Go","關閉練習腳本":"关闭练习脚本","題目":"题目","① 說出來":"① 说出来","② 跑一遍":"② 跑一遍","③ 寫成 Go":"③ 写成 Go","＋ 一行":"＋ 一行","載入範例":"载入示例","對答案":"对答案","骨架":"骨架","參考解答":"参考解答","下載這個檔案":"下载这个文件","第一步":"第一步","上一步":"上一步","下一步":"下一步","最後一步":"最后一步","Go 程式碼":"Go 代码","建立":"创建","給值":"赋值","推入":"压入","彈出":"弹出","放進字典":"放进字典","移除":"移除","標記":"标记","檢查":"检查","回傳":"返回","一行一句話，白板會照著擺。例：<code>array nums = [2,7,11,15]</code>、<code>dict seen</code>、<code>pointer i at nums[0]</code>、<code>put x -> i into seen</code>、<code>把 3 推入 stack</code>。白板上的元件可以拖，但要刪掉就得改或刪那一行。":"一行一句话，白板会照着摆。例：<code>array nums = [2,7,11,15]</code>、<code>dict seen</code>、<code>pointer i at nums[0]</code>、<code>put x -> i into seen</code>、<code>把 3 推入 stack</code>。白板上的组件可以拖，但要删掉就得改或删那一行。","一行一步：白板會停在選到的那一行。檢查句（<code>7 is not in seen</code>、<code>st is empty</code>）會直接拿白板來對。":"一行一步：白板会停在选中的那一行。检查句（<code>7 is not in seen</code>、<code>st is empty</code>）会直接拿白板来对。","把白板上的資料結構翻成 Go：測試裡會放你在白板上跑過的那組例子。在本機跑 <code>go mod init solution &amp;&amp; go test ./...</code>。":"把白板上的数据结构翻成 Go：测试里会放你在白板上跑过的那组例子。在本地运行 <code>go mod init solution &amp;&amp; go test ./...</code>。","由腳本第 {n} 行產生：可以拖，要改內容或刪掉請改那一行":"由脚本第 {n} 行生成：可以拖，要改内容或删掉请改那一行","這是腳本第 {n} 行產生的：改或刪那一行它才會變":"这是脚本第 {n} 行生成的：改或删那一行它才会变","跳到產生它的那一行":"跳到生成它的那一行","這個元件由腳本控制：用「highlight nums[1]」這樣的一行來標記":"这个组件由脚本控制：用「highlight nums[1]」这样的一行来标记","自由練習":"自由练习","白板停在這一行":"白板停在这一行","第 {n} 行":"第 {n} 行","例：array nums = [2,7,11,15]":"例：array nums = [2,7,11,15]","Jev（本機）· 平均信心 {p}%":"Jev（本地）· 平均置信度 {p}%","▷ 播放":"▷ 播放","❚❚ 暫停":"❚❚ 暂停","要用範例取代目前的腳本嗎？（可以復原）":"要用示例替换当前的脚本吗？（可以撤销）","已載入範例：到「② 跑一遍」一步一步看":"已载入示例：到「② 跑一遍」一步一步看","✓ 這次的追蹤是對的":"✓ 这次的追踪是对的","還有地方要再看看":"还有地方要再看看","題目：{t}":"题目：{t}","（從標題認出來的）":"（从标题识别出来的）","自由練習：只對檢查句和回傳值。選一題（或寫「title: 1. Two Sum」）就能拿參考解答來對。":"自由练习：只对检查句和返回值。选一题（或写「title: 1. Two Sum」）就能拿参考解答来对。","下一步：到「③ 寫成 Go」把它寫成程式。":"下一步：到「③ 写成 Go」把它写成程序。","複製程式碼":"复制代码"},"en":{"__help__":"<button type=\"button\" id=\"helpX\" aria-label=\"Close help\">×</button>\n      <b>Basics</b>: click or drag a component from the left onto the canvas. When a component is selected, <b>＋</b> and <b>×</b> appear right on it; drag the gray bar on top to move it.<br>\n      <b>Typing</b>: in an array type <kbd>2 7 11</kbd> (space or comma jumps to the next cell); in a string each character fills its own cell; press <kbd>⌫</kbd> in an empty cell to go back one cell.<br>\n      <b>Select</b>: drag on empty space. <kbd>⌥</kbd> (Alt) + drag = drag out a copy, <kbd>⌘D</kbd> duplicates the group below, <kbd>⌘C</kbd>/<kbd>⌘V</kbd> pastes at the mouse position, <kbd>Delete</kbd> deletes, <kbd>Shift</kbd> + click a component to add it to the selection.<br>\n      <b>Shapes</b>: in the bottom toolbar, rectangle <kbd>R</kbd>, circle <kbd>O</kbd>, line <kbd>L</kbd>, arrow <kbd>⇧L</kbd>; drag to draw, hold <kbd>Shift</kbd> for a square / perfect circle / 45°. Click a shape to select, move, or recolor it.<br>\n      <b>Layers</b>: with something selected, <kbd>⌘]</kbd> bring forward, <kbd>⌘[</kbd> send backward, <kbd>⌘⌥]</kbd> bring to front, <kbd>⌘⌥[</kbd> send to back (also ⤒ ⤓ in the toolbar).<br>\n      <b>Highlight</b>: <kbd>Shift</kbd> + click a cell = yellow, <kbd>Alt</kbd> + click a cell = faded.<br>\n      <b>View</b>: Space + drag or trackpad to pan; <kbd>⌘</kbd> + scroll wheel to zoom; <kbd>⇧1</kbd> fit all, <kbd>⇧0</kbd> 100%.","手動跑題白板":"Trace-by-Hand Whiteboard","瀏覽器空間滿了，這次沒有存到。可以刪掉幾個舊白板，或用匯出備份。":"Browser storage is full, so this wasn't saved. Delete some old boards or export a backup.","欄 1":"Column 1","欄 2":"Column 2","欄 3":"Column 3","名稱":"Name","刪除":"Delete","加一格":"Add a cell","（空的）":"(empty)","標題":"Title","程式碼":"Code","文字":"Text","便利貼":"Sticky note","字串":"String","陣列":"Array","堆疊":"Stack","↓ 頂端":"↓ Top","＋ 推入":"＋ Push","佇列":"Queue","前端":"Front","尾端":"Rear","＋ 加入":"＋ Add","字典":"Dictionary","刪除這筆":"Delete this entry","集合":"Set","二維陣列":"2D array","欄":"Column","列":"Row","刪除第 {n} 欄":"Delete column {n}","刪除第 {n} 列":"Delete row {n}","加一欄":"Add a column","加一列":"Add a row","＋ 列":"＋ Row","值":"Value","加左子節點":"Add left child","加右子節點":"Add right child","接下一個":"Add next node","加一個相鄰節點":"Add a neighbor node","表格":"Table","刪除這一欄":"Delete this column","刪除這一列":"Delete this row","＋ 新增一列":"＋ Add row","移到最上層":"Bring to front","移到最下層":"Send to back","往上一層":"Bring forward","往下一層":"Send backward","已經有左子節點了":"Already has a left child","已經有右子節點了":"Already has a right child","已複製一份，改有變的地方就好":"Duplicated. Just edit what changed","填充":"Fill","不填":"No fill","清除底色":"Clear background","底色":"Background","→ 有箭頭":"→ With arrow","— 沒箭頭":"— No arrow","反轉":"Reverse","已選 {n} 個":"{n} selected","邊框":"Border","線條":"Line","線條顏色":"Line color","移到最上層（":"Bring to front (","移到最下層（":"Send to back (","刪除（":"Delete (","大標題":"Heading","一般":"Normal","箭頭朝":"Arrow points","上":"Up","右":"Right","下":"Down","左":"Left","（按 R 旋轉）\">":" (press R to rotate)\">","顏色":"Color","這格":"This cell","第 {n} 格":"Cell {n}","全部格子":"All cells","整理這棵樹":"Tidy up this tree","加一個指標。":"Add a pointer.","＋點格子＝標黃，":"＋click a cell = yellow, ","＋點格子＝變淡":"＋click a cell = faded","＋指標":"＋Pointer","清除標記":"Clear highlights","；往上一層":"; bring forward","；往下一層":"; send backward","複製一份（":"Duplicate (","複製一份":"Duplicate","從這裡拉一條線":"Drag a line from here","連線":"Connect","點另一個元件，連過去":"Click another component to connect","已複製一份放在下面":"Duplicated below","已複製 {n} 個，按 ⌘V 貼上":"Copied {n}, press ⌘V to paste","已複製一份":"Duplicated","先點起點，再點終點":"Click the start, then the end","題目：":"Problem: ","步":"Step","說明":"Notes","起點":"Start","20. 有效的括號":"20. Valid Parentheses","讀到":"Read","決定":"Decision","堆疊放：還沒關的左括號\n右括號：只跟頂端比":"Stack holds: unclosed open brackets\nClosing bracket: compare with top only","在 seen 裡？":"In seen?","否":"No","二元樹：root = [3,9,20,null,null,15,7]":"Binary tree: root = [3,9,20,null,null,15,7]","鏈結串列：head = [1,2,3,4,5]":"Linked list: head = [1,2,3,4,5]","DP：dp[i][j] 代表…":"DP: dp[i][j] means…","狀態：\n轉移：dp[i][j] = \n起點：\n答案在哪一格：":"State:\nTransition: dp[i][j] = \nBase case:\nAnswer is in cell:","圖：從 A 出發":"Graph: start from A","白板":"Whiteboard","未命名白板 {n}":"Untitled board {n}","已開一個「{name}」的白板":"Opened a board for \"{name}\"","已開一個新白板":"Opened a new board","剛剛":"Just now","{n} 分鐘前":"{n} min ago","今天 {t}":"Today {t}","我的白板":"My boards","關閉":"Close","＋ 空白白板":"＋ Blank board","或":"or","題號或題名":"Problem number or title","輸入題號或題名，例：":"Enter a problem number or title, e.g. ","＋ 這一題的白板":"＋ Board for this problem","搜尋白板":"Search boards","搜尋已存的白板":"Search saved boards","題目 #{n}":"Problem #{n}","空白":"Blank","{n} 個元件":"{n} components","目前這個":"Current","開啟":"Open","改名":"Rename","複製":"Duplicate","找不到符合的白板。":"No matching boards.","還沒有存任何白板。":"No saved boards yet.","找不到這一題，請輸入題號（例：20）或完整題名。":"Problem not found. Enter a number (e.g. 20) or the full title.","新名稱":"New name","{name}（複製）":"{name} (copy)","已複製":"Duplicated","確定刪除？":"Delete this board?","已刪除":"Deleted","我的白板…":"My boards…","＋ 新的空白白板":"＋ New blank board","匯出／匯入…":"Export / import…","清空這個白板":"Clear this board","再按一次確定清空":"Click again to clear","已清空，可以按 ⌘Z 找回來":"Cleared. Press ⌘Z to undo","放大":"Zoom in","縮小":"Zoom out","縮放到 100%":"Zoom to 100%","全部看得到":"Fit all","清空畫板":"Clear canvas","已清空，可以按復原找回來":"Cleared. Press undo to restore","匯出／匯入":"Export / import","複製下面的內容存起來；要還原時，把內容貼回來按「匯入」。":"Copy the content below to save it. To restore, paste it back and click \"Import\".","畫板內容":"Board content","匯入":"Import","已匯入":"Imported","內容格式不對，沒有匯入":"Invalid format, nothing imported","我的第一個白板":"My first board","元件":"Components","白板選單：切換、新增、匯出、清空":"Board menu: switch, new, export, clear","搜尋元件":"Search components","指標":"Pointer","變數":"Variable","樹節點":"Tree node","串列節點":"List node","圖節點":"Graph node","工具":"Tools","選取（V）":"Select (V)","選取":"Select","移動畫面（H，或按住空白鍵）":"Pan (H, or hold Space)","移動畫面":"Pan","連線（C）":"Connect (C)","畫筆（P）":"Pen (P)","畫筆":"Pen","橡皮擦（E）：按住拖過去，碰到的筆跡都會擦掉":"Eraser (E): drag over strokes to erase them","擦筆跡":"Eraser","矩形（R）。按住 Shift 畫正方形":"Rectangle (R). Hold Shift for a square","矩形":"Rectangle","圓形（O）。按住 Shift 畫正圓":"Circle (O). Hold Shift for a perfect circle","圓形":"Circle","直線（L）。按住 Shift 對齊 45 度":"Line (L). Hold Shift to snap to 45°","直線":"Line","箭頭（⇧L）。按住 Shift 對齊 45 度":"Arrow (⇧L). Hold Shift to snap to 45°","箭頭":"Arrow","畫筆和形狀的顏色":"Pen and shape color","復原（⌘Z）":"Undo (⌘Z)","復原":"Undo","重做（⇧⌘Z）":"Redo (⇧⌘Z)","重做":"Redo","整張畫布的預覽，點一下跳到那裡":"Canvas overview. Click to jump there","縮小（⌘−）":"Zoom out (⌘−)","縮放選單":"Zoom menu","放大（⌘＋）":"Zoom in (⌘＋)","全部看得到（⇧1）":"Fit all (⇧1)","操作說明":"Help","語言 / Language":"語言 / Language","在 LeetCode 看題目 ↗":"View on LeetCode ↗","線性":"Linear","查表":"Lookup","節點":"Nodes","點一下放到畫面中間，或直接拖到畫布上。":"Click to place in the center, or drag onto the canvas.","練習腳本":"Practice script","✎ 練習腳本":"✎ Practice script","用一句一句的話擺白板、一步一步跑題目，最後寫成 Go":"Build the board one sentence at a time, trace the problem step by step, then write it in Go","關閉練習腳本":"Close practice script","題目":"Problem","① 說出來":"① Say it","② 跑一遍":"② Trace it","③ 寫成 Go":"③ Write it in Go","＋ 一行":"＋ Line","載入範例":"Load example","對答案":"Check","骨架":"Skeleton","參考解答":"Reference solution","下載這個檔案":"Download this file","第一步":"First step","上一步":"Previous step","下一步":"Next step","最後一步":"Last step","Go 程式碼":"Go code","建立":"create","給值":"assign","推入":"push","彈出":"pop","放進字典":"put","移除":"remove","標記":"mark","檢查":"check","回傳":"return","一行一句話，白板會照著擺。例：<code>array nums = [2,7,11,15]</code>、<code>dict seen</code>、<code>pointer i at nums[0]</code>、<code>put x -> i into seen</code>、<code>把 3 推入 stack</code>。白板上的元件可以拖，但要刪掉就得改或刪那一行。":"One sentence per line and the board follows. For example <code>array nums = [2,7,11,15]</code>, <code>dict seen</code>, <code>pointer i at nums[0]</code>, <code>put x -> i into seen</code>, <code>把 3 推入 stack</code>. You can drag the components, but to delete one, edit or delete its line.","一行一步：白板會停在選到的那一行。檢查句（<code>7 is not in seen</code>、<code>st is empty</code>）會直接拿白板來對。":"One line per step: the board stops at the selected line. Check lines (<code>7 is not in seen</code>, <code>st is empty</code>) are verified against the board.","把白板上的資料結構翻成 Go：測試裡會放你在白板上跑過的那組例子。在本機跑 <code>go mod init solution &amp;&amp; go test ./...</code>。":"Turns the data structures on your board into Go; the test includes the example you traced. Run <code>go mod init solution &amp;&amp; go test ./...</code> locally.","由腳本第 {n} 行產生：可以拖，要改內容或刪掉請改那一行":"Made by script line {n}: drag it freely; to change or delete it, edit that line","這是腳本第 {n} 行產生的：改或刪那一行它才會變":"Script line {n} made this: edit or delete that line to change it","跳到產生它的那一行":"Go to the line that made it","這個元件由腳本控制：用「highlight nums[1]」這樣的一行來標記":"The script controls this component: mark it with a line like \"highlight nums[1]\"","自由練習":"Free practice","白板停在這一行":"Stop the board at this line","第 {n} 行":"Line {n}","例：array nums = [2,7,11,15]":"e.g. array nums = [2,7,11,15]","Jev（本機）· 平均信心 {p}%":"Jev (local) · avg. confidence {p}%","▷ 播放":"▷ Play","❚❚ 暫停":"❚❚ Pause","要用範例取代目前的腳本嗎？（可以復原）":"Replace the current script with the example? (You can undo.)","已載入範例：到「② 跑一遍」一步一步看":"Example loaded: open \"② Trace it\" to step through it","✓ 這次的追蹤是對的":"✓ This trace is correct","還有地方要再看看":"A few things to look at","題目：{t}":"Problem: {t}","（從標題認出來的）":"(recognized from the title)","自由練習：只對檢查句和回傳值。選一題（或寫「title: 1. Two Sum」）就能拿參考解答來對。":"Free practice: only check lines and the returned value are verified. Pick a problem (or write \"title: 1. Two Sum\") to compare with a reference solution.","下一步：到「③ 寫成 Go」把它寫成程式。":"Next: open \"③ Write it in Go\" and turn it into code.","複製程式碼":"Copy code"},"ja":{"__help__":"<button type=\"button\" id=\"helpX\" aria-label=\"ヘルプを閉じる\">×</button>\n      <b>基本</b>：左のパネルからクリックまたはドラッグでキャンバスに配置。選択すると <b>＋</b> と <b>×</b> が要素の上に表示されます。上部の灰色のバーをドラッグすると移動できます。<br>\n      <b>入力</b>：配列は <kbd>2 7 11</kbd> のように入力（スペースかカンマで次のマスへ）。文字列は1文字ごとに自動で次のマスへ。空のマスで <kbd>⌫</kbd> を押すと前のマスに戻ります。<br>\n      <b>範囲選択</b>：空いている所をドラッグ。<kbd>⌥</kbd>（Alt）＋ドラッグ＝複製をドラッグ、<kbd>⌘D</kbd> でまとめて下に複製、<kbd>⌘C</kbd>/<kbd>⌘V</kbd> でマウス位置に貼り付け、<kbd>Delete</kbd> で削除、<kbd>Shift</kbd>＋クリックで選択に追加。<br>\n      <b>図形</b>：下のツールバーの四角形 <kbd>R</kbd>、円 <kbd>O</kbd>、直線 <kbd>L</kbd>、矢印 <kbd>⇧L</kbd> をドラッグで描画。<kbd>Shift</kbd> を押しながらで正方形／正円／45度。図形をクリックすると選択・移動・色の変更ができます。<br>\n      <b>レイヤー</b>：選択して <kbd>⌘]</kbd> で1つ前面へ、<kbd>⌘[</kbd> で1つ背面へ、<kbd>⌘⌥]</kbd> で最前面、<kbd>⌘⌥[</kbd> で最背面（ツールバーの ⤒ ⤓ でも可）。<br>\n      <b>マーク</b>：<kbd>Shift</kbd>＋マスをクリック＝黄色、<kbd>Alt</kbd>＋マスをクリック＝薄く表示。<br>\n      <b>表示</b>：スペース＋ドラッグまたはトラックパッドで移動。<kbd>⌘</kbd>＋スクロールでズーム。<kbd>⇧1</kbd> で全体表示、<kbd>⇧0</kbd> で 100%。","手動跑題白板":"手で追うアルゴリズムホワイトボード","瀏覽器空間滿了，這次沒有存到。可以刪掉幾個舊白板，或用匯出備份。":"ブラウザの保存容量がいっぱいで、今回は保存できませんでした。古いボードを削除するか、エクスポートでバックアップしてください。","欄 1":"列 1","欄 2":"列 2","欄 3":"列 3","名稱":"名前","刪除":"削除","加一格":"マスを追加","（空的）":"（空）","標題":"タイトル","程式碼":"コード","文字":"テキスト","便利貼":"付箋","字串":"文字列","陣列":"配列","堆疊":"スタック","↓ 頂端":"↓ トップ","＋ 推入":"＋ プッシュ","佇列":"キュー","前端":"先頭","尾端":"末尾","＋ 加入":"＋ 追加","字典":"辞書","刪除這筆":"この項目を削除","集合":"集合","二維陣列":"2次元配列","欄":"列","列":"行","刪除第 {n} 欄":"{n} 列目を削除","刪除第 {n} 列":"{n} 行目を削除","加一欄":"列を追加","加一列":"行を追加","＋ 列":"＋ 行","值":"値","加左子節點":"左の子を追加","加右子節點":"右の子を追加","接下一個":"次をつなぐ","加一個相鄰節點":"隣接ノードを追加","表格":"表","刪除這一欄":"この列を削除","刪除這一列":"この行を削除","＋ 新增一列":"＋ 行を追加","移到最上層":"最前面へ","移到最下層":"最背面へ","往上一層":"前面へ","往下一層":"背面へ","已經有左子節點了":"左の子はすでにあります","已經有右子節點了":"右の子はすでにあります","已複製一份，改有變的地方就好":"複製しました。変わった所だけ直せばOK","填充":"塗り","不填":"塗りなし","清除底色":"背景色をクリア","底色":"背景色","→ 有箭頭":"→ 矢印あり","— 沒箭頭":"— 矢印なし","反轉":"反転","已選 {n} 個":"{n} 個選択中","邊框":"枠線","線條":"線","線條顏色":"線の色","移到最上層（":"最前面へ（","移到最下層（":"最背面へ（","刪除（":"削除（","大標題":"大見出し","一般":"標準","箭頭朝":"矢印の向き","上":"上","右":"右","下":"下","左":"左","（按 R 旋轉）\">":"（R で回転）\">","顏色":"色","這格":"このマス","第 {n} 格":"{n} マス目","全部格子":"全マス","整理這棵樹":"この木を整列","加一個指標。":"ポインタを追加。","＋點格子＝標黃，":"＋マスをクリック＝黄色、","＋點格子＝變淡":"＋マスをクリック＝薄く","＋指標":"＋ポインタ","清除標記":"マークをクリア","；往上一層":"；前面へ","；往下一層":"；背面へ","複製一份（":"複製（","複製一份":"複製","從這裡拉一條線":"ここから線を引く","連線":"接続","點另一個元件，連過去":"別の要素をクリックしてつなぐ","已複製一份放在下面":"下に複製しました","已複製 {n} 個，按 ⌘V 貼上":"{n} 個コピーしました。⌘V で貼り付け","已複製一份":"複製しました","先點起點，再點終點":"始点をクリックしてから終点をクリック","題目：":"問題：","步":"ステップ","說明":"説明","起點":"始点","20. 有效的括號":"20. Valid Parentheses（有効な括弧）","讀到":"読んだ文字","決定":"判断","堆疊放：還沒關的左括號\n右括號：只跟頂端比":"スタックに入れる：まだ閉じていない開き括弧\n閉じ括弧：トップとだけ比べる","在 seen 裡？":"seen にある？","否":"いいえ","二元樹：root = [3,9,20,null,null,15,7]":"二分木：root = [3,9,20,null,null,15,7]","鏈結串列：head = [1,2,3,4,5]":"連結リスト：head = [1,2,3,4,5]","DP：dp[i][j] 代表…":"DP：dp[i][j] の意味は…","狀態：\n轉移：dp[i][j] = \n起點：\n答案在哪一格：":"状態：\n遷移：dp[i][j] = \n初期値：\n答えはどのマス：","圖：從 A 出發":"グラフ：A から出発","白板":"ホワイトボード","未命名白板 {n}":"無題のボード {n}","已開一個「{name}」的白板":"「{name}」のボードを開きました","已開一個新白板":"新しいボードを開きました","剛剛":"たった今","{n} 分鐘前":"{n} 分前","今天 {t}":"今日 {t}","我的白板":"マイボード","關閉":"閉じる","＋ 空白白板":"＋ 空のボード","或":"または","題號或題名":"問題番号または問題名","輸入題號或題名，例：":"問題番号か問題名を入力（例：","＋ 這一題的白板":"＋ この問題のボード","搜尋白板":"ボードを検索","搜尋已存的白板":"保存したボードを検索","題目 #{n}":"問題 #{n}","空白":"空","{n} 個元件":"{n} 個の要素","目前這個":"現在のボード","開啟":"開く","改名":"名前を変更","複製":"複製","找不到符合的白板。":"一致するボードが見つかりません。","還沒有存任何白板。":"保存したボードはまだありません。","找不到這一題，請輸入題號（例：20）或完整題名。":"問題が見つかりません。問題番号（例：20）か正式な問題名を入力してください。","新名稱":"新しい名前","{name}（複製）":"{name}（コピー）","已複製":"複製しました","確定刪除？":"削除しますか？","已刪除":"削除しました","我的白板…":"マイボード…","＋ 新的空白白板":"＋ 新しい空のボード","匯出／匯入…":"エクスポート／インポート…","清空這個白板":"このボードをクリア","再按一次確定清空":"もう一度押すとクリアします","已清空，可以按 ⌘Z 找回來":"クリアしました。⌘Z で元に戻せます","放大":"拡大","縮小":"縮小","縮放到 100%":"100% に戻す","全部看得到":"全体表示","清空畫板":"ボードをクリア","已清空，可以按復原找回來":"クリアしました。元に戻すで復元できます","匯出／匯入":"エクスポート／インポート","複製下面的內容存起來；要還原時，把內容貼回來按「匯入」。":"下の内容をコピーして保存してください。復元するときは内容を貼り付けて「インポート」を押します。","畫板內容":"ボードの内容","匯入":"インポート","已匯入":"インポートしました","內容格式不對，沒有匯入":"形式が正しくないため、インポートしませんでした","我的第一個白板":"はじめてのボード","元件":"要素","白板選單：切換、新增、匯出、清空":"ボードメニュー：切り替え・新規・エクスポート・クリア","搜尋元件":"要素を検索","指標":"ポインタ","變數":"変数","樹節點":"木のノード","串列節點":"リストノード","圖節點":"グラフノード","工具":"ツール","選取（V）":"選択（V）","選取":"選択","移動畫面（H，或按住空白鍵）":"画面移動（H、またはスペースを押したまま）","移動畫面":"画面移動","連線（C）":"接続（C）","畫筆（P）":"ペン（P）","畫筆":"ペン","橡皮擦（E）：按住拖過去，碰到的筆跡都會擦掉":"消しゴム（E）：ドラッグでなぞった線を消します","擦筆跡":"線を消す","矩形（R）。按住 Shift 畫正方形":"四角形（R）。Shift で正方形","矩形":"四角形","圓形（O）。按住 Shift 畫正圓":"円（O）。Shift で正円","圓形":"円","直線（L）。按住 Shift 對齊 45 度":"直線（L）。Shift で 45 度に揃える","直線":"直線","箭頭（⇧L）。按住 Shift 對齊 45 度":"矢印（⇧L）。Shift で 45 度に揃える","箭頭":"矢印","畫筆和形狀的顏色":"ペンと図形の色","復原（⌘Z）":"元に戻す（⌘Z）","復原":"元に戻す","重做（⇧⌘Z）":"やり直し（⇧⌘Z）","重做":"やり直し","整張畫布的預覽，點一下跳到那裡":"キャンバス全体のプレビュー。クリックでその場所へ移動","縮小（⌘−）":"縮小（⌘−）","縮放選單":"ズームメニュー","放大（⌘＋）":"拡大（⌘＋）","全部看得到（⇧1）":"全体表示（⇧1）","操作說明":"操作説明","語言 / Language":"言語 / Language","在 LeetCode 看題目 ↗":"LeetCode で問題を見る ↗","線性":"線形","查表":"ルックアップ","節點":"ノード","點一下放到畫面中間，或直接拖到畫布上。":"クリックで画面中央に配置、またはキャンバスへ直接ドラッグ。","練習腳本":"練習スクリプト","✎ 練習腳本":"✎ 練習スクリプト","用一句一句的話擺白板、一步一步跑題目，最後寫成 Go":"一文ずつホワイトボードを組み立て、問題を一歩ずつトレースし、最後に Go で書く","關閉練習腳本":"練習スクリプトを閉じる","題目":"問題","① 說出來":"① 言葉にする","② 跑一遍":"② トレースする","③ 寫成 Go":"③ Go で書く","＋ 一行":"＋ 行","載入範例":"例を読み込む","對答案":"答え合わせ","骨架":"スケルトン","參考解答":"模範解答","下載這個檔案":"このファイルをダウンロード","第一步":"最初のステップ","上一步":"前のステップ","下一步":"次のステップ","最後一步":"最後のステップ","Go 程式碼":"Go コード","建立":"作成","給值":"代入","推入":"プッシュ","彈出":"ポップ","放進字典":"辞書に追加","移除":"削除","標記":"マーク","檢查":"チェック","回傳":"返す","一行一句話，白板會照著擺。例：<code>array nums = [2,7,11,15]</code>、<code>dict seen</code>、<code>pointer i at nums[0]</code>、<code>put x -> i into seen</code>、<code>把 3 推入 stack</code>。白板上的元件可以拖，但要刪掉就得改或刪那一行。":"1 行に 1 文。ボードがその通りに並びます。例：<code>array nums = [2,7,11,15]</code>、<code>dict seen</code>、<code>pointer i at nums[0]</code>、<code>put x -> i into seen</code>、<code>把 3 推入 stack</code>。コンポーネントはドラッグできますが、消すにはその行を編集または削除します。","一行一步：白板會停在選到的那一行。檢查句（<code>7 is not in seen</code>、<code>st is empty</code>）會直接拿白板來對。":"1 行が 1 ステップ：ボードは選んだ行の時点で止まります。チェック文（<code>7 is not in seen</code>、<code>st is empty</code>）はボードと照合されます。","把白板上的資料結構翻成 Go：測試裡會放你在白板上跑過的那組例子。在本機跑 <code>go mod init solution &amp;&amp; go test ./...</code>。":"ボード上のデータ構造を Go に変換します。テストにはボードでトレースした例が入ります。ローカルで <code>go mod init solution &amp;&amp; go test ./...</code> を実行。","由腳本第 {n} 行產生：可以拖，要改內容或刪掉請改那一行":"スクリプト {n} 行目で作成：ドラッグは自由、内容の変更や削除はその行を編集","這是腳本第 {n} 行產生的：改或刪那一行它才會變":"スクリプト {n} 行目が作ったものです：変えるにはその行を編集または削除してください","跳到產生它的那一行":"作成した行へ移動","這個元件由腳本控制：用「highlight nums[1]」這樣的一行來標記":"このコンポーネントはスクリプトが管理しています：「highlight nums[1]」のような行でマークしてください","自由練習":"自由練習","白板停在這一行":"この行でボードを止める","第 {n} 行":"{n} 行目","例：array nums = [2,7,11,15]":"例：array nums = [2,7,11,15]","Jev（本機）· 平均信心 {p}%":"Jev（ローカル）· 平均確信度 {p}%","▷ 播放":"▷ 再生","❚❚ 暫停":"❚❚ 一時停止","要用範例取代目前的腳本嗎？（可以復原）":"現在のスクリプトを例で置き換えますか？（元に戻せます）","已載入範例：到「② 跑一遍」一步一步看":"例を読み込みました：「② トレースする」で一歩ずつ確認できます","✓ 這次的追蹤是對的":"✓ このトレースは正しいです","還有地方要再看看":"見直すところがあります","題目：{t}":"問題：{t}","（從標題認出來的）":"（タイトルから認識）","自由練習：只對檢查句和回傳值。選一題（或寫「title: 1. Two Sum」）就能拿參考解答來對。":"自由練習：チェック文と返り値だけを確認します。問題を選ぶ（または「title: 1. Two Sum」と書く）と模範解答と比較できます。","下一步：到「③ 寫成 Go」把它寫成程式。":"次は「③ Go で書く」でコードにしましょう。","複製程式碼":"コードをコピー"},"ko":{"__help__":"<button type=\"button\" id=\"helpX\" aria-label=\"도움말 닫기\">×</button>\n      <b>기본</b>: 왼쪽에서 요소를 클릭하거나 캔버스로 드래그하세요. 요소를 선택하면 <b>＋</b>와 <b>×</b>가 요소 위에 바로 나타나고, 위쪽 회색 막대를 드래그하면 이동할 수 있습니다.<br>\n      <b>입력</b>: 배열은 <kbd>2 7 11</kbd>처럼 입력(공백이나 쉼표로 다음 칸 이동). 문자열은 한 글자마다 자동으로 다음 칸으로 이동. 빈 칸에서 <kbd>⌫</kbd>를 누르면 이전 칸으로 돌아갑니다.<br>\n      <b>범위 선택</b>: 빈 곳에서 드래그. <kbd>⌥</kbd>(Alt)＋드래그＝복사본 끌어내기, <kbd>⌘D</kbd> 선택 전체를 아래에 복제, <kbd>⌘C</kbd>/<kbd>⌘V</kbd> 마우스 위치에 붙여넣기, <kbd>Delete</kbd> 삭제, <kbd>Shift</kbd>＋요소 클릭으로 추가 선택.<br>\n      <b>도형</b>: 아래 도구 막대의 사각형 <kbd>R</kbd>, 원 <kbd>O</kbd>, 직선 <kbd>L</kbd>, 화살표 <kbd>⇧L</kbd>를 드래그해서 그립니다. <kbd>Shift</kbd>를 누르면 정사각형/정원/45도. 도형을 클릭하면 선택, 이동, 색 변경이 가능합니다.<br>\n      <b>레이어</b>: 선택 후 <kbd>⌘]</kbd> 한 단계 앞으로, <kbd>⌘[</kbd> 한 단계 뒤로, <kbd>⌘⌥]</kbd> 맨 앞으로, <kbd>⌘⌥[</kbd> 맨 뒤로(도구 막대에도 ⤒ ⤓ 있음).<br>\n      <b>표시</b>: <kbd>Shift</kbd>＋칸 클릭＝노란색 표시, <kbd>Alt</kbd>＋칸 클릭＝흐리게.<br>\n      <b>화면</b>: 스페이스바＋드래그 또는 트랙패드로 이동, <kbd>⌘</kbd>＋스크롤로 확대/축소, <kbd>⇧1</kbd> 전체 보기, <kbd>⇧0</kbd> 100%.","手動跑題白板":"손으로 따라가는 알고리즘 화이트보드","瀏覽器空間滿了，這次沒有存到。可以刪掉幾個舊白板，或用匯出備份。":"브라우저 저장 공간이 가득 차서 이번에는 저장되지 않았습니다. 오래된 보드를 몇 개 삭제하거나 내보내기로 백업하세요.","欄 1":"열 1","欄 2":"열 2","欄 3":"열 3","名稱":"이름","刪除":"삭제","加一格":"칸 추가","（空的）":"(비어 있음)","標題":"제목","程式碼":"코드","文字":"텍스트","便利貼":"메모","字串":"문자열","陣列":"배열","堆疊":"스택","↓ 頂端":"↓ 꼭대기","＋ 推入":"＋ 푸시","佇列":"큐","前端":"앞","尾端":"뒤","＋ 加入":"＋ 추가","字典":"딕셔너리","刪除這筆":"이 항목 삭제","集合":"집합","二維陣列":"2차원 배열","欄":"열","列":"행","刪除第 {n} 欄":"{n}번째 열 삭제","刪除第 {n} 列":"{n}번째 행 삭제","加一欄":"열 추가","加一列":"행 추가","＋ 列":"＋ 행","值":"값","加左子節點":"왼쪽 자식 추가","加右子節點":"오른쪽 자식 추가","接下一個":"다음 노드 연결","加一個相鄰節點":"인접 노드 추가","表格":"표","刪除這一欄":"이 열 삭제","刪除這一列":"이 행 삭제","＋ 新增一列":"＋ 행 추가","移到最上層":"맨 앞으로","移到最下層":"맨 뒤로","往上一層":"한 단계 앞으로","往下一層":"한 단계 뒤로","已經有左子節點了":"이미 왼쪽 자식이 있습니다","已經有右子節點了":"이미 오른쪽 자식이 있습니다","已複製一份，改有變的地方就好":"복사했습니다. 바뀐 부분만 고치세요","填充":"채우기","不填":"채우지 않음","清除底色":"배경색 지우기","底色":"배경색","→ 有箭頭":"→ 화살표 있음","— 沒箭頭":"— 화살표 없음","反轉":"반전","已選 {n} 個":"{n}개 선택됨","邊框":"테두리","線條":"선","線條顏色":"선 색","移到最上層（":"맨 앞으로 (","移到最下層（":"맨 뒤로 (","刪除（":"삭제 (","大標題":"큰 제목","一般":"보통","箭頭朝":"화살표 방향","上":"위","右":"오른쪽","下":"아래","左":"왼쪽","（按 R 旋轉）\">":"(R 키로 회전)\">","顏色":"색","這格":"이 칸","第 {n} 格":"{n}번째 칸","全部格子":"모든 칸","整理這棵樹":"트리 정리","加一個指標。":"포인터 추가.","＋點格子＝標黃，":"＋칸 클릭＝노란색 표시, ","＋點格子＝變淡":"＋칸 클릭＝흐리게","＋指標":"＋포인터","清除標記":"표시 지우기","；往上一層":"; 한 단계 앞으로","；往下一層":"; 한 단계 뒤로","複製一份（":"복제 (","複製一份":"복제","從這裡拉一條線":"여기서 선 끌기","連線":"연결","點另一個元件，連過去":"다른 요소를 클릭해 연결하세요","已複製一份放在下面":"아래에 복제했습니다","已複製 {n} 個，按 ⌘V 貼上":"{n}개 복사됨, ⌘V로 붙여넣기","已複製一份":"복제했습니다","先點起點，再點終點":"시작점을 클릭한 다음 끝점을 클릭하세요","題目：":"문제: ","步":"단계","說明":"설명","起點":"시작","20. 有效的括號":"20. Valid Parentheses","讀到":"읽은 문자","決定":"판단","堆疊放：還沒關的左括號\n右括號：只跟頂端比":"스택: 아직 닫히지 않은 여는 괄호\n닫는 괄호: 꼭대기와만 비교","在 seen 裡？":"seen에 있나?","否":"아니요","二元樹：root = [3,9,20,null,null,15,7]":"이진 트리: root = [3,9,20,null,null,15,7]","鏈結串列：head = [1,2,3,4,5]":"연결 리스트: head = [1,2,3,4,5]","DP：dp[i][j] 代表…":"DP: dp[i][j]의 의미는…","狀態：\n轉移：dp[i][j] = \n起點：\n答案在哪一格：":"상태: \n전이: dp[i][j] = \n초기값: \n정답 칸: ","圖：從 A 出發":"그래프: A에서 출발","白板":"화이트보드","未命名白板 {n}":"제목 없는 보드 {n}","已開一個「{name}」的白板":"「{name}」 보드를 열었습니다","已開一個新白板":"새 보드를 열었습니다","剛剛":"방금","{n} 分鐘前":"{n}분 전","今天 {t}":"오늘 {t}","我的白板":"내 보드","關閉":"닫기","＋ 空白白板":"＋ 빈 보드","或":"또는","題號或題名":"문제 번호 또는 제목","輸入題號或題名，例：":"문제 번호나 제목 입력, 예: ","＋ 這一題的白板":"＋ 이 문제 보드","搜尋白板":"보드 검색","搜尋已存的白板":"저장된 보드 검색","題目 #{n}":"문제 #{n}","空白":"비어 있음","{n} 個元件":"요소 {n}개","目前這個":"현재 보드","開啟":"열기","改名":"이름 바꾸기","複製":"복제","找不到符合的白板。":"일치하는 보드가 없습니다.","還沒有存任何白板。":"저장된 보드가 아직 없습니다.","找不到這一題，請輸入題號（例：20）或完整題名。":"문제를 찾을 수 없습니다. 문제 번호(예: 20)나 전체 제목을 입력하세요.","新名稱":"새 이름","{name}（複製）":"{name} (사본)","已複製":"복제했습니다","確定刪除？":"삭제할까요?","已刪除":"삭제했습니다","我的白板…":"내 보드…","＋ 新的空白白板":"＋ 새 빈 보드","匯出／匯入…":"내보내기/가져오기…","清空這個白板":"이 보드 비우기","再按一次確定清空":"한 번 더 누르면 비워집니다","已清空，可以按 ⌘Z 找回來":"비웠습니다. ⌘Z로 되돌릴 수 있습니다","放大":"확대","縮小":"축소","縮放到 100%":"100%로 보기","全部看得到":"전체 보기","清空畫板":"보드 비우기","已清空，可以按復原找回來":"비웠습니다. 실행 취소로 되돌릴 수 있습니다","匯出／匯入":"내보내기/가져오기","複製下面的內容存起來；要還原時，把內容貼回來按「匯入」。":"아래 내용을 복사해 보관하세요. 복원하려면 내용을 다시 붙여넣고 「가져오기」를 누르세요.","畫板內容":"보드 내용","匯入":"가져오기","已匯入":"가져왔습니다","內容格式不對，沒有匯入":"형식이 올바르지 않아 가져오지 못했습니다","我的第一個白板":"내 첫 번째 보드","元件":"요소","白板選單：切換、新增、匯出、清空":"보드 메뉴: 전환, 새로 만들기, 내보내기, 비우기","搜尋元件":"요소 검색","指標":"포인터","變數":"변수","樹節點":"트리 노드","串列節點":"리스트 노드","圖節點":"그래프 노드","工具":"도구","選取（V）":"선택 (V)","選取":"선택","移動畫面（H，或按住空白鍵）":"화면 이동 (H 또는 스페이스바 누른 채)","移動畫面":"화면 이동","連線（C）":"연결 (C)","畫筆（P）":"펜 (P)","畫筆":"펜","橡皮擦（E）：按住拖過去，碰到的筆跡都會擦掉":"지우개 (E): 누른 채 드래그하면 닿는 필기가 지워집니다","擦筆跡":"필기 지우기","矩形（R）。按住 Shift 畫正方形":"사각형 (R). Shift를 누르면 정사각형","矩形":"사각형","圓形（O）。按住 Shift 畫正圓":"원 (O). Shift를 누르면 정원","圓形":"원","直線（L）。按住 Shift 對齊 45 度":"직선 (L). Shift를 누르면 45도 맞춤","直線":"직선","箭頭（⇧L）。按住 Shift 對齊 45 度":"화살표 (⇧L). Shift를 누르면 45도 맞춤","箭頭":"화살표","畫筆和形狀的顏色":"펜과 도형 색","復原（⌘Z）":"실행 취소 (⌘Z)","復原":"실행 취소","重做（⇧⌘Z）":"다시 실행 (⇧⌘Z)","重做":"다시 실행","整張畫布的預覽，點一下跳到那裡":"전체 캔버스 미리보기, 클릭하면 그 위치로 이동","縮小（⌘−）":"축소 (⌘−)","縮放選單":"확대/축소 메뉴","放大（⌘＋）":"확대 (⌘＋)","全部看得到（⇧1）":"전체 보기 (⇧1)","操作說明":"사용법","語言 / Language":"언어 / Language","在 LeetCode 看題目 ↗":"LeetCode에서 문제 보기 ↗","線性":"선형","查表":"조회","節點":"노드","點一下放到畫面中間，或直接拖到畫布上。":"클릭하면 화면 가운데에 놓이고, 캔버스로 바로 드래그할 수도 있습니다.","練習腳本":"연습 스크립트","✎ 練習腳本":"✎ 연습 스크립트","用一句一句的話擺白板、一步一步跑題目，最後寫成 Go":"한 문장씩 보드를 꾸미고, 문제를 한 단계씩 추적한 뒤 Go로 작성합니다","關閉練習腳本":"연습 스크립트 닫기","題目":"문제","① 說出來":"① 말로 하기","② 跑一遍":"② 추적하기","③ 寫成 Go":"③ Go로 쓰기","＋ 一行":"＋ 줄","載入範例":"예제 불러오기","對答案":"채점","骨架":"뼈대","參考解答":"참고 답안","下載這個檔案":"이 파일 다운로드","第一步":"첫 단계","上一步":"이전 단계","下一步":"다음 단계","最後一步":"마지막 단계","Go 程式碼":"Go 코드","建立":"생성","給值":"대입","推入":"푸시","彈出":"팝","放進字典":"딕셔너리에 넣기","移除":"제거","標記":"표시","檢查":"확인","回傳":"반환","一行一句話，白板會照著擺。例：<code>array nums = [2,7,11,15]</code>、<code>dict seen</code>、<code>pointer i at nums[0]</code>、<code>put x -> i into seen</code>、<code>把 3 推入 stack</code>。白板上的元件可以拖，但要刪掉就得改或刪那一行。":"한 줄에 한 문장, 보드가 그대로 따라갑니다. 예: <code>array nums = [2,7,11,15]</code>, <code>dict seen</code>, <code>pointer i at nums[0]</code>, <code>put x -> i into seen</code>, <code>把 3 推入 stack</code>. 보드의 컴포넌트는 끌 수 있지만, 지우려면 그 줄을 고치거나 지워야 합니다.","一行一步：白板會停在選到的那一行。檢查句（<code>7 is not in seen</code>、<code>st is empty</code>）會直接拿白板來對。":"한 줄이 한 단계: 보드는 선택한 줄에서 멈춥니다. 확인 문장(<code>7 is not in seen</code>, <code>st is empty</code>)은 보드와 바로 대조됩니다.","把白板上的資料結構翻成 Go：測試裡會放你在白板上跑過的那組例子。在本機跑 <code>go mod init solution &amp;&amp; go test ./...</code>。":"보드의 자료구조를 Go로 옮깁니다. 테스트에는 보드에서 추적한 예제가 들어갑니다. 로컬에서 <code>go mod init solution &amp;&amp; go test ./...</code> 를 실행하세요.","由腳本第 {n} 行產生：可以拖，要改內容或刪掉請改那一行":"스크립트 {n}번째 줄이 만든 것: 끌 수 있고, 바꾸거나 지우려면 그 줄을 고치세요","這是腳本第 {n} 行產生的：改或刪那一行它才會變":"스크립트 {n}번째 줄이 만든 것입니다: 그 줄을 고치거나 지워야 바뀝니다","跳到產生它的那一行":"만든 줄로 이동","這個元件由腳本控制：用「highlight nums[1]」這樣的一行來標記":"이 컴포넌트는 스크립트가 관리합니다: \"highlight nums[1]\" 같은 줄로 표시하세요","自由練習":"자유 연습","白板停在這一行":"이 줄에서 보드 멈추기","第 {n} 行":"{n}번째 줄","例：array nums = [2,7,11,15]":"예: array nums = [2,7,11,15]","Jev（本機）· 平均信心 {p}%":"Jev(로컬) · 평균 신뢰도 {p}%","▷ 播放":"▷ 재생","❚❚ 暫停":"❚❚ 일시정지","要用範例取代目前的腳本嗎？（可以復原）":"현재 스크립트를 예제로 바꿀까요? (되돌릴 수 있습니다)","已載入範例：到「② 跑一遍」一步一步看":"예제를 불러왔습니다: \"② 추적하기\"에서 한 단계씩 보세요","✓ 這次的追蹤是對的":"✓ 이번 추적은 맞습니다","還有地方要再看看":"다시 볼 곳이 있습니다","題目：{t}":"문제: {t}","（從標題認出來的）":"(제목에서 인식함)","自由練習：只對檢查句和回傳值。選一題（或寫「title: 1. Two Sum」）就能拿參考解答來對。":"자유 연습: 확인 문장과 반환값만 확인합니다. 문제를 고르거나 \"title: 1. Two Sum\"이라고 쓰면 참고 답안과 비교합니다.","下一步：到「③ 寫成 Go」把它寫成程式。":"다음: \"③ Go로 쓰기\"에서 코드로 옮기세요.","複製程式碼":"코드 복사"},"fr":{"__help__":"<button type=\"button\" id=\"helpX\" aria-label=\"Fermer l’aide\">×</button>\n      <b>Bases</b> : cliquez ou glissez un composant depuis la gauche vers le canevas. Une fois un composant sélectionné, <b>＋</b> et <b>×</b> apparaissent directement dessus ; glissez la barre grise du haut pour le déplacer.<br>\n      <b>Saisie</b> : dans un tableau, tapez <kbd>2 7 11</kbd> (espace ou virgule pour passer à la case suivante) ; dans une chaîne, chaque caractère passe à la case suivante ; dans une case vide, <kbd>⌫</kbd> revient à la case précédente.<br>\n      <b>Sélection</b> : glissez sur une zone vide. <kbd>⌥</kbd> (Alt) + glisser = faire glisser une copie, <kbd>⌘D</kbd> duplique le groupe en dessous, <kbd>⌘C</kbd>/<kbd>⌘V</kbd> colle à la position de la souris, <kbd>Delete</kbd> supprime, <kbd>Shift</kbd> + clic sur un composant l’ajoute à la sélection.<br>\n      <b>Formes</b> : dans la barre d’outils du bas, rectangle <kbd>R</kbd>, cercle <kbd>O</kbd>, ligne <kbd>L</kbd>, flèche <kbd>⇧L</kbd> ; glissez pour dessiner, maintenez <kbd>Shift</kbd> pour un carré / cercle parfait / 45°. Cliquez sur une forme pour la sélectionner, la déplacer ou changer sa couleur.<br>\n      <b>Calques</b> : après sélection, <kbd>⌘]</kbd> monte d’un niveau, <kbd>⌘[</kbd> descend d’un niveau, <kbd>⌘⌥]</kbd> tout au-dessus, <kbd>⌘⌥[</kbd> tout en dessous (aussi ⤒ ⤓ dans la barre d’outils).<br>\n      <b>Marquage</b> : <kbd>Shift</kbd> + clic sur une case = jaune, <kbd>Alt</kbd> + clic sur une case = estompé.<br>\n      <b>Vue</b> : barre d’espace + glisser ou pavé tactile pour se déplacer ; <kbd>⌘</kbd> + molette pour zoomer ; <kbd>⇧1</kbd> tout afficher, <kbd>⇧0</kbd> 100 %.","手動跑題白板":"Tableau blanc pour dérouler à la main","瀏覽器空間滿了，這次沒有存到。可以刪掉幾個舊白板，或用匯出備份。":"L’espace du navigateur est plein, rien n’a été enregistré. Supprimez quelques anciens tableaux blancs ou faites une sauvegarde via l’export.","欄 1":"Colonne 1","欄 2":"Colonne 2","欄 3":"Colonne 3","名稱":"Nom","刪除":"Supprimer","加一格":"Ajouter une case","（空的）":"(vide)","標題":"Titre","程式碼":"Code","文字":"Texte","便利貼":"Post-it","字串":"Chaîne","陣列":"Tableau","堆疊":"Pile","↓ 頂端":"↓ Sommet","＋ 推入":"＋ Empiler","佇列":"File","前端":"Tête","尾端":"Queue","＋ 加入":"＋ Ajouter","字典":"Dictionnaire","刪除這筆":"Supprimer cette entrée","集合":"Ensemble","二維陣列":"Tableau 2D","欄":"Colonne","列":"Ligne","刪除第 {n} 欄":"Supprimer la colonne {n}","刪除第 {n} 列":"Supprimer la ligne {n}","加一欄":"Ajouter une colonne","加一列":"Ajouter une ligne","＋ 列":"＋ Ligne","值":"Valeur","加左子節點":"Ajouter un enfant gauche","加右子節點":"Ajouter un enfant droit","接下一個":"Ajouter le suivant","加一個相鄰節點":"Ajouter un nœud voisin","表格":"Table","刪除這一欄":"Supprimer cette colonne","刪除這一列":"Supprimer cette ligne","＋ 新增一列":"＋ Nouvelle ligne","移到最上層":"Mettre au premier plan","移到最下層":"Mettre à l’arrière-plan","往上一層":"Monter d’un niveau","往下一層":"Descendre d’un niveau","已經有左子節點了":"Il y a déjà un enfant gauche","已經有右子節點了":"Il y a déjà un enfant droit","已複製一份，改有變的地方就好":"Copie créée, modifiez seulement ce qui change","填充":"Remplissage","不填":"Sans remplissage","清除底色":"Effacer le fond","底色":"Fond","→ 有箭頭":"→ Avec flèche","— 沒箭頭":"— Sans flèche","反轉":"Inverser","已選 {n} 個":"{n} sélectionné(s)","邊框":"Bordure","線條":"Trait","線條顏色":"Couleur du trait","移到最上層（":"Mettre au premier plan (","移到最下層（":"Mettre à l’arrière-plan (","刪除（":"Supprimer (","大標題":"Grand titre","一般":"Normal","箭頭朝":"Flèche vers","上":"Haut","右":"Droite","下":"Bas","左":"Gauche","（按 R 旋轉）\">":"(R pour pivoter)\">","顏色":"Couleur","這格":"Cette case","第 {n} 格":"Case {n}","全部格子":"Toutes les cases","整理這棵樹":"Réorganiser cet arbre","加一個指標。":"Ajouter un pointeur.","＋點格子＝標黃，":"＋clic sur une case = jaune, ","＋點格子＝變淡":"＋clic sur une case = estompé","＋指標":"＋Pointeur","清除標記":"Effacer les marques","；往上一層":" ; monter d’un niveau","；往下一層":" ; descendre d’un niveau","複製一份（":"Dupliquer (","複製一份":"Dupliquer","從這裡拉一條線":"Tirer un lien d’ici","連線":"Lien","點另一個元件，連過去":"Cliquez sur un autre composant pour le relier","已複製一份放在下面":"Copie placée en dessous","已複製 {n} 個，按 ⌘V 貼上":"{n} copié(s), ⌘V pour coller","已複製一份":"Copie créée","先點起點，再點終點":"Cliquez d’abord le départ, puis l’arrivée","題目：":"Problème : ","步":"Étape","說明":"Explication","起點":"Départ","20. 有效的括號":"20. Valid Parentheses","讀到":"Lu","決定":"Décision","堆疊放：還沒關的左括號\n右括號：只跟頂端比":"La pile contient : les parenthèses ouvrantes pas encore fermées\nParenthèse fermante : comparer seulement au sommet","在 seen 裡？":"Dans seen ?","否":"Non","二元樹：root = [3,9,20,null,null,15,7]":"Arbre binaire : root = [3,9,20,null,null,15,7]","鏈結串列：head = [1,2,3,4,5]":"Liste chaînée : head = [1,2,3,4,5]","DP：dp[i][j] 代表…":"DP : dp[i][j] représente…","狀態：\n轉移：dp[i][j] = \n起點：\n答案在哪一格：":"État :\nTransition : dp[i][j] = \nCas de base :\nCase de la réponse :","圖：從 A 出發":"Graphe : à partir de A","白板":"Tableau blanc","未命名白板 {n}":"Tableau blanc sans titre {n}","已開一個「{name}」的白板":"Tableau blanc « {name} » ouvert","已開一個新白板":"Nouveau tableau blanc ouvert","剛剛":"À l’instant","{n} 分鐘前":"Il y a {n} min","今天 {t}":"Aujourd’hui {t}","我的白板":"Mes tableaux blancs","關閉":"Fermer","＋ 空白白板":"＋ Tableau blanc vierge","或":"ou","題號或題名":"Numéro ou titre du problème","輸入題號或題名，例：":"Saisissez un numéro ou un titre, ex. : ","＋ 這一題的白板":"＋ Tableau blanc pour ce problème","搜尋白板":"Rechercher un tableau blanc","搜尋已存的白板":"Rechercher dans les tableaux enregistrés","題目 #{n}":"Problème #{n}","空白":"Vierge","{n} 個元件":"{n} composant(s)","目前這個":"Actuel","開啟":"Ouvrir","改名":"Renommer","複製":"Dupliquer","找不到符合的白板。":"Aucun tableau blanc ne correspond.","還沒有存任何白板。":"Aucun tableau blanc enregistré pour l’instant.","找不到這一題，請輸入題號（例：20）或完整題名。":"Problème introuvable, saisissez un numéro (ex. : 20) ou le titre complet.","新名稱":"Nouveau nom","{name}（複製）":"{name} (copie)","已複製":"Dupliqué","確定刪除？":"Confirmer la suppression ?","已刪除":"Supprimé","我的白板…":"Mes tableaux blancs…","＋ 新的空白白板":"＋ Nouveau tableau blanc vierge","匯出／匯入…":"Exporter / Importer…","清空這個白板":"Vider ce tableau blanc","再按一次確定清空":"Cliquez encore pour confirmer","已清空，可以按 ⌘Z 找回來":"Vidé, ⌘Z pour récupérer","放大":"Zoom avant","縮小":"Zoom arrière","縮放到 100%":"Zoom à 100 %","全部看得到":"Tout afficher","清空畫板":"Vider le canevas","已清空，可以按復原找回來":"Vidé, utilisez Annuler pour récupérer","匯出／匯入":"Exporter / Importer","複製下面的內容存起來；要還原時，把內容貼回來按「匯入」。":"Copiez le contenu ci-dessous pour le conserver ; pour restaurer, collez-le ici et cliquez sur « Importer ».","畫板內容":"Contenu du canevas","匯入":"Importer","已匯入":"Importé","內容格式不對，沒有匯入":"Format invalide, rien n’a été importé","我的第一個白板":"Mon premier tableau blanc","元件":"Composants","白板選單：切換、新增、匯出、清空":"Menu tableau blanc : changer, créer, exporter, vider","搜尋元件":"Rechercher un composant","指標":"Pointeur","變數":"Variable","樹節點":"Nœud d’arbre","串列節點":"Nœud de liste","圖節點":"Nœud de graphe","工具":"Outils","選取（V）":"Sélection (V)","選取":"Sélection","移動畫面（H，或按住空白鍵）":"Déplacer la vue (H, ou maintenir la barre d’espace)","移動畫面":"Déplacer la vue","連線（C）":"Lien (C)","畫筆（P）":"Crayon (P)","畫筆":"Crayon","橡皮擦（E）：按住拖過去，碰到的筆跡都會擦掉":"Gomme (E) : maintenez et glissez, les traits touchés sont effacés","擦筆跡":"Effacer les traits","矩形（R）。按住 Shift 畫正方形":"Rectangle (R). Maintenez Shift pour un carré","矩形":"Rectangle","圓形（O）。按住 Shift 畫正圓":"Cercle (O). Maintenez Shift pour un cercle parfait","圓形":"Cercle","直線（L）。按住 Shift 對齊 45 度":"Ligne (L). Maintenez Shift pour aligner à 45°","直線":"Ligne","箭頭（⇧L）。按住 Shift 對齊 45 度":"Flèche (⇧L). Maintenez Shift pour aligner à 45°","箭頭":"Flèche","畫筆和形狀的顏色":"Couleur du crayon et des formes","復原（⌘Z）":"Annuler (⌘Z)","復原":"Annuler","重做（⇧⌘Z）":"Rétablir (⇧⌘Z)","重做":"Rétablir","整張畫布的預覽，點一下跳到那裡":"Aperçu de tout le canevas, cliquez pour y aller","縮小（⌘−）":"Zoom arrière (⌘−)","縮放選單":"Menu du zoom","放大（⌘＋）":"Zoom avant (⌘＋)","全部看得到（⇧1）":"Tout afficher (⇧1)","操作說明":"Aide","語言 / Language":"Langue / Language","在 LeetCode 看題目 ↗":"Voir le problème sur LeetCode ↗","線性":"Linéaire","查表":"Recherche","節點":"Nœuds","點一下放到畫面中間，或直接拖到畫布上。":"Cliquez pour placer au centre de la vue, ou glissez directement sur le canevas.","練習腳本":"Script d’entraînement","✎ 練習腳本":"✎ Script d’entraînement","用一句一句的話擺白板、一步一步跑題目，最後寫成 Go":"Construire le tableau phrase par phrase, dérouler le problème pas à pas, puis l’écrire en Go","關閉練習腳本":"Fermer le script d’entraînement","題目":"Problème","① 說出來":"① Le dire","② 跑一遍":"② Le dérouler","③ 寫成 Go":"③ L’écrire en Go","＋ 一行":"＋ Ligne","載入範例":"Charger l’exemple","對答案":"Vérifier","骨架":"Squelette","參考解答":"Solution de référence","下載這個檔案":"Télécharger ce fichier","第一步":"Première étape","上一步":"Étape précédente","下一步":"Étape suivante","最後一步":"Dernière étape","Go 程式碼":"Code Go","建立":"créer","給值":"affecter","推入":"empiler","彈出":"dépiler","放進字典":"ajouter au dico","移除":"retirer","標記":"marquer","檢查":"vérifier","回傳":"renvoyer","一行一句話，白板會照著擺。例：<code>array nums = [2,7,11,15]</code>、<code>dict seen</code>、<code>pointer i at nums[0]</code>、<code>put x -> i into seen</code>、<code>把 3 推入 stack</code>。白板上的元件可以拖，但要刪掉就得改或刪那一行。":"Une phrase par ligne, le tableau suit. Par exemple <code>array nums = [2,7,11,15]</code>, <code>dict seen</code>, <code>pointer i at nums[0]</code>, <code>put x -> i into seen</code>, <code>把 3 推入 stack</code>. Vous pouvez déplacer les composants, mais pour en supprimer un, modifiez ou supprimez sa ligne.","一行一步：白板會停在選到的那一行。檢查句（<code>7 is not in seen</code>、<code>st is empty</code>）會直接拿白板來對。":"Une ligne par étape : le tableau s’arrête à la ligne choisie. Les lignes de vérification (<code>7 is not in seen</code>, <code>st is empty</code>) sont comparées au tableau.","把白板上的資料結構翻成 Go：測試裡會放你在白板上跑過的那組例子。在本機跑 <code>go mod init solution &amp;&amp; go test ./...</code>。":"Traduit les structures de données du tableau en Go ; le test contient l’exemple que vous avez déroulé. Lancez <code>go mod init solution &amp;&amp; go test ./...</code> en local.","由腳本第 {n} 行產生：可以拖，要改內容或刪掉請改那一行":"Créé par la ligne {n} du script : déplacez-le librement ; pour le modifier ou le supprimer, modifiez cette ligne","這是腳本第 {n} 行產生的：改或刪那一行它才會變":"La ligne {n} du script a créé ceci : modifiez ou supprimez cette ligne pour le changer","跳到產生它的那一行":"Aller à la ligne qui l’a créé","這個元件由腳本控制：用「highlight nums[1]」這樣的一行來標記":"Ce composant est géré par le script : marquez-le avec une ligne comme « highlight nums[1] »","自由練習":"Entraînement libre","白板停在這一行":"Arrêter le tableau à cette ligne","第 {n} 行":"Ligne {n}","例：array nums = [2,7,11,15]":"ex. array nums = [2,7,11,15]","Jev（本機）· 平均信心 {p}%":"Jev (local) · confiance moyenne {p} %","▷ 播放":"▷ Lecture","❚❚ 暫停":"❚❚ Pause","要用範例取代目前的腳本嗎？（可以復原）":"Remplacer le script actuel par l’exemple ? (Annulable.)","已載入範例：到「② 跑一遍」一步一步看":"Exemple chargé : ouvrez « ② Le dérouler » pour avancer pas à pas","✓ 這次的追蹤是對的":"✓ Ce déroulé est correct","還有地方要再看看":"Quelques points à revoir","題目：{t}":"Problème : {t}","（從標題認出來的）":"(reconnu d’après le titre)","自由練習：只對檢查句和回傳值。選一題（或寫「title: 1. Two Sum」）就能拿參考解答來對。":"Entraînement libre : seules les lignes de vérification et la valeur renvoyée sont contrôlées. Choisissez un problème (ou écrivez « title: 1. Two Sum ») pour comparer avec une solution de référence.","下一步：到「③ 寫成 Go」把它寫成程式。":"Ensuite : ouvrez « ③ L’écrire en Go » pour en faire du code.","複製程式碼":"Copier le code"},"hi":{"__help__":"<button type=\"button\" id=\"helpX\" aria-label=\"सहायता बंद करें\">×</button>\n      <b>बेसिक</b>: बाईं ओर से किसी component पर क्लिक करें या उसे canvas पर खींचें। Component चुनने पर <b>＋</b> और <b>×</b> सीधे उसी पर दिखते हैं; ऊपर की ग्रे पट्टी खींचकर उसे move करें।<br>\n      <b>इनपुट</b>: Array में <kbd>2 7 11</kbd> टाइप करें (space या comma से अगला सेल); String में हर अक्षर अपने-आप अगले सेल में जाता है; खाली सेल में <kbd>⌫</kbd> दबाने पर पिछले सेल पर लौटें।<br>\n      <b>बॉक्स से चुनें</b>: खाली जगह पर ड्रैग करें। <kbd>⌥</kbd> (Alt) ＋ ड्रैग = कॉपी खींचें, <kbd>⌘D</kbd> पूरे समूह की कॉपी नीचे, <kbd>⌘C</kbd>/<kbd>⌘V</kbd> माउस की जगह पर पेस्ट, <kbd>Delete</kbd> हटाएं, <kbd>Shift</kbd> ＋ क्लिक से चुनाव में जोड़ें।<br>\n      <b>आकृतियाँ</b>: नीचे के टूलबार में आयत <kbd>R</kbd>, वृत्त <kbd>O</kbd>, रेखा <kbd>L</kbd>, तीर <kbd>⇧L</kbd> — ड्रैग करके बनाएं; <kbd>Shift</kbd> दबाए रखें तो वर्ग / पूरा वृत्त / 45 डिग्री। आकृति पर क्लिक करके चुनें, खिसकाएं, रंग बदलें।<br>\n      <b>लेयर</b>: चुनने के बाद <kbd>⌘]</kbd> एक लेयर ऊपर, <kbd>⌘[</kbd> एक लेयर नीचे, <kbd>⌘⌥]</kbd> सबसे ऊपर, <kbd>⌘⌥[</kbd> सबसे नीचे (टूलबार में भी ⤒ ⤓ हैं)।<br>\n      <b>मार्क करें</b>: <kbd>Shift</kbd> ＋ सेल पर क्लिक = पीला, <kbd>Alt</kbd> ＋ सेल पर क्लिक = फीका।<br>\n      <b>व्यू</b>: Space ＋ ड्रैग या ट्रैकपैड से move करें; <kbd>⌘</kbd> ＋ स्क्रॉल से Zoom; <kbd>⇧1</kbd> सब कुछ दिखाएं, <kbd>⇧0</kbd> 100%।","手動跑題白板":"हाथ से ट्रेस करने वाला व्हाइटबोर्ड","瀏覽器空間滿了，這次沒有存到。可以刪掉幾個舊白板，或用匯出備份。":"ब्राउज़र की स्टोरेज भर गई है, इस बार सेव नहीं हुआ। कुछ पुराने व्हाइटबोर्ड हटाएं या Export करके बैकअप लें।","欄 1":"कॉलम 1","欄 2":"कॉलम 2","欄 3":"कॉलम 3","名稱":"नाम","刪除":"हटाएं","加一格":"एक सेल जोड़ें","（空的）":"(खाली)","標題":"शीर्षक","程式碼":"Code","文字":"टेक्स्ट","便利貼":"स्टिकी नोट","字串":"String","陣列":"Array","堆疊":"Stack","↓ 頂端":"↓ टॉप","＋ 推入":"＋ Push","佇列":"Queue","前端":"फ्रंट","尾端":"रियर","＋ 加入":"＋ जोड़ें","字典":"Dictionary","刪除這筆":"यह एंट्री हटाएं","集合":"Set","二維陣列":"2D Array","欄":"कॉलम","列":"पंक्ति","刪除第 {n} 欄":"कॉलम {n} हटाएं","刪除第 {n} 列":"पंक्ति {n} हटाएं","加一欄":"एक कॉलम जोड़ें","加一列":"एक पंक्ति जोड़ें","＋ 列":"＋ पंक्ति","值":"मान","加左子節點":"बायां child node जोड़ें","加右子節點":"दायां child node जोड़ें","接下一個":"अगला जोड़ें","加一個相鄰節點":"एक पड़ोसी Node जोड़ें","表格":"टेबल","刪除這一欄":"यह कॉलम हटाएं","刪除這一列":"यह पंक्ति हटाएं","＋ 新增一列":"＋ नई पंक्ति","移到最上層":"सबसे ऊपर ले जाएं","移到最下層":"सबसे नीचे ले जाएं","往上一層":"एक लेयर ऊपर","往下一層":"एक लेयर नीचे","已經有左子節點了":"बायां child node पहले से है","已經有右子節點了":"दायां child node पहले से है","已複製一份，改有變的地方就好":"कॉपी बन गई, बस जो बदला है वह ठीक करें","填充":"भरें","不填":"न भरें","清除底色":"बैकग्राउंड हटाएं","底色":"बैकग्राउंड","→ 有箭頭":"→ तीर के साथ","— 沒箭頭":"— बिना तीर","反轉":"उलटें","已選 {n} 個":"{n} चुने गए","邊框":"बॉर्डर","線條":"रेखा","線條顏色":"रेखा का रंग","移到最上層（":"सबसे ऊपर ले जाएं（","移到最下層（":"सबसे नीचे ले जाएं（","刪除（":"हटाएं（","大標題":"बड़ा शीर्षक","一般":"सामान्य","箭頭朝":"तीर की दिशा","上":"ऊपर","右":"दाएं","下":"नीचे","左":"बाएं","（按 R 旋轉）\">":"（घुमाने के लिए R दबाएं）\">","顏色":"रंग","這格":"यह सेल","第 {n} 格":"सेल {n}","全部格子":"सभी सेल","整理這棵樹":"इस tree को व्यवस्थित करें","加一個指標。":"Pointer जोड़ें।","＋點格子＝標黃，":"＋सेल पर क्लिक = पीला, ","＋點格子＝變淡":"＋सेल पर क्लिक = फीका","＋指標":"＋Pointer","清除標記":"मार्क हटाएं","；往上一層":"; एक लेयर ऊपर","；往下一層":"; एक लेयर नीचे","複製一份（":"कॉपी बनाएं（","複製一份":"कॉपी बनाएं","從這裡拉一條線":"यहाँ से एक लाइन खींचें","連線":"कनेक्ट","點另一個元件，連過去":"दूसरे component पर क्लिक करके जोड़ें","已複製一份放在下面":"कॉपी नीचे रख दी गई","已複製 {n} 個，按 ⌘V 貼上":"{n} कॉपी हुए, पेस्ट करने के लिए ⌘V दबाएं","已複製一份":"कॉपी बन गई","先點起點，再點終點":"पहले शुरुआती बिंदु पर, फिर अंतिम बिंदु पर क्लिक करें","題目：":"प्रश्न: ","步":"स्टेप","說明":"विवरण","起點":"शुरुआत","20. 有效的括號":"20. Valid Parentheses","讀到":"पढ़ा","決定":"निर्णय","堆疊放：還沒關的左括號\n右括號：只跟頂端比":"Stack में: अभी तक बंद न हुए खुले ब्रैकेट\nबंद ब्रैकेट: सिर्फ टॉप से मिलाएं","在 seen 裡？":"seen में है?","否":"नहीं","二元樹：root = [3,9,20,null,null,15,7]":"Binary Tree: root = [3,9,20,null,null,15,7]","鏈結串列：head = [1,2,3,4,5]":"Linked List: head = [1,2,3,4,5]","DP：dp[i][j] 代表…":"DP: dp[i][j] का मतलब…","狀態：\n轉移：dp[i][j] = \n起點：\n答案在哪一格：":"State: \nTransition: dp[i][j] = \nBase case: \nजवाब किस सेल में: ","圖：從 A 出發":"Graph: A से शुरू","白板":"व्हाइटबोर्ड","未命名白板 {n}":"बिना नाम का व्हाइटबोर्ड {n}","已開一個「{name}」的白板":"\"{name}\" का व्हाइटबोर्ड खोला गया","已開一個新白板":"नया व्हाइटबोर्ड खोला गया","剛剛":"अभी-अभी","{n} 分鐘前":"{n} मिनट पहले","今天 {t}":"आज {t}","我的白板":"मेरे व्हाइटबोर्ड","關閉":"बंद करें","＋ 空白白板":"＋ खाली व्हाइटबोर्ड","或":"या","題號或題名":"प्रश्न नंबर या नाम","輸入題號或題名，例：":"प्रश्न नंबर या नाम डालें, जैसे: ","＋ 這一題的白板":"＋ इस प्रश्न का व्हाइटबोर्ड","搜尋白板":"व्हाइटबोर्ड खोजें","搜尋已存的白板":"सेव किए गए व्हाइटबोर्ड खोजें","題目 #{n}":"प्रश्न #{n}","空白":"खाली","{n} 個元件":"{n} components","目前這個":"मौजूदा","開啟":"खोलें","改名":"नाम बदलें","複製":"कॉपी बनाएं","找不到符合的白板。":"कोई मिलता-जुलता व्हाइटबोर्ड नहीं मिला।","還沒有存任何白板。":"अभी तक कोई व्हाइटबोर्ड सेव नहीं है।","找不到這一題，請輸入題號（例：20）或完整題名。":"यह प्रश्न नहीं मिला, प्रश्न नंबर (जैसे: 20) या पूरा नाम डालें।","新名稱":"नया नाम","{name}（複製）":"{name} (कॉपी)","已複製":"कॉपी बन गई","確定刪除？":"पक्का हटाएं?","已刪除":"हटा दिया गया","我的白板…":"मेरे व्हाइटबोर्ड…","＋ 新的空白白板":"＋ नया खाली व्हाइटबोर्ड","匯出／匯入…":"Export / Import…","清空這個白板":"यह व्हाइटबोर्ड खाली करें","再按一次確定清空":"खाली करने के लिए फिर से दबाएं","已清空，可以按 ⌘Z 找回來":"खाली कर दिया, ⌘Z से वापस ला सकते हैं","放大":"Zoom in","縮小":"Zoom out","縮放到 100%":"100% पर Zoom","全部看得到":"सब कुछ दिखाएं","清空畫板":"बोर्ड खाली करें","已清空，可以按復原找回來":"खाली कर दिया, Undo से वापस ला सकते हैं","匯出／匯入":"Export / Import","複製下面的內容存起來；要還原時，把內容貼回來按「匯入」。":"नीचे का कंटेंट कॉपी करके सेव कर लें; वापस लाने के लिए उसे यहाँ पेस्ट करके \"Import\" दबाएं।","畫板內容":"बोर्ड का कंटेंट","匯入":"Import","已匯入":"Import हो गया","內容格式不對，沒有匯入":"फ़ॉर्मेट गलत है, Import नहीं हुआ","我的第一個白板":"मेरा पहला व्हाइटबोर्ड","元件":"Components","白板選單：切換、新增、匯出、清空":"व्हाइटबोर्ड मेनू: बदलें, नया, Export, खाली करें","搜尋元件":"Component खोजें","指標":"Pointer","變數":"Variable","樹節點":"Tree Node","串列節點":"List Node","圖節點":"Graph Node","工具":"टूल","選取（V）":"चुनें (V)","選取":"चुनें","移動畫面（H，或按住空白鍵）":"व्यू खिसकाएं (H, या Space दबाए रखें)","移動畫面":"व्यू खिसकाएं","連線（C）":"कनेक्ट (C)","畫筆（P）":"पेन (P)","畫筆":"पेन","橡皮擦（E）：按住拖過去，碰到的筆跡都會擦掉":"इरेज़र (E): दबाकर ऊपर से खींचें, छूने वाली सारी लिखावट मिट जाएगी","擦筆跡":"लिखावट मिटाएं","矩形（R）。按住 Shift 畫正方形":"आयत (R)। Shift दबाकर वर्ग बनाएं","矩形":"आयत","圓形（O）。按住 Shift 畫正圓":"वृत्त (O)। Shift दबाकर पूरा वृत्त बनाएं","圓形":"वृत्त","直線（L）。按住 Shift 對齊 45 度":"रेखा (L)। Shift दबाकर 45 डिग्री पर align करें","直線":"रेखा","箭頭（⇧L）。按住 Shift 對齊 45 度":"तीर (⇧L)। Shift दबाकर 45 डिग्री पर align करें","箭頭":"तीर","畫筆和形狀的顏色":"पेन और आकृतियों का रंग","復原（⌘Z）":"पूर्ववत करें (⌘Z)","復原":"पूर्ववत करें","重做（⇧⌘Z）":"फिर से करें (⇧⌘Z)","重做":"फिर से करें","整張畫布的預覽，點一下跳到那裡":"पूरे canvas का प्रीव्यू, क्लिक करके वहाँ जाएं","縮小（⌘−）":"Zoom out (⌘−)","縮放選單":"Zoom मेनू","放大（⌘＋）":"Zoom in (⌘＋)","全部看得到（⇧1）":"सब कुछ दिखाएं (⇧1)","操作說明":"सहायता","語言 / Language":"भाषा / Language","在 LeetCode 看題目 ↗":"LeetCode पर प्रश्न देखें ↗","線性":"लीनियर","查表":"लुकअप","節點":"Node","點一下放到畫面中間，或直接拖到畫布上。":"क्लिक करके स्क्रीन के बीच में रखें, या सीधे canvas पर खींचें।","練習腳本":"अभ्यास स्क्रिप्ट","✎ 練習腳本":"✎ अभ्यास स्क्रिप्ट","用一句一句的話擺白板、一步一步跑題目，最後寫成 Go":"एक-एक वाक्य से बोर्ड बनाइए, सवाल को कदम-दर-कदम चलाइए, फिर Go में लिखिए","關閉練習腳本":"अभ्यास स्क्रिप्ट बंद करें","題目":"सवाल","① 說出來":"① बोलिए","② 跑一遍":"② चलाइए","③ 寫成 Go":"③ Go में लिखिए","＋ 一行":"＋ पंक्ति","載入範例":"उदाहरण लोड करें","對答案":"जाँचें","骨架":"ढाँचा","參考解答":"संदर्भ हल","下載這個檔案":"यह फ़ाइल डाउनलोड करें","第一步":"पहला कदम","上一步":"पिछला कदम","下一步":"अगला कदम","最後一步":"आख़िरी कदम","Go 程式碼":"Go कोड","建立":"बनाएँ","給值":"मान दें","推入":"पुश","彈出":"पॉप","放進字典":"डिक्शनरी में रखें","移除":"हटाएँ","標記":"चिह्नित करें","檢查":"जाँच","回傳":"लौटाएँ","一行一句話，白板會照著擺。例：<code>array nums = [2,7,11,15]</code>、<code>dict seen</code>、<code>pointer i at nums[0]</code>、<code>put x -> i into seen</code>、<code>把 3 推入 stack</code>。白板上的元件可以拖，但要刪掉就得改或刪那一行。":"हर पंक्ति में एक वाक्य, बोर्ड उसी के अनुसार बनता है। उदाहरण: <code>array nums = [2,7,11,15]</code>, <code>dict seen</code>, <code>pointer i at nums[0]</code>, <code>put x -> i into seen</code>, <code>把 3 推入 stack</code>। घटकों को खींच सकते हैं, पर हटाने के लिए उसकी पंक्ति बदलें या हटाएँ।","一行一步：白板會停在選到的那一行。檢查句（<code>7 is not in seen</code>、<code>st is empty</code>）會直接拿白板來對。":"हर पंक्ति एक कदम: बोर्ड चुनी गई पंक्ति पर रुकता है। जाँच वाली पंक्तियाँ (<code>7 is not in seen</code>, <code>st is empty</code>) सीधे बोर्ड से मिलाई जाती हैं।","把白板上的資料結構翻成 Go：測試裡會放你在白板上跑過的那組例子。在本機跑 <code>go mod init solution &amp;&amp; go test ./...</code>。":"बोर्ड की डेटा संरचनाओं को Go में बदलता है; टेस्ट में वह उदाहरण होता है जो आपने बोर्ड पर चलाया। अपने कंप्यूटर पर <code>go mod init solution &amp;&amp; go test ./...</code> चलाएँ।","由腳本第 {n} 行產生：可以拖，要改內容或刪掉請改那一行":"स्क्रिप्ट की पंक्ति {n} से बना: खींच सकते हैं; बदलने या हटाने के लिए वह पंक्ति बदलें","這是腳本第 {n} 行產生的：改或刪那一行它才會變":"यह स्क्रिप्ट की पंक्ति {n} से बना है: बदलने के लिए वह पंक्ति बदलें या हटाएँ","跳到產生它的那一行":"जिस पंक्ति ने बनाया वहाँ जाएँ","這個元件由腳本控制：用「highlight nums[1]」這樣的一行來標記":"यह घटक स्क्रिप्ट से चलता है: \"highlight nums[1]\" जैसी पंक्ति से चिह्नित करें","自由練習":"मुक्त अभ्यास","白板停在這一行":"बोर्ड को इस पंक्ति पर रोकें","第 {n} 行":"पंक्ति {n}","例：array nums = [2,7,11,15]":"उदा. array nums = [2,7,11,15]","Jev（本機）· 平均信心 {p}%":"Jev (लोकल) · औसत भरोसा {p}%","▷ 播放":"▷ चलाएँ","❚❚ 暫停":"❚❚ रोकें","要用範例取代目前的腳本嗎？（可以復原）":"मौजूदा स्क्रिप्ट को उदाहरण से बदलें? (वापस ला सकते हैं)","已載入範例：到「② 跑一遍」一步一步看":"उदाहरण लोड हुआ: \"② चलाइए\" में कदम-दर-कदम देखें","✓ 這次的追蹤是對的":"✓ यह ट्रेस सही है","還有地方要再看看":"कुछ जगहें फिर देखें","題目：{t}":"सवाल: {t}","（從標題認出來的）":"(शीर्षक से पहचाना गया)","自由練習：只對檢查句和回傳值。選一題（或寫「title: 1. Two Sum」）就能拿參考解答來對。":"मुक्त अभ्यास: सिर्फ़ जाँच वाली पंक्तियाँ और लौटाया गया मान जाँचे जाते हैं। संदर्भ हल से मिलाने के लिए सवाल चुनें (या \"title: 1. Two Sum\" लिखें)।","下一步：到「③ 寫成 Go」把它寫成程式。":"अगला: \"③ Go में लिखिए\" में इसे कोड बनाइए।","複製程式碼":"कोड कॉपी करें"}};
 var LANGS=[['zh-TW','繁體中文'],['zh-CN','简体中文'],['en','English'],['ja','日本語'],['ko','한국어'],['fr','Français'],['hi','हिन्दी']];
 function normLang(c){c=String(c||'').toLowerCase(); if(!c) return null;
   if(c.indexOf('zh')===0) return (/cn|sg|hans/.test(c))?'zh-CN':'zh-TW';
@@ -419,8 +1244,8 @@ function persist(){
   var m=boardMeta(curBoard); if(m){m.updated=Date.now();saveIndex();}
   if(!ok) toast(_T('瀏覽器空間滿了，這次沒有存到。可以刪掉幾個舊白板，或用匯出備份。'));
 }
-function undo(){if(!hist.length)return; clearMulti(); fut.push(lastSnap); lastSnap=hist.pop(); B=JSON.parse(lastSnap); sel=null; selEdge=null; renderAll(); persist(); updUndo();}
-function redo(){if(!fut.length)return; clearMulti(); hist.push(lastSnap); lastSnap=fut.pop(); B=JSON.parse(lastSnap); sel=null; selEdge=null; renderAll(); persist(); updUndo();}
+function undo(){if(!hist.length)return; clearMulti(); fut.push(lastSnap); lastSnap=hist.pop(); B=JSON.parse(lastSnap); sel=null; selEdge=null; renderAll(); persist(); updUndo(); trainRender();}
+function redo(){if(!fut.length)return; clearMulti(); hist.push(lastSnap); lastSnap=fut.pop(); B=JSON.parse(lastSnap); sel=null; selEdge=null; renderAll(); persist(); updUndo(); trainRender();}
 function updUndo(){$('undo').disabled=!hist.length; $('redo').disabled=!fut.length;}
 
 /* ---------- 元件的預設內容 ---------- */
@@ -527,6 +1352,9 @@ function renderItem(it){
   el.classList.toggle('connsrc',connSrc===it.id);
   el.classList.toggle('msel',msel.indexOf(it.id)>=0);
   if(it.type==='tree'||it.type==='list'||it.type==='gnode'){var nv=el.querySelector('.nv');nv.contentEditable=it.val===''?'true':'false';}
+  el.classList.toggle('owned',!!it.src);
+  if(it.src){ [].forEach.call(el.querySelectorAll('[contenteditable]'),function(x){x.contentEditable='false';}); el.dataset.line='#'+scriptLineNo(it.src); el.title=_T('由腳本第 {n} 行產生：可以拖，要改內容或刪掉請改那一行',{n:scriptLineNo(it.src)}); }
+  else {delete el.dataset.line; el.removeAttribute('title');}
   return el;
 }
 function renderAll(){
@@ -538,7 +1366,7 @@ function renderAll(){
   B.items.forEach(renderItem);
   renderEdges(); renderStrokes(); applyView(); renderToolbar();
 }
-function applyView(){drawMini();renderHandles();world.style.transform='translate('+view.x+'px,'+view.y+'px) scale('+view.z+')';$('zv').textContent=Math.round(view.z*100)+'%';placeToolbar();}
+function applyView(){document.querySelector('.app').classList.toggle('narrowb',board.clientWidth<1000);drawMini();renderHandles();world.style.transform='translate('+view.x+'px,'+view.y+'px) scale('+view.z+')';$('zv').textContent=Math.round(view.z*100)+'%';placeToolbar();}
 
 /* ---------- 連線 ---------- */
 function box(id){var el=itemsEl.querySelector('[data-id="'+id+'"]');if(!el)return null;var n=el.querySelector('.node');
@@ -661,14 +1489,14 @@ function duplicate(id){
   var it=byId(id); if(!it) return;
   var el=itemsEl.querySelector('[data-id="'+id+'"]'); var h=el?el.offsetHeight:60, w=el?el.offsetWidth:100;
   var vertical=['array','string','queue','grid','steps','text','var','dict','set'].indexOf(it.type)>=0;
-  var c=clone(it); c.id=nid(); delete c.z; c.x=it.x+(vertical?0:w+30); c.y=it.y+(vertical?h+26:0);
+  var c=clone(it); c.id=nid(); delete c.z; delete c.src; c.x=it.x+(vertical?0:w+30); c.y=it.y+(vertical?h+26:0);
   B.items.push(c);
   // 指到這個陣列的指標也一起複製
   if(it.type==='array'||it.type==='string'){
     var r=el.getBoundingClientRect();
     B.items.filter(function(p){return p.type==='pointer';}).forEach(function(p){
       var pe=itemsEl.querySelector('[data-id="'+p.id+'"]'); if(!pe) return; var q=pe.getBoundingClientRect();
-      if(q.left+q.width/2>=r.left-10&&q.left+q.width/2<=r.right+10&&q.top>=r.bottom-8&&q.top<=r.bottom+50){var pc=clone(p);pc.id=nid();pc.y+=h+26;B.items.push(pc);}
+      if(q.left+q.width/2>=r.left-10&&q.left+q.width/2<=r.right+10&&q.top>=r.bottom-8&&q.top<=r.bottom+50){var pc=clone(p);pc.id=nid();delete pc.src;pc.y+=h+26;B.items.push(pc);}
     });
   }
   sel=c.id; renderAll(); commit(); toast(_T('已複製一份，改有變的地方就好'));
@@ -692,6 +1520,7 @@ function paint(it,n,key){
   (key!=null?[key]:cellKeys(it)).forEach(function(k){if(n) it.cbg[k]=n; else delete it.cbg[k];});
 }
 function renderToolbar(){
+  trainMarkSel();
   var M=$('mt');
   if(selEdge){var e=edgeById(selEdge); if(!e){M.hidden=true;return;}
     M.innerHTML='<button type="button" data-act="toggleDir">'+(e.dir?_T('→ 有箭頭'):_T('— 沒箭頭'))+_T('</button><button type="button" data-act="flip">⇄ 反轉</button><button type="button" data-act="edgeLabel">T 文字</button><span class="sep2"></span><button type="button" class="danger" data-act="delEdge">刪除</button>');
@@ -713,7 +1542,7 @@ function renderToolbar(){
   if(it.type==='array'||it.type==='string') h+=_T('<button type="button" data-act="addPtr" title="加一個指標。Shift＋點格子＝標黃，Alt＋點格子＝變淡">＋指標</button>')+((it.hl||[]).length||(it.done||[]).length?_T('<button type="button" data-act="clearHl">清除標記</button>'):'')+'<span class="sep2"></span>';
   if((it.type==='grid'||it.type==='steps')&&(it.hl||[]).length) h+=_T('<button type="button" data-act="clearHl">清除標記</button><span class="sep2"></span>');
   h+=_T('<button type="button" data-act="zfront" title="移到最上層（⌘⌥]；往上一層 ⌘]）" aria-label="移到最上層">⤒</button><button type="button" data-act="zback" title="移到最下層（⌘⌥[；往下一層 ⌘[）" aria-label="移到最下層">⤓</button><span class="sep2"></span>');
-  h+=_T('<button type="button" data-act="dup" title="複製一份（⌘D）" aria-label="複製一份">⧉</button><button type="button" data-act="connFrom" title="從這裡拉一條線" aria-label="連線">→</button><button type="button" class="danger" data-act="del" title="刪除（Delete）" aria-label="刪除">✕</button>');
+  h+=_T('<button type="button" data-act="dup" title="複製一份（⌘D）" aria-label="複製一份">⧉</button><button type="button" data-act="connFrom" title="從這裡拉一條線" aria-label="連線">→</button>')+(it.src?'<button type="button" data-act="toLine" title="'+_T('跳到產生它的那一行')+'">✎ #'+scriptLineNo(it.src)+'</button>':_T('<button type="button" class="danger" data-act="del" title="刪除（Delete）" aria-label="刪除">✕</button>'));
   M.innerHTML=h; M.hidden=false; placeToolbar();
 }
 function placeToolbar(){
@@ -802,6 +1631,7 @@ function act(a,v,i){
   var it=byId(sel); if(!it) return;
   switch(a){
     case 'dup': duplicate(it.id); return;
+    case 'toLine': trainOpen(true); focusLine(it.src); return;
     case 'del': delItem(it.id); return;
     case 'addCell': it.cells.push(''); renderItem(it); commit(); focusCell(it,it.cells.length-1); placeToolbar(); return;
     case 'delCell': if(activeCell&&activeCell.id===it.id)activeCell=null; removeCell(it,+i); break;
@@ -894,6 +1724,7 @@ function buildList(head,vals){
   renderAll(); commit();
 }
 function delItem(id){
+  var o=byId(id); if(o&&o.src){ownedToast(o);return;}
   B.items=B.items.filter(function(x){return x.id!==id;});
   B.edges=B.edges.filter(function(e){return e.from!==id&&e.to!==id;});
   if(sel===id) sel=null; renderAll(); commit();
@@ -921,7 +1752,7 @@ function packGroup(){ // 把選到的東西（含它們之間的連線、選到�
 }
 function pasteGroup(pk,dx,dy){
   var map={}, newIds=[], newStk=[];
-  pk.items.forEach(function(it){var c=clone(it);map[it.id]=c.id=nid();delete c.z;c.x+=dx;c.y+=dy;B.items.push(c);newIds.push(c.id);});
+  pk.items.forEach(function(it){var c=clone(it);map[it.id]=c.id=nid();delete c.z;delete c.src;c.x+=dx;c.y+=dy;B.items.push(c);newIds.push(c.id);});
   pk.edges.forEach(function(e){var c=clone(e);c.id=nid();c.from=map[e.from];c.to=map[e.to];B.edges.push(c);});
   pk.strokes.forEach(function(st){B.strokes.push({t:st.t,c:st.c,f:st.f,p:st.p.map(function(q){return [q[0]+dx,q[1]+dy];})});newStk.push(B.strokes.length-1);});
   setMulti(newIds,newStk); commit();
@@ -934,7 +1765,7 @@ function packBox(pk){ // 世界座標的外框
 }
 function dupInPlace(pk){ // 在原位置複製一份，回傳新的 id（不存檔，拖完才存）
   var map={}, ids=[], stk=[];
-  pk.items.forEach(function(it){var c=clone(it);map[it.id]=c.id=nid();delete c._snap;delete c.z;B.items.push(c);ids.push(c.id);});
+  pk.items.forEach(function(it){var c=clone(it);map[it.id]=c.id=nid();delete c._snap;delete c.z;delete c.src;B.items.push(c);ids.push(c.id);});
   pk.edges.forEach(function(e){var c=clone(e);c.id=nid();c.from=map[e.from];c.to=map[e.to];B.edges.push(c);});
   pk.strokes.forEach(function(st){B.strokes.push({t:st.t,c:st.c,f:st.f,p:st.p.map(function(q){return [q[0],q[1]];})});stk.push(B.strokes.length-1);});
   return {ids:ids,stk:stk};
@@ -952,11 +1783,13 @@ function pasteClip(){
   pasteGroup(clip,dx,dy);
 }
 function delGroup(){
-  var ids=groupIds(), set={}; ids.forEach(function(i){set[i]=1;});
+  var ids=groupIds(), set={}, kept=ids.filter(function(i){var o=byId(i);return o&&o.src;});
+  ids.filter(function(i){return kept.indexOf(i)<0;}).forEach(function(i){set[i]=1;});
+  if(kept.length) ownedToast(byId(kept[0]));
   B.items=B.items.filter(function(x){return !set[x.id];});
   B.edges=B.edges.filter(function(e){return !set[e.from]&&!set[e.to];});
   if(mstk.length){var ks={};mstk.forEach(function(i){ks[i]=1;});B.strokes=B.strokes.filter(function(_,i){return !ks[i];});}
-  clearMulti(); sel=null; renderAll(); commit();
+  clearMulti(); sel=null; if(kept.length) setMulti(kept,[]); else renderAll(); commit();
 }
 function finishMarquee(){
   var r=marq.rect; marq.el.remove(); var m=marq; marq=null;
@@ -1044,7 +1877,7 @@ board.addEventListener('pointerdown',function(e){
   var cell=e.target.closest('[data-c],[data-r]');
   var inMulti=msel.indexOf(it.id)>=0&&msel.length+mstk.length>1; // 框選中：Option＝複製整組，不是標記
   if(cell&&!inMulti&&(e.shiftKey||e.altKey)&&(it.type==='array'||it.type==='string'||it.type==='grid'||it.type==='steps')){
-    e.preventDefault();
+    e.preventDefault(); if(it.src){toast(_T('這個元件由腳本控制：用「highlight nums[1]」這樣的一行來標記'));return;}
     var keyv=cell.dataset.c!=null?+cell.dataset.c:cell.dataset.r+','+cell.dataset.k, arr=e.altKey&&it.type!=='grid'&&it.type!=='steps'?(it.done=it.done||[]):(it.hl=it.hl||[]);
     var at=arr.indexOf(keyv); if(at>=0) arr.splice(at,1); else arr.push(keyv);
     sel=it.id; renderAll(); commit(); return;
@@ -1090,7 +1923,7 @@ board.addEventListener('pointermove',function(e){
   if(!drag) return;
   var dx=(e.clientX-drag.sx)/view.z, dy=(e.clientY-drag.sy)/view.z;
   if(!drag.moved&&Math.hypot(dx,dy)<3) return;
-  if(!drag.moved&&(drag.alt||e.altKey)){ var src=byId(drag.id), cp=clone(src); cp.id=nid(); cp.x=drag.ox; cp.y=drag.oy; delete cp._snap; delete cp.z; B.items.push(cp);
+  if(!drag.moved&&(drag.alt||e.altKey)){ var src=byId(drag.id), cp=clone(src); cp.id=nid(); cp.x=drag.ox; cp.y=drag.oy; delete cp._snap; delete cp.z; delete cp.src; B.items.push(cp);
     sel=cp.id; activeCell=null; renderAll(); drag.id=cp.id; drag.el=itemsEl.querySelector('[data-id="'+cp.id+'"]'); drag.copied=true; }
   drag.moved=true; var it=byId(drag.id);
   var nx=Math.round(drag.ox+dx), ny=Math.round(drag.oy+dy), ddx=nx-it.x, ddy=ny-it.y;
@@ -1102,7 +1935,7 @@ board.addEventListener('pointerup',function(e){
   if(erasing){var hit=erasing.hit;erasing=null;board.classList.remove('erasing');if(hit)commit();return;}
   if(marq){finishMarquee();return;}
   if(drag&&drag.group){var g=drag;drag=null;
-    if(g.moved){commit();if(g.copied)toast(_T('已複製一份'));return;}
+    if(g.moved){if(B.script)scriptApply();commit();if(g.copied)toast(_T('已複製一份'));return;}
     // 沒拖動：當成點一下 → 只選這一個
     if(!g.id){renderAll();return;}
     clearMulti(); sel=g.id; renderAll();
@@ -1122,8 +1955,8 @@ board.addEventListener('pointerup',function(e){
     if(dbl){var ne=del.querySelector('.nv,.pn');if(ne){ne.contentEditable='true';ne.focus();selectAll(ne);}}
     return;
   }
-  if(moved&&it.type==='pointer'){delete it._snap; if(e.shiftKey){var c=nearCell(it);if(c){snapPointer(it,c);renderAll();}}}
-  if(moved){commit(); if(drag0copied) toast(_T('已複製一份'));}
+  if(moved&&it.type==='pointer'&&!it.src){delete it._snap; if(e.shiftKey){var c=nearCell(it);if(c){snapPointer(it,c);renderAll();}}}
+  if(moved){if(it.src||B.script)scriptApply(); commit(); if(drag0copied) toast(_T('已複製一份'));}
 });
 board.addEventListener('dblclick',function(e){
   var nv=e.target.closest('.node');
@@ -1394,7 +2227,7 @@ function openBoard(id){
   B=data?JSON.parse(data):{items:[],edges:[],strokes:[],seq:1}; B.edges=B.edges||[]; B.strokes=B.strokes||[]; B.seq=B.seq||1;
   view=v?JSON.parse(v):{x:40,y:30,z:1};
   sel=null; selEdge=null; clearMulti(); activeCell=null; hist=[]; fut=[];
-  renderAll(); lastSnap=snapshot(); updUndo(); renderBoardBtn();
+  renderAll(); lastSnap=snapshot(); updUndo(); renderBoardBtn(); trainRender(true);
   if(!v) setTimeout(fit,30);
 }
 function newBoard(prob){
@@ -1407,7 +2240,7 @@ function newBoard(prob){
   B={items:[],edges:[],strokes:[],seq:1}; view={x:40,y:30,z:1};
   sel=null; selEdge=null; clearMulti(); activeCell=null; hist=[]; fut=[];
   if(prob){var t=make('title',60,40); t.text=prob[0]+'. '+prob[1]+(prob[3]?_T('（')+prob[3]+_T('）'):''); B.items.push(t);}
-  renderAll(); lastSnap=snapshot(); persist(); updUndo(); renderBoardBtn();
+  renderAll(); lastSnap=snapshot(); persist(); updUndo(); renderBoardBtn(); trainRender(true);
   toast(prob?_T('已開一個「{name}」的白板',{name:name}):_T('已開一個新白板'));
 }
 function relTime(t){
@@ -1489,7 +2322,7 @@ paintCdot();
 $('boardBtn').onclick=function(){
   popMenu($('boardBtn'),[[_T('我的白板…'),'',showBoards],[_T('＋ 新的空白白板'),'',function(){newBoard(null);}],'-',[_T('匯出／匯入…'),'',function(){$('exp').click();}],'-',
     [_T('清空這個白板'),'',function(b){if(!b.dataset.arm){b.dataset.arm='1';b.querySelector('span').textContent=_T('再按一次確定清空');return;}
-      B={items:[],edges:[],strokes:[],seq:B.seq};sel=null;selEdge=null;clearMulti();renderAll();commit();closePop();toast(_T('已清空，可以按 ⌘Z 找回來'));},'danger','keep']]);
+      B={items:[],edges:[],strokes:[],seq:B.seq};sel=null;selEdge=null;clearMulti();renderAll();commit();closePop();trainRender(true);toast(_T('已清空，可以按 ⌘Z 找回來'));},'danger','keep']]);
 };
 var expBtn=document.createElement('button'); expBtn.id='exp'; expBtn.hidden=true; document.body.appendChild(expBtn);
 
@@ -1517,13 +2350,250 @@ $('exp').onclick=function(){
   board.appendChild(m); var ta=$('ioText'); ta.value=JSON.stringify(B);
   $('ioClose').onclick=function(){m.remove();};
   $('ioCopy').onclick=function(){var done=function(){toast(_T('已複製'));};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(ta.value).then(done,function(){ta.select();});else ta.select();};
-  $('ioLoad').onclick=function(){try{var o=JSON.parse(ta.value);if(!o||!Array.isArray(o.items))throw 0;B=o;B.edges=B.edges||[];B.strokes=B.strokes||[];B.seq=B.seq||999;sel=null;renderAll();commit();m.remove();fit();toast(_T('已匯入'));}catch(e){toast(_T('內容格式不對，沒有匯入'));}};
+  $('ioLoad').onclick=function(){try{var o=JSON.parse(ta.value);if(!o||!Array.isArray(o.items))throw 0;B=o;B.edges=B.edges||[];B.strokes=B.strokes||[];B.seq=B.seq||999;sel=null;renderAll();commit();m.remove();fit();trainRender(true);toast(_T('已匯入'));}catch(e){toast(_T('內容格式不對，沒有匯入'));}};
 };
 $('helpX').onclick=function(){$('help').hidden=true;try{localStorage.setItem('drycanvas-help','0');}catch(e){}};
+
+/* ---------- 練習腳本：一句話擺白板 → 一步一步跑 → 寫成 Go ---------- */
+// 腳本存在 B.script（跟著白板存檔、可以復原）。每一行產生的元件 id＝'s'+行的 id、src＝行的 id：
+// 使用者可以拖、換顏色，但不能直接刪；改那一行就跟著改，刪那一行它就不見。
+var HAS_NL=typeof NLBoard!=='undefined'&&typeof Trainer!=='undefined';
+var trainTab='say', lastRun=null, goMode='skel', goFile='solution.go', playT=null, commitT=null;
+var INTENT_LABEL={create:_T('建立'),assign:_T('給值'),push:_T('推入'),pop:_T('彈出'),put:_T('放進字典'),remove:_T('移除'),mark:_T('標記'),assert:_T('檢查'),ret:_T('回傳')};
+$('tpHintSay').innerHTML=_T('一行一句話，白板會照著擺。例：<code>array nums = [2,7,11,15]</code>、<code>dict seen</code>、<code>pointer i at nums[0]</code>、<code>put x -> i into seen</code>、<code>把 3 推入 stack</code>。白板上的元件可以拖，但要刪掉就得改或刪那一行。');
+$('tpHintRun').innerHTML=_T('一行一步：白板會停在選到的那一行。檢查句（<code>7 is not in seen</code>、<code>st is empty</code>）會直接拿白板來對。');
+$('tpHintGo').innerHTML=_T('把白板上的資料結構翻成 Go：測試裡會放你在白板上跑過的那組例子。在本機跑 <code>go mod init solution &amp;&amp; go test ./...</code>。');
+function caseFromBoard(){var m=boardMeta(curBoard);return m&&m.pid&&HAS_NL?Trainer.byPid(m.pid):null;}
+function ensureScript(){
+  if(!B.script) B.script={lines:[],step:null,pos:{},poff:{},next:{c0:0,c1:0,cx:0},origin:null,seq:1,caseId:caseFromBoard()};
+  if(!B.script.lines.length) B.script.lines.push({id:'L'+(B.script.seq++),text:''});
+  return B.script;
+}
+function scriptLineNo(key){var sc=B.script; if(sc) for(var i=0;i<sc.lines.length;i++) if(sc.lines[i].id===key) return i+1; return '?';}
+function ownedToast(o){toast(_T('這是腳本第 {n} 行產生的：改或刪那一行它才會變',{n:scriptLineNo(o.src)})); trainOpen(true); focusLine(o.src);}
+function quietSave(){lastSnap=snapshot(); persist();}
+function laterCommit(){clearTimeout(commitT); commitT=setTimeout(commit,600);}
+
+function autoPos(c){
+  var sc=B.script;
+  if(!sc.origin){
+    var cc=center(), free=B.items.filter(function(i){return !i.src;}), ox=Math.round(cc.x-320), oy=Math.round(cc.y-200);
+    if(free.length){var x1=1e9,y2=-1e9; free.forEach(function(i){var el=itemsEl.querySelector('[data-id="'+i.id+'"]'); x1=Math.min(x1,i.x); y2=Math.max(y2,i.y+(el?el.offsetHeight:60));}); ox=x1; oy=y2+80;}
+    sc.origin={x:ox,y:oy};
+  }
+  var o=sc.origin, n=sc.next, p;
+  if(n.vx==null&&c.type!=='title'&&c.type!=='array'&&c.type!=='string') n.vx=Math.max(300,(n.w||0)+50); // 變數欄放在最寬的陣列右邊
+  if(c.type==='title'){p={x:o.x,y:o.y+n.c0}; n.c0+=64;}
+  else if(c.type==='array'||c.type==='string'){p={x:o.x,y:o.y+n.c0}; n.c0+=104; n.w=Math.max(n.w||0,c.cells.length*46+30);}
+  else if(c.type==='var'||c.type==='note'){p={x:o.x+n.vx,y:o.y+n.c1}; n.c1+=c.type==='note'?120:54;}
+  else {p={x:o.x+n.vx+170+n.cx*170,y:o.y}; n.cx++;}
+  return p;
+}
+function compItem(c,prev){
+  var sc=B.script, it=make(c.type==='title'?'title':c.type,0,0);
+  it.id='s'+c.key; it.src=c.key;
+  if(prev) ['z','cbg','bg','color','dir'].forEach(function(k){if(prev[k]!=null) it[k]=prev[k];});
+  if(c.type==='array'||c.type==='string'){it.name=c.name; it.cells=c.cells.slice(); it.hl=c.hl.slice(); it.done=c.done.slice();}
+  else if(c.type==='stack'||c.type==='queue'||c.type==='set'){it.name=c.name; it.cells=c.cells.slice();}
+  else if(c.type==='dict'){it.name=c.name; it.rows=c.rows.map(function(r){return r.slice();});}
+  else if(c.type==='var'){it.name=c.name; it.value=c.value; if(c.ret&&!it.bg) it.bg=2;}
+  else if(c.type==='pointer'){it.name=c.name; if(!prev||prev.color==null) it.color=c.color; it._t=c.target; it._i=c.idx;}
+  else it.text=c.text;
+  var p=sc.pos[c.key]; if(!p&&c.type!=='pointer'){p=autoPos(c); sc.pos[c.key]=p;}
+  it.x=p?p.x:0; it.y=p?p.y:0;
+  return it;
+}
+/* 照腳本重畫白板上屬於腳本的元件 */
+function scriptApply(){
+  var sc=B.script; if(!sc||!HAS_NL) return;
+  B.items.forEach(function(it){ if(!it.src) return;
+    if(it.type==='pointer'){ if(it._bx!=null) sc.poff[it.src]={x:it.x-it._bx,y:it.y-it._by}; }
+    else sc.pos[it.src]={x:it.x,y:it.y};
+  });
+  var run=NLBoard.replay(sc.lines,trainTab==='run'?sc.step:null); lastRun=run;
+  var old={}, items=B.items.filter(function(it){if(it.src){old[it.src]=it;return false;}return true;});
+  var fresh=[];
+  run.board.comps.forEach(function(c){if(!old[c.key]) fresh.push('s'+c.key); items.push(compItem(c,old[c.key]));});
+  B.items=items;
+  var ids={}; B.items.forEach(function(it){ids[it.id]=1;}); B.edges=B.edges.filter(function(e){return ids[e.from]&&ids[e.to];});
+  if(sel&&!byId(sel)) sel=null;
+  renderAll();
+  var ptrs=B.items.filter(function(p){return p.src&&p.type==='pointer';});
+  ptrs.forEach(function(p){delete p._snap;});
+  ptrs.forEach(function(p){
+    var cells=itemsEl.querySelectorAll('[data-id="s'+p._t+'"] .cell'); if(!cells.length) return;
+    var k=Math.max(0,Math.min(cells.length-1,p._i)); snapPointer(p,cells[k]);
+    p.x+=Math.round((p._i-k)*(cells[k].offsetWidth+3)); p._bx=p.x; p._by=p.y;
+    var off=sc.poff[p.src]; if(off){p.x+=off.x; p.y+=off.y;}
+    renderItem(p);
+  });
+  if(ptrs.length){renderEdges(); placeToolbar();}
+  if(fresh.length&&!playT) reveal(fresh);
+  trainStatus();
+}
+function reveal(ids){ // 新出現的元件在畫面外 → 平移畫面讓它看得到
+  var br=board.getBoundingClientRect(), dx=0, dy=0, pad=24;
+  ids.forEach(function(id){var el=itemsEl.querySelector('[data-id="'+id+'"]'); if(!el) return; var r=el.getBoundingClientRect();
+    if(r.right+dx>br.right-pad) dx=Math.min(dx,br.right-pad-r.right); if(r.left+dx<br.left+pad) dx=br.left+pad-r.left;
+    if(r.bottom+dy>br.bottom-110) dy=Math.min(dy,br.bottom-110-r.bottom); if(r.top+dy<br.top+pad) dy=br.top+pad-r.top;});
+  if(dx||dy){view.x+=dx; view.y+=dy; applyView();}
+}
+
+/* ---------- 面板 ---------- */
+function trainOpen(on){
+  var p=$('trainp'); if(on==null) on=p.hidden; if(!HAS_NL) on=false;
+  p.hidden=!on; $('trainBtn').setAttribute('aria-pressed',on?'true':'false'); lsSet('drycanvas-train',on?'1':'0');
+  if(on&&!B.script){ensureScript(); quietSave();}
+  if(!on&&B.script&&B.script.step!=null&&trainTab==='run'){trainTab='say'; scriptApply(); quietSave();}
+  trainRender(); applyView();
+}
+function activeLines(){return trainTab==='run'?$('tpLines2'):$('tpLines');}
+function trainRender(boardChanged){
+  if(!HAS_NL) return;
+  if(boardChanged&&B.script){scriptApply(); if(lastSnap!==null) quietSave();} // 換白板：照腳本重畫，不算一步
+  var on=!$('trainp').hidden; if(!on) return;
+  var sc=B.script||{lines:[],caseId:null};
+  $('tpCase').innerHTML='<option value="">'+_T('自由練習')+'</option>'+Object.keys(Trainer.CASES).map(function(k){var C=Trainer.CASES[k];return '<option value="'+k+'"'+(sc.caseId===k?' selected':'')+'>'+C.id+'. '+esc(C.title)+'</option>';}).join('');
+  [].forEach.call(document.querySelectorAll('.tptab'),function(b){b.setAttribute('aria-selected',b.dataset.tp===trainTab?'true':'false');});
+  $('tpSay').hidden=trainTab!=='say'; $('tpRun').hidden=trainTab!=='run'; $('tpGo').hidden=trainTab!=='go';
+  $('tpLines').innerHTML=''; $('tpLines2').innerHTML='';
+  if(trainTab!=='go'){
+    activeLines().innerHTML=sc.lines.map(function(l,i){
+      return '<div class="tpl" data-l="'+l.id+'"><button type="button" class="tpn" data-n="'+i+'" title="'+_T('白板停在這一行')+'">'+(i+1)+'</button><input class="tpi" type="text" spellcheck="false" autocomplete="off" value="'+esc(l.text)+'" aria-label="'+_T('第 {n} 行',{n:i+1})+'" placeholder="'+(i===0&&sc.lines.length===1?esc(_T('例：array nums = [2,7,11,15]')):'')+'"><span class="tpst"></span><div class="tpsum"></div></div>';
+    }).join('');
+  }
+  if(trainTab==='go') renderGo();
+  trainStatus(); trainMarkSel();
+}
+function trainStatus(){
+  if(!HAS_NL||$('trainp').hidden||!B.script) return;
+  var sc=B.script, run=NLBoard.replay(sc.lines,null), conf=[], box=activeLines();
+  run.results.forEach(function(r,i){
+    if(r.confidence!=null&&r.status!=='err') conf.push(r.confidence);
+    var row=box&&box.querySelector('[data-l="'+sc.lines[i].id+'"]'); if(!row) return;
+    var st=row.querySelector('.tpst'), sm=row.querySelector('.tpsum');
+    st.className='tpst '+r.status; st.textContent={ok:'●',pass:'✓',fail:'✗',err:'!',comment:'#',blank:''}[r.status]||'';
+    st.title=r.status==='err'?r.msg:'';
+    if(r.status==='blank'||r.status==='comment'){sm.hidden=true;}
+    else {sm.hidden=false; sm.className='tpsum'+(r.status==='err'||r.status==='fail'?' bad':'');
+      sm.innerHTML='<span class="in">'+esc(INTENT_LABEL[r.intent]||r.intent)+'</span> '+esc(r.sum||'')+(r.msg?' — '+esc(r.msg):'')+' · '+Math.round((r.p||0)*100)+'%';
+      sm.title='Jev: '+r.state;}
+    row.classList.toggle('cur',trainTab==='run'&&sc.step===i);
+    row.classList.toggle('after',trainTab==='run'&&sc.step!=null&&i>sc.step);
+  });
+  var avg=conf.length?Math.round(conf.reduce(function(a,b){return a+b;},0)/conf.length*100):0;
+  $('tpModel').textContent=_T('Jev（本機）· 平均信心 {p}%',{p:avg});
+  var n=sc.lines.length, k=sc.step==null?n-1:sc.step;
+  $('tpStep').textContent=(k+1)+' / '+n;
+  $('tpFirst').disabled=$('tpPrev').disabled=k<0; $('tpNext').disabled=$('tpLast').disabled=k>=n-1;
+}
+function trainMarkSel(){
+  if(!HAS_NL||$('trainp').hidden) return;
+  var it=sel&&byId(sel), key=it&&it.src;
+  [].forEach.call(document.querySelectorAll('.tpl'),function(r){r.classList.toggle('selc',!!key&&r.dataset.l===key);});
+}
+function focusLine(key){
+  setTimeout(function(){var row=activeLines()&&activeLines().querySelector('[data-l="'+key+'"]'); if(row){row.scrollIntoView({block:'nearest'}); var inp=row.querySelector('.tpi'); inp.focus(); inp.setSelectionRange(inp.value.length,inp.value.length);}},0);
+}
+function lineHover(key,on){var el=itemsEl.querySelector('[data-id="s'+key+'"]'); if(el) el.classList.toggle('lnhl',on);}
+function setStep(k){
+  var sc=B.script; if(!sc) return; var n=sc.lines.length;
+  sc.step=Math.max(-1,Math.min(n-1,k)); scriptApply(); quietSave();
+  var row=activeLines().querySelector('.tpl.cur'); if(row) row.scrollIntoView({block:'nearest'});
+}
+function stopPlay(){if(playT){clearInterval(playT);playT=null;$('tpPlay').textContent=_T('▷ 播放');}}
+function setTab(t){
+  stopPlay(); trainTab=t; var sc=B.script;
+  if(sc&&t==='run'&&sc.step==null) sc.step=sc.lines.length-1;
+  if(sc){scriptApply(); quietSave();}
+  trainRender();
+}
+function editLines(fn,focusKey,caret){ // 改結構（加行、刪行）：馬上存成一步
+  var sc=ensureScript(); fn(sc); if(trainTab==='run'&&sc.step!=null) sc.step=Math.min(sc.step,sc.lines.length-1);
+  scriptApply(); commit(); trainRender();
+  if(focusKey) setTimeout(function(){var row=activeLines().querySelector('[data-l="'+focusKey+'"]'); if(row){var inp=row.querySelector('.tpi'); inp.focus(); var c=caret==null?inp.value.length:caret; inp.setSelectionRange(c,c);}},0);
+}
+function newLine(text){return {id:'L'+(B.script.seq++),text:text||''};}
+
+$('trainBtn').onclick=function(){trainOpen();};
+$('tpX').onclick=function(){trainOpen(false);};
+[].forEach.call(document.querySelectorAll('.tptab'),function(b){b.onclick=function(){setTab(b.dataset.tp);};});
+$('tpCase').onchange=function(){var sc=ensureScript(); sc.caseId=this.value||null; commit(); if(trainTab==='go') renderGo(); $('tpReport').innerHTML='';};
+$('tpAdd').onclick=function(){var l; editLines(function(sc){l=newLine();sc.lines.push(l);},null); focusLine(l.id);};
+$('tpDemo').onclick=function(){
+  var sc=ensureScript(), cid=sc.caseId||'two-sum', C=Trainer.CASES[cid];
+  if(sc.lines.some(function(l){return l.text.trim();})&&!confirm(_T('要用範例取代目前的腳本嗎？（可以復原）'))) return;
+  var inp=lastRun?C.inputs(lastRun.state):{err:1}; if(inp.err) inp=cid==='two-sum'?{nums:[2,7,11,15],target:9}:{s:'([)]'};
+  editLines(function(s2){s2.caseId=cid; s2.lines=Trainer.demo(cid,inp).map(function(t){return newLine(t);}); s2.pos={}; s2.poff={}; s2.next={c0:0,c1:0,cx:0}; s2.origin=null; s2.step=null;});
+  setTimeout(fit,30); toast(_T('已載入範例：到「② 跑一遍」一步一步看'));
+};
+function lineEvents(box){
+  box.addEventListener('input',function(e){
+    var inp=e.target.closest('.tpi'); if(!inp) return; var key=inp.closest('.tpl').dataset.l, sc=ensureScript();
+    var l=sc.lines.filter(function(x){return x.id===key;})[0]; if(!l) return; l.text=inp.value;
+    scriptApply(); laterCommit();
+  });
+  box.addEventListener('keydown',function(e){
+    var inp=e.target.closest('.tpi'); if(!inp||e.isComposing) return;
+    var sc=B.script, key=inp.closest('.tpl').dataset.l, i=sc.lines.map(function(l){return l.id;}).indexOf(key);
+    if(e.key==='Enter'){e.preventDefault(); var c=inp.selectionStart, a=inp.value.slice(0,c), b=inp.value.slice(c), nl;
+      editLines(function(s2){s2.lines[i].text=a; nl=newLine(b); s2.lines.splice(i+1,0,nl); if(trainTab==='run'&&s2.step===i) s2.step=i+1;},null);
+      var row=activeLines().querySelector('[data-l="'+nl.id+'"]'); if(row){var ni=row.querySelector('.tpi'); ni.focus(); ni.setSelectionRange(0,0);} return;}
+    if(e.key==='Backspace'&&inp.selectionStart===0&&inp.selectionEnd===0&&i>0){e.preventDefault();
+      var prev=sc.lines[i-1], at=prev.text.length, rest=inp.value;
+      editLines(function(s2){prev.text+=rest; s2.lines.splice(i,1);},prev.id,at); return;}
+    if(e.key==='ArrowUp'&&i>0){e.preventDefault(); focusLine(sc.lines[i-1].id); if(trainTab==='run') setStep(i-1); return;}
+    if(e.key==='ArrowDown'&&i<sc.lines.length-1){e.preventDefault(); focusLine(sc.lines[i+1].id); if(trainTab==='run') setStep(i+1); return;}
+  });
+  box.addEventListener('paste',function(e){
+    var inp=e.target.closest('.tpi'); if(!inp) return; var t=(e.clipboardData||window.clipboardData).getData('text'); if(t.indexOf('\n')<0) return;
+    e.preventDefault(); var sc=B.script, key=inp.closest('.tpl').dataset.l, i=sc.lines.map(function(l){return l.id;}).indexOf(key);
+    var parts=t.replace(/\r/g,'').split('\n'), c=inp.selectionStart, a=inp.value.slice(0,c), b=inp.value.slice(inp.selectionEnd), last;
+    editLines(function(s2){s2.lines[i].text=a+parts[0]; var add=parts.slice(1).map(function(x){return newLine(x);}); add[add.length-1].text+=b; last=add[add.length-1]; s2.lines.splice.apply(s2.lines,[i+1,0].concat(add));},null);
+    focusLine(last.id);
+  });
+  box.addEventListener('click',function(e){var n=e.target.closest('.tpn'); if(!n) return; if(trainTab!=='run') setTab('run'); setStep(+n.dataset.n);});
+  box.addEventListener('focusin',function(e){var row=e.target.closest('.tpl'); if(row) lineHover(row.dataset.l,true);});
+  box.addEventListener('focusout',function(e){var row=e.target.closest('.tpl'); if(row) lineHover(row.dataset.l,false); clearTimeout(commitT); commit();});
+  box.addEventListener('pointerover',function(e){var row=e.target.closest('.tpl'); if(row) lineHover(row.dataset.l,true);});
+  box.addEventListener('pointerout',function(e){var row=e.target.closest('.tpl'); if(row&&document.activeElement!==row.querySelector('.tpi')) lineHover(row.dataset.l,false);});
+}
+lineEvents($('tpLines')); lineEvents($('tpLines2'));
+$('tpFirst').onclick=function(){stopPlay();setStep(-1);};
+$('tpPrev').onclick=function(){stopPlay();setStep((B.script.step==null?B.script.lines.length-1:B.script.step)-1);};
+$('tpNext').onclick=function(){stopPlay();setStep((B.script.step==null?B.script.lines.length-1:B.script.step)+1);};
+$('tpLast').onclick=function(){stopPlay();setStep(B.script.lines.length-1);};
+$('tpPlay').onclick=function(){
+  if(playT){stopPlay();return;} var sc=B.script; if(!sc) return;
+  if(sc.step==null||sc.step>=sc.lines.length-1) setStep(-1);
+  $('tpPlay').textContent=_T('❚❚ 暫停');
+  playT=setInterval(function(){if(!B.script||B.script.step>=B.script.lines.length-1){stopPlay();return;} setStep(B.script.step+1);},800);
+};
+$('tpCheck').onclick=function(){
+  var sc=B.script; if(!sc) return;
+  var res=Trainer.check(sc.caseId,NLBoard.replay(sc.lines,null)), C=res.caseId&&Trainer.CASES[res.caseId];
+  $('tpReport').innerHTML='<div class="tprep"><div class="head">'+(res.ok?_T('✓ 這次的追蹤是對的'):_T('還有地方要再看看'))+'</div>'+
+    (C?'<div class="r"><span>'+esc(_T('題目：{t}',{t:C.id+'. '+C.title}))+(sc.caseId?'':' '+esc(_T('（從標題認出來的）')))+'</span></div>':'<div class="r"><span>'+esc(_T('自由練習：只對檢查句和回傳值。選一題（或寫「title: 1. Two Sum」）就能拿參考解答來對。'))+'</span></div>')+
+    res.items.map(function(x){return '<div class="r '+(x.ok?'ok':'no')+'"><b>'+(x.ok?'✓':'✗')+'</b><span>'+esc(x.msg)+(x.lines?' ('+x.lines.map(function(id){return '#'+scriptLineNo(id);}).join(', ')+')':'')+'</span></div>';}).join('')+
+    (res.ok?'<div class="r"><span>'+_T('下一步：到「③ 寫成 Go」把它寫成程式。')+'</span></div>':'')+'</div>';
+};
+function renderGo(){
+  var sc=B.script; if(!sc){$('tpCode').value='';return;}
+  var files=Trainer.goCode(sc.caseId,NLBoard.replay(sc.lines,null),sc.lines,{solution:goMode==='sol'});
+  $('tpCode').value=files[goFile]||'';
+  [].forEach.call(document.querySelectorAll('[data-gm]'),function(b){b.setAttribute('aria-pressed',b.dataset.gm===goMode?'true':'false');});
+  [].forEach.call(document.querySelectorAll('[data-gf]'),function(b){b.setAttribute('aria-pressed',b.dataset.gf===goFile?'true':'false');});
+}
+[].forEach.call(document.querySelectorAll('[data-gm]'),function(b){b.onclick=function(){goMode=b.dataset.gm;renderGo();};});
+[].forEach.call(document.querySelectorAll('[data-gf]'),function(b){b.onclick=function(){goFile=b.dataset.gf;renderGo();};});
+$('tpCopy').onclick=function(){var ta=$('tpCode'),done=function(){toast(_T('已複製'));};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(ta.value).then(done,function(){ta.select();});else ta.select();};
+$('tpSave').onclick=function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([$('tpCode').value],{type:'text/plain'}));a.download=goFile;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},0);};
+if(!HAS_NL) $('trainBtn').hidden=true;
 
 /* ---------- 開始 ---------- */
 (function init(){
   if(lsGet('drycanvas-help')!=='0') $('help').hidden=false;
+  if(HAS_NL&&lsGet('drycanvas-train')==='1') $('trainp').hidden=false;
   setTool('select');
   try{BOARDS=JSON.parse(lsGet('drycanvas-boards')||'[]')||[];}catch(e){BOARDS=[];}
   if(!BOARDS.length){
