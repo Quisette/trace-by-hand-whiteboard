@@ -286,6 +286,58 @@ table.grid th.rax{text-align:center;vertical-align:bottom}
 table.grid .ax{display:inline-block;min-width:12px;padding:0 2px;border-radius:3px}
 .langrow{display:flex;align-items:center;gap:6px;padding:0 6px;color:var(--ui-dim)}
 .langsel{border:1px solid var(--panel-line);background:var(--panel);color:var(--ui-text);border-radius:6px;padding:3px 6px;font-size:12px;cursor:pointer;max-width:100%}
+/* ===== 練習腳本（自然語言 → 白板） ===== */
+.it.owned::after{content:attr(data-line);position:absolute;top:-9px;left:-9px;min-width:18px;height:16px;padding:0 4px;border-radius:8px;background:var(--active);color:var(--active-ink);font:700 10px/16px var(--mono);text-align:center;opacity:0;transition:opacity .12s;pointer-events:none}
+.it.owned:hover::after,.it.owned.sel::after,.it.owned.lnhl::after{opacity:1}
+.it.owned .ctl{display:none!important}
+.app.narrowb #mini{display:none}
+.app.narrowb .dock{left:16px;transform:none}
+.it.owned.lnhl{outline:2px dashed var(--active);outline-offset:4px;border-radius:6px}
+.trainbtn{border:1px solid var(--panel-line);background:var(--panel);color:var(--ui-text);border-radius:6px;padding:5px 8px;font-size:12.5px;font-weight:600;cursor:pointer;text-align:left}
+.trainbtn:hover{border-color:var(--active)}
+.trainbtn[aria-pressed="true"]{background:var(--active);color:var(--active-ink);border-color:var(--active)}
+.trainp{width:380px;flex:none;background:var(--panel);border-left:1px solid var(--panel-line);display:flex;flex-direction:column;min-height:0;color:var(--ui-text)}
+.tphead{display:flex;align-items:center;gap:6px;padding:10px 12px;border-bottom:1px solid var(--panel-line)}
+.tphead b{font-size:14px;flex:1}
+.tphead select{border:1px solid var(--panel-line);background:var(--panel);color:var(--ui-text);border-radius:6px;padding:3px 6px;font-size:12px;max-width:180px}
+.tpx{border:0;background:none;color:var(--ui-dim);font-size:16px;cursor:pointer;padding:0 4px}
+.tptabs{display:flex;gap:2px;padding:8px 10px 0;border-bottom:1px solid var(--panel-line)}
+.tptab{border:0;border-bottom:2px solid transparent;background:none;padding:6px 8px 7px;font-size:12.5px;font-weight:600;color:var(--ui-dim);cursor:pointer}
+.tptab[aria-selected="true"]{color:var(--ui-text);border-bottom-color:var(--active)}
+.tpbody{flex:1;overflow-y:auto;padding:10px 12px 16px;display:flex;flex-direction:column;gap:8px;min-height:0}
+.tphint{font-size:11.5px;color:var(--ui-dim);line-height:1.55}
+.tphint code{font-family:var(--mono);font-size:11px;background:var(--hover);border-radius:4px;padding:0 4px;color:var(--ui-text)}
+.tplines{display:flex;flex-direction:column;border:1px solid var(--panel-line);border-radius:8px;overflow:hidden}
+.tpl{display:grid;grid-template-columns:28px minmax(0,1fr) 18px;column-gap:4px;align-items:center;padding:3px 6px 3px 0;border-top:1px solid var(--panel-line)}
+.tpl:first-child{border-top:0}
+.tpl.cur{background:var(--marker-bg)}
+.tpl.after{opacity:.45}
+.tpl.selc{box-shadow:inset 3px 0 0 var(--active)}
+.tpn{font:600 10.5px var(--mono);color:var(--ui-dim);text-align:right;cursor:pointer;border:0;background:none;padding:0}
+.tpn:hover{color:var(--active)}
+.tpi{border:0;background:transparent;font-family:var(--mono);font-size:12.5px;color:var(--ui-text);padding:4px 4px;min-width:0;width:100%;border-radius:4px}
+.tpi:focus{outline:none;background:var(--hover)}
+.tpst{font:700 12px var(--mono);text-align:center}
+.tpst.ok{color:var(--green)} .tpst.pass{color:var(--green)} .tpst.fail,.tpst.err{color:var(--red)} .tpst.comment{color:var(--ui-dim)}
+.tpsum{grid-column:2/4;font:11px var(--mono);color:var(--ui-dim);padding:0 4px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tpsum .in{color:var(--purple);font-weight:600}
+.tpsum.bad{color:var(--red);white-space:normal}
+.tpbar{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.tpb{border:1px solid var(--panel-line);background:var(--panel);color:var(--ui-text);border-radius:6px;padding:4px 9px;font-size:12.5px;cursor:pointer;white-space:nowrap}
+.tpb:hover{border-color:var(--active)}
+.tpb.pri{background:var(--active);color:var(--active-ink);border-color:var(--active)}
+.tpb:disabled{opacity:.4;cursor:default}
+.tpstep{font:12px var(--mono);color:var(--ui-dim);min-width:64px;text-align:center}
+.tprep{display:flex;flex-direction:column;gap:4px;border:1px solid var(--panel-line);border-radius:8px;padding:8px 10px;font-size:12.5px}
+.tprep .r{display:flex;gap:6px;align-items:baseline;line-height:1.45}
+.tprep .r b{font-family:var(--mono)}
+.tprep .r.ok b{color:var(--green)} .tprep .r.no b{color:var(--red)}
+.tprep .head{font-weight:700}
+.tpcode{width:100%;min-height:260px;flex:1;font-family:var(--mono);font-size:11.5px;line-height:1.5;border:1px solid var(--panel-line);border-radius:8px;padding:8px;background:var(--hover);color:var(--ui-text);white-space:pre;resize:vertical;tab-size:4}
+.tpseg{display:inline-flex;border:1px solid var(--panel-line);border-radius:7px;overflow:hidden}
+.tpseg button{border:0;background:var(--panel);color:var(--ui-text);padding:4px 9px;font-size:12px;cursor:pointer}
+.tpseg button[aria-pressed="true"]{background:var(--ui-text);color:var(--panel)}
+@media (max-width:900px){.trainp{position:absolute;right:0;top:0;bottom:0;z-index:15;width:min(380px,100%);box-shadow:var(--dock-shadow)}}
 </style>
 
 <div class="app">
@@ -294,6 +346,7 @@ table.grid .ax{display:inline-block;min-width:12px;padding:0 2px;border-radius:3
       <button class="boardbtn" id="boardBtn" type="button" title="白板選單：切換、新增、匯出、清空">白板</button>
       <label class="langrow"><span class="sr">語言 / Language</span><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg><select id="langSel" class="langsel" aria-label="Language"></select></label>
       <a class="lclink" id="lcLink" href="#" target="_blank" rel="noopener" hidden>在 LeetCode 看題目 ↗</a>
+      <button class="trainbtn" id="trainBtn" type="button" aria-pressed="false" title="用一句一句的話擺白板、一步一步跑題目，最後寫成 Go">✎ 練習腳本</button>
     </div>
     <div class="pbody" id="tab-comp">
       <label for="psearch" class="sr">搜尋元件</label><input type="search" id="psearch" class="psearch" placeholder="搜尋元件">
@@ -343,7 +396,29 @@ table.grid .ax{display:inline-block;min-width:12px;padding:0 2px;border-radius:3
       <b>畫面</b>：空白鍵＋拖曳或觸控板移動；<kbd>⌘</kbd>＋滾輪縮放；<kbd>⇧1</kbd> 全部看得到、<kbd>⇧0</kbd> 100%。
     </div>
   </div>
+  <aside class="trainp" id="trainp" aria-label="練習腳本" hidden>
+    <div class="tphead"><b>練習腳本</b><label class="sr" for="tpCase">題目</label><select id="tpCase"></select><button class="tpx" id="tpX" type="button" aria-label="關閉練習腳本">×</button></div>
+    <div class="tptabs" role="tablist"><button class="tptab" role="tab" type="button" data-tp="say">① 說出來</button><button class="tptab" role="tab" type="button" data-tp="run">② 跑一遍</button><button class="tptab" role="tab" type="button" data-tp="go">③ 寫成 Go</button></div>
+    <div class="tpbody" id="tpSay">
+      <div class="tphint" id="tpHintSay"></div>
+      <div class="tplines" id="tpLines"></div>
+      <div class="tpbar"><button class="tpb" id="tpAdd" type="button">＋ 一行</button><button class="tpb" id="tpDemo" type="button">載入範例</button><span class="grow"></span><span class="tphint" id="tpModel"></span></div>
+    </div>
+    <div class="tpbody" id="tpRun" hidden>
+      <div class="tphint" id="tpHintRun"></div>
+      <div class="tpbar"><button class="tpb" id="tpFirst" type="button" aria-label="第一步">⏮</button><button class="tpb" id="tpPrev" type="button" aria-label="上一步">◀</button><span class="tpstep" id="tpStep"></span><button class="tpb" id="tpNext" type="button" aria-label="下一步">▶</button><button class="tpb" id="tpLast" type="button" aria-label="最後一步">⏭</button><button class="tpb" id="tpPlay" type="button">▷ 播放</button><span class="grow"></span><button class="tpb pri" id="tpCheck" type="button">對答案</button></div>
+      <div class="tplines" id="tpLines2"></div>
+      <div id="tpReport"></div>
+    </div>
+    <div class="tpbody" id="tpGo" hidden>
+      <div class="tphint" id="tpHintGo"></div>
+      <div class="tpbar"><span class="tpseg"><button type="button" data-gm="skel" aria-pressed="true">骨架</button><button type="button" data-gm="sol" aria-pressed="false">參考解答</button></span><span class="tpseg"><button type="button" data-gf="solution.go" aria-pressed="true">solution.go</button><button type="button" data-gf="solution_test.go" aria-pressed="false">solution_test.go</button></span></div>
+      <textarea class="tpcode" id="tpCode" spellcheck="false" aria-label="Go 程式碼"></textarea>
+      <div class="tpbar"><button class="tpb" id="tpCopy" type="button">複製程式碼</button><button class="tpb" id="tpSave" type="button">下載這個檔案</button></div>
+    </div>
+  </aside>
 </div>
+<script>/*MODULES*/</script>
 <script>
 (function(){
 /* ---------- 多國語系 ---------- */
@@ -412,8 +487,8 @@ function persist(){
   var m=boardMeta(curBoard); if(m){m.updated=Date.now();saveIndex();}
   if(!ok) toast(_T('瀏覽器空間滿了，這次沒有存到。可以刪掉幾個舊白板，或用匯出備份。'));
 }
-function undo(){if(!hist.length)return; clearMulti(); fut.push(lastSnap); lastSnap=hist.pop(); B=JSON.parse(lastSnap); sel=null; selEdge=null; renderAll(); persist(); updUndo();}
-function redo(){if(!fut.length)return; clearMulti(); hist.push(lastSnap); lastSnap=fut.pop(); B=JSON.parse(lastSnap); sel=null; selEdge=null; renderAll(); persist(); updUndo();}
+function undo(){if(!hist.length)return; clearMulti(); fut.push(lastSnap); lastSnap=hist.pop(); B=JSON.parse(lastSnap); sel=null; selEdge=null; renderAll(); persist(); updUndo(); trainRender();}
+function redo(){if(!fut.length)return; clearMulti(); hist.push(lastSnap); lastSnap=fut.pop(); B=JSON.parse(lastSnap); sel=null; selEdge=null; renderAll(); persist(); updUndo(); trainRender();}
 function updUndo(){$('undo').disabled=!hist.length; $('redo').disabled=!fut.length;}
 
 /* ---------- 元件的預設內容 ---------- */
@@ -520,6 +595,9 @@ function renderItem(it){
   el.classList.toggle('connsrc',connSrc===it.id);
   el.classList.toggle('msel',msel.indexOf(it.id)>=0);
   if(it.type==='tree'||it.type==='list'||it.type==='gnode'){var nv=el.querySelector('.nv');nv.contentEditable=it.val===''?'true':'false';}
+  el.classList.toggle('owned',!!it.src);
+  if(it.src){ [].forEach.call(el.querySelectorAll('[contenteditable]'),function(x){x.contentEditable='false';}); el.dataset.line='#'+scriptLineNo(it.src); el.title=_T('由腳本第 {n} 行產生：可以拖，要改內容或刪掉請改那一行',{n:scriptLineNo(it.src)}); }
+  else {delete el.dataset.line; el.removeAttribute('title');}
   return el;
 }
 function renderAll(){
@@ -531,7 +609,7 @@ function renderAll(){
   B.items.forEach(renderItem);
   renderEdges(); renderStrokes(); applyView(); renderToolbar();
 }
-function applyView(){drawMini();renderHandles();world.style.transform='translate('+view.x+'px,'+view.y+'px) scale('+view.z+')';$('zv').textContent=Math.round(view.z*100)+'%';placeToolbar();}
+function applyView(){document.querySelector('.app').classList.toggle('narrowb',board.clientWidth<1000);drawMini();renderHandles();world.style.transform='translate('+view.x+'px,'+view.y+'px) scale('+view.z+')';$('zv').textContent=Math.round(view.z*100)+'%';placeToolbar();}
 
 /* ---------- 連線 ---------- */
 function box(id){var el=itemsEl.querySelector('[data-id="'+id+'"]');if(!el)return null;var n=el.querySelector('.node');
@@ -654,14 +732,14 @@ function duplicate(id){
   var it=byId(id); if(!it) return;
   var el=itemsEl.querySelector('[data-id="'+id+'"]'); var h=el?el.offsetHeight:60, w=el?el.offsetWidth:100;
   var vertical=['array','string','queue','grid','steps','text','var','dict','set'].indexOf(it.type)>=0;
-  var c=clone(it); c.id=nid(); delete c.z; c.x=it.x+(vertical?0:w+30); c.y=it.y+(vertical?h+26:0);
+  var c=clone(it); c.id=nid(); delete c.z; delete c.src; c.x=it.x+(vertical?0:w+30); c.y=it.y+(vertical?h+26:0);
   B.items.push(c);
   // 指到這個陣列的指標也一起複製
   if(it.type==='array'||it.type==='string'){
     var r=el.getBoundingClientRect();
     B.items.filter(function(p){return p.type==='pointer';}).forEach(function(p){
       var pe=itemsEl.querySelector('[data-id="'+p.id+'"]'); if(!pe) return; var q=pe.getBoundingClientRect();
-      if(q.left+q.width/2>=r.left-10&&q.left+q.width/2<=r.right+10&&q.top>=r.bottom-8&&q.top<=r.bottom+50){var pc=clone(p);pc.id=nid();pc.y+=h+26;B.items.push(pc);}
+      if(q.left+q.width/2>=r.left-10&&q.left+q.width/2<=r.right+10&&q.top>=r.bottom-8&&q.top<=r.bottom+50){var pc=clone(p);pc.id=nid();delete pc.src;pc.y+=h+26;B.items.push(pc);}
     });
   }
   sel=c.id; renderAll(); commit(); toast(_T('已複製一份，改有變的地方就好'));
@@ -685,6 +763,7 @@ function paint(it,n,key){
   (key!=null?[key]:cellKeys(it)).forEach(function(k){if(n) it.cbg[k]=n; else delete it.cbg[k];});
 }
 function renderToolbar(){
+  trainMarkSel();
   var M=$('mt');
   if(selEdge){var e=edgeById(selEdge); if(!e){M.hidden=true;return;}
     M.innerHTML='<button type="button" data-act="toggleDir">'+(e.dir?_T('→ 有箭頭'):_T('— 沒箭頭'))+_T('</button><button type="button" data-act="flip">⇄ 反轉</button><button type="button" data-act="edgeLabel">T 文字</button><span class="sep2"></span><button type="button" class="danger" data-act="delEdge">刪除</button>');
@@ -706,7 +785,7 @@ function renderToolbar(){
   if(it.type==='array'||it.type==='string') h+=_T('<button type="button" data-act="addPtr" title="加一個指標。Shift＋點格子＝標黃，Alt＋點格子＝變淡">＋指標</button>')+((it.hl||[]).length||(it.done||[]).length?_T('<button type="button" data-act="clearHl">清除標記</button>'):'')+'<span class="sep2"></span>';
   if((it.type==='grid'||it.type==='steps')&&(it.hl||[]).length) h+=_T('<button type="button" data-act="clearHl">清除標記</button><span class="sep2"></span>');
   h+=_T('<button type="button" data-act="zfront" title="移到最上層（⌘⌥]；往上一層 ⌘]）" aria-label="移到最上層">⤒</button><button type="button" data-act="zback" title="移到最下層（⌘⌥[；往下一層 ⌘[）" aria-label="移到最下層">⤓</button><span class="sep2"></span>');
-  h+=_T('<button type="button" data-act="dup" title="複製一份（⌘D）" aria-label="複製一份">⧉</button><button type="button" data-act="connFrom" title="從這裡拉一條線" aria-label="連線">→</button><button type="button" class="danger" data-act="del" title="刪除（Delete）" aria-label="刪除">✕</button>');
+  h+=_T('<button type="button" data-act="dup" title="複製一份（⌘D）" aria-label="複製一份">⧉</button><button type="button" data-act="connFrom" title="從這裡拉一條線" aria-label="連線">→</button>')+(it.src?'<button type="button" data-act="toLine" title="'+_T('跳到產生它的那一行')+'">✎ #'+scriptLineNo(it.src)+'</button>':_T('<button type="button" class="danger" data-act="del" title="刪除（Delete）" aria-label="刪除">✕</button>'));
   M.innerHTML=h; M.hidden=false; placeToolbar();
 }
 function placeToolbar(){
@@ -795,6 +874,7 @@ function act(a,v,i){
   var it=byId(sel); if(!it) return;
   switch(a){
     case 'dup': duplicate(it.id); return;
+    case 'toLine': trainOpen(true); focusLine(it.src); return;
     case 'del': delItem(it.id); return;
     case 'addCell': it.cells.push(''); renderItem(it); commit(); focusCell(it,it.cells.length-1); placeToolbar(); return;
     case 'delCell': if(activeCell&&activeCell.id===it.id)activeCell=null; removeCell(it,+i); break;
@@ -887,6 +967,7 @@ function buildList(head,vals){
   renderAll(); commit();
 }
 function delItem(id){
+  var o=byId(id); if(o&&o.src){ownedToast(o);return;}
   B.items=B.items.filter(function(x){return x.id!==id;});
   B.edges=B.edges.filter(function(e){return e.from!==id&&e.to!==id;});
   if(sel===id) sel=null; renderAll(); commit();
@@ -914,7 +995,7 @@ function packGroup(){ // 把選到的東西（含它們之間的連線、選到�
 }
 function pasteGroup(pk,dx,dy){
   var map={}, newIds=[], newStk=[];
-  pk.items.forEach(function(it){var c=clone(it);map[it.id]=c.id=nid();delete c.z;c.x+=dx;c.y+=dy;B.items.push(c);newIds.push(c.id);});
+  pk.items.forEach(function(it){var c=clone(it);map[it.id]=c.id=nid();delete c.z;delete c.src;c.x+=dx;c.y+=dy;B.items.push(c);newIds.push(c.id);});
   pk.edges.forEach(function(e){var c=clone(e);c.id=nid();c.from=map[e.from];c.to=map[e.to];B.edges.push(c);});
   pk.strokes.forEach(function(st){B.strokes.push({t:st.t,c:st.c,f:st.f,p:st.p.map(function(q){return [q[0]+dx,q[1]+dy];})});newStk.push(B.strokes.length-1);});
   setMulti(newIds,newStk); commit();
@@ -927,7 +1008,7 @@ function packBox(pk){ // 世界座標的外框
 }
 function dupInPlace(pk){ // 在原位置複製一份，回傳新的 id（不存檔，拖完才存）
   var map={}, ids=[], stk=[];
-  pk.items.forEach(function(it){var c=clone(it);map[it.id]=c.id=nid();delete c._snap;delete c.z;B.items.push(c);ids.push(c.id);});
+  pk.items.forEach(function(it){var c=clone(it);map[it.id]=c.id=nid();delete c._snap;delete c.z;delete c.src;B.items.push(c);ids.push(c.id);});
   pk.edges.forEach(function(e){var c=clone(e);c.id=nid();c.from=map[e.from];c.to=map[e.to];B.edges.push(c);});
   pk.strokes.forEach(function(st){B.strokes.push({t:st.t,c:st.c,f:st.f,p:st.p.map(function(q){return [q[0],q[1]];})});stk.push(B.strokes.length-1);});
   return {ids:ids,stk:stk};
@@ -945,11 +1026,13 @@ function pasteClip(){
   pasteGroup(clip,dx,dy);
 }
 function delGroup(){
-  var ids=groupIds(), set={}; ids.forEach(function(i){set[i]=1;});
+  var ids=groupIds(), set={}, kept=ids.filter(function(i){var o=byId(i);return o&&o.src;});
+  ids.filter(function(i){return kept.indexOf(i)<0;}).forEach(function(i){set[i]=1;});
+  if(kept.length) ownedToast(byId(kept[0]));
   B.items=B.items.filter(function(x){return !set[x.id];});
   B.edges=B.edges.filter(function(e){return !set[e.from]&&!set[e.to];});
   if(mstk.length){var ks={};mstk.forEach(function(i){ks[i]=1;});B.strokes=B.strokes.filter(function(_,i){return !ks[i];});}
-  clearMulti(); sel=null; renderAll(); commit();
+  clearMulti(); sel=null; if(kept.length) setMulti(kept,[]); else renderAll(); commit();
 }
 function finishMarquee(){
   var r=marq.rect; marq.el.remove(); var m=marq; marq=null;
@@ -1037,7 +1120,7 @@ board.addEventListener('pointerdown',function(e){
   var cell=e.target.closest('[data-c],[data-r]');
   var inMulti=msel.indexOf(it.id)>=0&&msel.length+mstk.length>1; // 框選中：Option＝複製整組，不是標記
   if(cell&&!inMulti&&(e.shiftKey||e.altKey)&&(it.type==='array'||it.type==='string'||it.type==='grid'||it.type==='steps')){
-    e.preventDefault();
+    e.preventDefault(); if(it.src){toast(_T('這個元件由腳本控制：用「highlight nums[1]」這樣的一行來標記'));return;}
     var keyv=cell.dataset.c!=null?+cell.dataset.c:cell.dataset.r+','+cell.dataset.k, arr=e.altKey&&it.type!=='grid'&&it.type!=='steps'?(it.done=it.done||[]):(it.hl=it.hl||[]);
     var at=arr.indexOf(keyv); if(at>=0) arr.splice(at,1); else arr.push(keyv);
     sel=it.id; renderAll(); commit(); return;
@@ -1083,7 +1166,7 @@ board.addEventListener('pointermove',function(e){
   if(!drag) return;
   var dx=(e.clientX-drag.sx)/view.z, dy=(e.clientY-drag.sy)/view.z;
   if(!drag.moved&&Math.hypot(dx,dy)<3) return;
-  if(!drag.moved&&(drag.alt||e.altKey)){ var src=byId(drag.id), cp=clone(src); cp.id=nid(); cp.x=drag.ox; cp.y=drag.oy; delete cp._snap; delete cp.z; B.items.push(cp);
+  if(!drag.moved&&(drag.alt||e.altKey)){ var src=byId(drag.id), cp=clone(src); cp.id=nid(); cp.x=drag.ox; cp.y=drag.oy; delete cp._snap; delete cp.z; delete cp.src; B.items.push(cp);
     sel=cp.id; activeCell=null; renderAll(); drag.id=cp.id; drag.el=itemsEl.querySelector('[data-id="'+cp.id+'"]'); drag.copied=true; }
   drag.moved=true; var it=byId(drag.id);
   var nx=Math.round(drag.ox+dx), ny=Math.round(drag.oy+dy), ddx=nx-it.x, ddy=ny-it.y;
@@ -1095,7 +1178,7 @@ board.addEventListener('pointerup',function(e){
   if(erasing){var hit=erasing.hit;erasing=null;board.classList.remove('erasing');if(hit)commit();return;}
   if(marq){finishMarquee();return;}
   if(drag&&drag.group){var g=drag;drag=null;
-    if(g.moved){commit();if(g.copied)toast(_T('已複製一份'));return;}
+    if(g.moved){if(B.script)scriptApply();commit();if(g.copied)toast(_T('已複製一份'));return;}
     // 沒拖動：當成點一下 → 只選這一個
     if(!g.id){renderAll();return;}
     clearMulti(); sel=g.id; renderAll();
@@ -1115,8 +1198,8 @@ board.addEventListener('pointerup',function(e){
     if(dbl){var ne=del.querySelector('.nv,.pn');if(ne){ne.contentEditable='true';ne.focus();selectAll(ne);}}
     return;
   }
-  if(moved&&it.type==='pointer'){delete it._snap; if(e.shiftKey){var c=nearCell(it);if(c){snapPointer(it,c);renderAll();}}}
-  if(moved){commit(); if(drag0copied) toast(_T('已複製一份'));}
+  if(moved&&it.type==='pointer'&&!it.src){delete it._snap; if(e.shiftKey){var c=nearCell(it);if(c){snapPointer(it,c);renderAll();}}}
+  if(moved){if(it.src||B.script)scriptApply(); commit(); if(drag0copied) toast(_T('已複製一份'));}
 });
 board.addEventListener('dblclick',function(e){
   var nv=e.target.closest('.node');
@@ -1387,7 +1470,7 @@ function openBoard(id){
   B=data?JSON.parse(data):{items:[],edges:[],strokes:[],seq:1}; B.edges=B.edges||[]; B.strokes=B.strokes||[]; B.seq=B.seq||1;
   view=v?JSON.parse(v):{x:40,y:30,z:1};
   sel=null; selEdge=null; clearMulti(); activeCell=null; hist=[]; fut=[];
-  renderAll(); lastSnap=snapshot(); updUndo(); renderBoardBtn();
+  renderAll(); lastSnap=snapshot(); updUndo(); renderBoardBtn(); trainRender(true);
   if(!v) setTimeout(fit,30);
 }
 function newBoard(prob){
@@ -1400,7 +1483,7 @@ function newBoard(prob){
   B={items:[],edges:[],strokes:[],seq:1}; view={x:40,y:30,z:1};
   sel=null; selEdge=null; clearMulti(); activeCell=null; hist=[]; fut=[];
   if(prob){var t=make('title',60,40); t.text=prob[0]+'. '+prob[1]+(prob[3]?_T('（')+prob[3]+_T('）'):''); B.items.push(t);}
-  renderAll(); lastSnap=snapshot(); persist(); updUndo(); renderBoardBtn();
+  renderAll(); lastSnap=snapshot(); persist(); updUndo(); renderBoardBtn(); trainRender(true);
   toast(prob?_T('已開一個「{name}」的白板',{name:name}):_T('已開一個新白板'));
 }
 function relTime(t){
@@ -1482,7 +1565,7 @@ paintCdot();
 $('boardBtn').onclick=function(){
   popMenu($('boardBtn'),[[_T('我的白板…'),'',showBoards],[_T('＋ 新的空白白板'),'',function(){newBoard(null);}],'-',[_T('匯出／匯入…'),'',function(){$('exp').click();}],'-',
     [_T('清空這個白板'),'',function(b){if(!b.dataset.arm){b.dataset.arm='1';b.querySelector('span').textContent=_T('再按一次確定清空');return;}
-      B={items:[],edges:[],strokes:[],seq:B.seq};sel=null;selEdge=null;clearMulti();renderAll();commit();closePop();toast(_T('已清空，可以按 ⌘Z 找回來'));},'danger','keep']]);
+      B={items:[],edges:[],strokes:[],seq:B.seq};sel=null;selEdge=null;clearMulti();renderAll();commit();closePop();trainRender(true);toast(_T('已清空，可以按 ⌘Z 找回來'));},'danger','keep']]);
 };
 var expBtn=document.createElement('button'); expBtn.id='exp'; expBtn.hidden=true; document.body.appendChild(expBtn);
 
@@ -1510,13 +1593,250 @@ $('exp').onclick=function(){
   board.appendChild(m); var ta=$('ioText'); ta.value=JSON.stringify(B);
   $('ioClose').onclick=function(){m.remove();};
   $('ioCopy').onclick=function(){var done=function(){toast(_T('已複製'));};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(ta.value).then(done,function(){ta.select();});else ta.select();};
-  $('ioLoad').onclick=function(){try{var o=JSON.parse(ta.value);if(!o||!Array.isArray(o.items))throw 0;B=o;B.edges=B.edges||[];B.strokes=B.strokes||[];B.seq=B.seq||999;sel=null;renderAll();commit();m.remove();fit();toast(_T('已匯入'));}catch(e){toast(_T('內容格式不對，沒有匯入'));}};
+  $('ioLoad').onclick=function(){try{var o=JSON.parse(ta.value);if(!o||!Array.isArray(o.items))throw 0;B=o;B.edges=B.edges||[];B.strokes=B.strokes||[];B.seq=B.seq||999;sel=null;renderAll();commit();m.remove();fit();trainRender(true);toast(_T('已匯入'));}catch(e){toast(_T('內容格式不對，沒有匯入'));}};
 };
 $('helpX').onclick=function(){$('help').hidden=true;try{localStorage.setItem('drycanvas-help','0');}catch(e){}};
+
+/* ---------- 練習腳本：一句話擺白板 → 一步一步跑 → 寫成 Go ---------- */
+// 腳本存在 B.script（跟著白板存檔、可以復原）。每一行產生的元件 id＝'s'+行的 id、src＝行的 id：
+// 使用者可以拖、換顏色，但不能直接刪；改那一行就跟著改，刪那一行它就不見。
+var HAS_NL=typeof NLBoard!=='undefined'&&typeof Trainer!=='undefined';
+var trainTab='say', lastRun=null, goMode='skel', goFile='solution.go', playT=null, commitT=null;
+var INTENT_LABEL={create:_T('建立'),assign:_T('給值'),push:_T('推入'),pop:_T('彈出'),put:_T('放進字典'),remove:_T('移除'),mark:_T('標記'),assert:_T('檢查'),ret:_T('回傳')};
+$('tpHintSay').innerHTML=_T('一行一句話，白板會照著擺。例：<code>array nums = [2,7,11,15]</code>、<code>dict seen</code>、<code>pointer i at nums[0]</code>、<code>put x -> i into seen</code>、<code>把 3 推入 stack</code>。白板上的元件可以拖，但要刪掉就得改或刪那一行。');
+$('tpHintRun').innerHTML=_T('一行一步：白板會停在選到的那一行。檢查句（<code>7 is not in seen</code>、<code>st is empty</code>）會直接拿白板來對。');
+$('tpHintGo').innerHTML=_T('把白板上的資料結構翻成 Go：測試裡會放你在白板上跑過的那組例子。在本機跑 <code>go mod init solution &amp;&amp; go test ./...</code>。');
+function caseFromBoard(){var m=boardMeta(curBoard);return m&&m.pid&&HAS_NL?Trainer.byPid(m.pid):null;}
+function ensureScript(){
+  if(!B.script) B.script={lines:[],step:null,pos:{},poff:{},next:{c0:0,c1:0,cx:0},origin:null,seq:1,caseId:caseFromBoard()};
+  if(!B.script.lines.length) B.script.lines.push({id:'L'+(B.script.seq++),text:''});
+  return B.script;
+}
+function scriptLineNo(key){var sc=B.script; if(sc) for(var i=0;i<sc.lines.length;i++) if(sc.lines[i].id===key) return i+1; return '?';}
+function ownedToast(o){toast(_T('這是腳本第 {n} 行產生的：改或刪那一行它才會變',{n:scriptLineNo(o.src)})); trainOpen(true); focusLine(o.src);}
+function quietSave(){lastSnap=snapshot(); persist();}
+function laterCommit(){clearTimeout(commitT); commitT=setTimeout(commit,600);}
+
+function autoPos(c){
+  var sc=B.script;
+  if(!sc.origin){
+    var cc=center(), free=B.items.filter(function(i){return !i.src;}), ox=Math.round(cc.x-320), oy=Math.round(cc.y-200);
+    if(free.length){var x1=1e9,y2=-1e9; free.forEach(function(i){var el=itemsEl.querySelector('[data-id="'+i.id+'"]'); x1=Math.min(x1,i.x); y2=Math.max(y2,i.y+(el?el.offsetHeight:60));}); ox=x1; oy=y2+80;}
+    sc.origin={x:ox,y:oy};
+  }
+  var o=sc.origin, n=sc.next, p;
+  if(n.vx==null&&c.type!=='title'&&c.type!=='array'&&c.type!=='string') n.vx=Math.max(300,(n.w||0)+50); // 變數欄放在最寬的陣列右邊
+  if(c.type==='title'){p={x:o.x,y:o.y+n.c0}; n.c0+=64;}
+  else if(c.type==='array'||c.type==='string'){p={x:o.x,y:o.y+n.c0}; n.c0+=104; n.w=Math.max(n.w||0,c.cells.length*46+30);}
+  else if(c.type==='var'||c.type==='note'){p={x:o.x+n.vx,y:o.y+n.c1}; n.c1+=c.type==='note'?120:54;}
+  else {p={x:o.x+n.vx+170+n.cx*170,y:o.y}; n.cx++;}
+  return p;
+}
+function compItem(c,prev){
+  var sc=B.script, it=make(c.type==='title'?'title':c.type,0,0);
+  it.id='s'+c.key; it.src=c.key;
+  if(prev) ['z','cbg','bg','color','dir'].forEach(function(k){if(prev[k]!=null) it[k]=prev[k];});
+  if(c.type==='array'||c.type==='string'){it.name=c.name; it.cells=c.cells.slice(); it.hl=c.hl.slice(); it.done=c.done.slice();}
+  else if(c.type==='stack'||c.type==='queue'||c.type==='set'){it.name=c.name; it.cells=c.cells.slice();}
+  else if(c.type==='dict'){it.name=c.name; it.rows=c.rows.map(function(r){return r.slice();});}
+  else if(c.type==='var'){it.name=c.name; it.value=c.value; if(c.ret&&!it.bg) it.bg=2;}
+  else if(c.type==='pointer'){it.name=c.name; if(!prev||prev.color==null) it.color=c.color; it._t=c.target; it._i=c.idx;}
+  else it.text=c.text;
+  var p=sc.pos[c.key]; if(!p&&c.type!=='pointer'){p=autoPos(c); sc.pos[c.key]=p;}
+  it.x=p?p.x:0; it.y=p?p.y:0;
+  return it;
+}
+/* 照腳本重畫白板上屬於腳本的元件 */
+function scriptApply(){
+  var sc=B.script; if(!sc||!HAS_NL) return;
+  B.items.forEach(function(it){ if(!it.src) return;
+    if(it.type==='pointer'){ if(it._bx!=null) sc.poff[it.src]={x:it.x-it._bx,y:it.y-it._by}; }
+    else sc.pos[it.src]={x:it.x,y:it.y};
+  });
+  var run=NLBoard.replay(sc.lines,trainTab==='run'?sc.step:null); lastRun=run;
+  var old={}, items=B.items.filter(function(it){if(it.src){old[it.src]=it;return false;}return true;});
+  var fresh=[];
+  run.board.comps.forEach(function(c){if(!old[c.key]) fresh.push('s'+c.key); items.push(compItem(c,old[c.key]));});
+  B.items=items;
+  var ids={}; B.items.forEach(function(it){ids[it.id]=1;}); B.edges=B.edges.filter(function(e){return ids[e.from]&&ids[e.to];});
+  if(sel&&!byId(sel)) sel=null;
+  renderAll();
+  var ptrs=B.items.filter(function(p){return p.src&&p.type==='pointer';});
+  ptrs.forEach(function(p){delete p._snap;});
+  ptrs.forEach(function(p){
+    var cells=itemsEl.querySelectorAll('[data-id="s'+p._t+'"] .cell'); if(!cells.length) return;
+    var k=Math.max(0,Math.min(cells.length-1,p._i)); snapPointer(p,cells[k]);
+    p.x+=Math.round((p._i-k)*(cells[k].offsetWidth+3)); p._bx=p.x; p._by=p.y;
+    var off=sc.poff[p.src]; if(off){p.x+=off.x; p.y+=off.y;}
+    renderItem(p);
+  });
+  if(ptrs.length){renderEdges(); placeToolbar();}
+  if(fresh.length&&!playT) reveal(fresh);
+  trainStatus();
+}
+function reveal(ids){ // 新出現的元件在畫面外 → 平移畫面讓它看得到
+  var br=board.getBoundingClientRect(), dx=0, dy=0, pad=24;
+  ids.forEach(function(id){var el=itemsEl.querySelector('[data-id="'+id+'"]'); if(!el) return; var r=el.getBoundingClientRect();
+    if(r.right+dx>br.right-pad) dx=Math.min(dx,br.right-pad-r.right); if(r.left+dx<br.left+pad) dx=br.left+pad-r.left;
+    if(r.bottom+dy>br.bottom-110) dy=Math.min(dy,br.bottom-110-r.bottom); if(r.top+dy<br.top+pad) dy=br.top+pad-r.top;});
+  if(dx||dy){view.x+=dx; view.y+=dy; applyView();}
+}
+
+/* ---------- 面板 ---------- */
+function trainOpen(on){
+  var p=$('trainp'); if(on==null) on=p.hidden; if(!HAS_NL) on=false;
+  p.hidden=!on; $('trainBtn').setAttribute('aria-pressed',on?'true':'false'); lsSet('drycanvas-train',on?'1':'0');
+  if(on&&!B.script){ensureScript(); quietSave();}
+  if(!on&&B.script&&B.script.step!=null&&trainTab==='run'){trainTab='say'; scriptApply(); quietSave();}
+  trainRender(); applyView();
+}
+function activeLines(){return trainTab==='run'?$('tpLines2'):$('tpLines');}
+function trainRender(boardChanged){
+  if(!HAS_NL) return;
+  if(boardChanged&&B.script){scriptApply(); if(lastSnap!==null) quietSave();} // 換白板：照腳本重畫，不算一步
+  var on=!$('trainp').hidden; if(!on) return;
+  var sc=B.script||{lines:[],caseId:null};
+  $('tpCase').innerHTML='<option value="">'+_T('自由練習')+'</option>'+Object.keys(Trainer.CASES).map(function(k){var C=Trainer.CASES[k];return '<option value="'+k+'"'+(sc.caseId===k?' selected':'')+'>'+C.id+'. '+esc(C.title)+'</option>';}).join('');
+  [].forEach.call(document.querySelectorAll('.tptab'),function(b){b.setAttribute('aria-selected',b.dataset.tp===trainTab?'true':'false');});
+  $('tpSay').hidden=trainTab!=='say'; $('tpRun').hidden=trainTab!=='run'; $('tpGo').hidden=trainTab!=='go';
+  $('tpLines').innerHTML=''; $('tpLines2').innerHTML='';
+  if(trainTab!=='go'){
+    activeLines().innerHTML=sc.lines.map(function(l,i){
+      return '<div class="tpl" data-l="'+l.id+'"><button type="button" class="tpn" data-n="'+i+'" title="'+_T('白板停在這一行')+'">'+(i+1)+'</button><input class="tpi" type="text" spellcheck="false" autocomplete="off" value="'+esc(l.text)+'" aria-label="'+_T('第 {n} 行',{n:i+1})+'" placeholder="'+(i===0&&sc.lines.length===1?esc(_T('例：array nums = [2,7,11,15]')):'')+'"><span class="tpst"></span><div class="tpsum"></div></div>';
+    }).join('');
+  }
+  if(trainTab==='go') renderGo();
+  trainStatus(); trainMarkSel();
+}
+function trainStatus(){
+  if(!HAS_NL||$('trainp').hidden||!B.script) return;
+  var sc=B.script, run=NLBoard.replay(sc.lines,null), conf=[], box=activeLines();
+  run.results.forEach(function(r,i){
+    if(r.confidence!=null&&r.status!=='err') conf.push(r.confidence);
+    var row=box&&box.querySelector('[data-l="'+sc.lines[i].id+'"]'); if(!row) return;
+    var st=row.querySelector('.tpst'), sm=row.querySelector('.tpsum');
+    st.className='tpst '+r.status; st.textContent={ok:'●',pass:'✓',fail:'✗',err:'!',comment:'#',blank:''}[r.status]||'';
+    st.title=r.status==='err'?r.msg:'';
+    if(r.status==='blank'||r.status==='comment'){sm.hidden=true;}
+    else {sm.hidden=false; sm.className='tpsum'+(r.status==='err'||r.status==='fail'?' bad':'');
+      sm.innerHTML='<span class="in">'+esc(INTENT_LABEL[r.intent]||r.intent)+'</span> '+esc(r.sum||'')+(r.msg?' — '+esc(r.msg):'')+' · '+Math.round((r.p||0)*100)+'%';
+      sm.title='Jev: '+r.state;}
+    row.classList.toggle('cur',trainTab==='run'&&sc.step===i);
+    row.classList.toggle('after',trainTab==='run'&&sc.step!=null&&i>sc.step);
+  });
+  var avg=conf.length?Math.round(conf.reduce(function(a,b){return a+b;},0)/conf.length*100):0;
+  $('tpModel').textContent=_T('Jev（本機）· 平均信心 {p}%',{p:avg});
+  var n=sc.lines.length, k=sc.step==null?n-1:sc.step;
+  $('tpStep').textContent=(k+1)+' / '+n;
+  $('tpFirst').disabled=$('tpPrev').disabled=k<0; $('tpNext').disabled=$('tpLast').disabled=k>=n-1;
+}
+function trainMarkSel(){
+  if(!HAS_NL||$('trainp').hidden) return;
+  var it=sel&&byId(sel), key=it&&it.src;
+  [].forEach.call(document.querySelectorAll('.tpl'),function(r){r.classList.toggle('selc',!!key&&r.dataset.l===key);});
+}
+function focusLine(key){
+  setTimeout(function(){var row=activeLines()&&activeLines().querySelector('[data-l="'+key+'"]'); if(row){row.scrollIntoView({block:'nearest'}); var inp=row.querySelector('.tpi'); inp.focus(); inp.setSelectionRange(inp.value.length,inp.value.length);}},0);
+}
+function lineHover(key,on){var el=itemsEl.querySelector('[data-id="s'+key+'"]'); if(el) el.classList.toggle('lnhl',on);}
+function setStep(k){
+  var sc=B.script; if(!sc) return; var n=sc.lines.length;
+  sc.step=Math.max(-1,Math.min(n-1,k)); scriptApply(); quietSave();
+  var row=activeLines().querySelector('.tpl.cur'); if(row) row.scrollIntoView({block:'nearest'});
+}
+function stopPlay(){if(playT){clearInterval(playT);playT=null;$('tpPlay').textContent=_T('▷ 播放');}}
+function setTab(t){
+  stopPlay(); trainTab=t; var sc=B.script;
+  if(sc&&t==='run'&&sc.step==null) sc.step=sc.lines.length-1;
+  if(sc){scriptApply(); quietSave();}
+  trainRender();
+}
+function editLines(fn,focusKey,caret){ // 改結構（加行、刪行）：馬上存成一步
+  var sc=ensureScript(); fn(sc); if(trainTab==='run'&&sc.step!=null) sc.step=Math.min(sc.step,sc.lines.length-1);
+  scriptApply(); commit(); trainRender();
+  if(focusKey) setTimeout(function(){var row=activeLines().querySelector('[data-l="'+focusKey+'"]'); if(row){var inp=row.querySelector('.tpi'); inp.focus(); var c=caret==null?inp.value.length:caret; inp.setSelectionRange(c,c);}},0);
+}
+function newLine(text){return {id:'L'+(B.script.seq++),text:text||''};}
+
+$('trainBtn').onclick=function(){trainOpen();};
+$('tpX').onclick=function(){trainOpen(false);};
+[].forEach.call(document.querySelectorAll('.tptab'),function(b){b.onclick=function(){setTab(b.dataset.tp);};});
+$('tpCase').onchange=function(){var sc=ensureScript(); sc.caseId=this.value||null; commit(); if(trainTab==='go') renderGo(); $('tpReport').innerHTML='';};
+$('tpAdd').onclick=function(){var l; editLines(function(sc){l=newLine();sc.lines.push(l);},null); focusLine(l.id);};
+$('tpDemo').onclick=function(){
+  var sc=ensureScript(), cid=sc.caseId||'two-sum', C=Trainer.CASES[cid];
+  if(sc.lines.some(function(l){return l.text.trim();})&&!confirm(_T('要用範例取代目前的腳本嗎？（可以復原）'))) return;
+  var inp=lastRun?C.inputs(lastRun.state):{err:1}; if(inp.err) inp=cid==='two-sum'?{nums:[2,7,11,15],target:9}:{s:'([)]'};
+  editLines(function(s2){s2.caseId=cid; s2.lines=Trainer.demo(cid,inp).map(function(t){return newLine(t);}); s2.pos={}; s2.poff={}; s2.next={c0:0,c1:0,cx:0}; s2.origin=null; s2.step=null;});
+  setTimeout(fit,30); toast(_T('已載入範例：到「② 跑一遍」一步一步看'));
+};
+function lineEvents(box){
+  box.addEventListener('input',function(e){
+    var inp=e.target.closest('.tpi'); if(!inp) return; var key=inp.closest('.tpl').dataset.l, sc=ensureScript();
+    var l=sc.lines.filter(function(x){return x.id===key;})[0]; if(!l) return; l.text=inp.value;
+    scriptApply(); laterCommit();
+  });
+  box.addEventListener('keydown',function(e){
+    var inp=e.target.closest('.tpi'); if(!inp||e.isComposing) return;
+    var sc=B.script, key=inp.closest('.tpl').dataset.l, i=sc.lines.map(function(l){return l.id;}).indexOf(key);
+    if(e.key==='Enter'){e.preventDefault(); var c=inp.selectionStart, a=inp.value.slice(0,c), b=inp.value.slice(c), nl;
+      editLines(function(s2){s2.lines[i].text=a; nl=newLine(b); s2.lines.splice(i+1,0,nl); if(trainTab==='run'&&s2.step===i) s2.step=i+1;},null);
+      var row=activeLines().querySelector('[data-l="'+nl.id+'"]'); if(row){var ni=row.querySelector('.tpi'); ni.focus(); ni.setSelectionRange(0,0);} return;}
+    if(e.key==='Backspace'&&inp.selectionStart===0&&inp.selectionEnd===0&&i>0){e.preventDefault();
+      var prev=sc.lines[i-1], at=prev.text.length, rest=inp.value;
+      editLines(function(s2){prev.text+=rest; s2.lines.splice(i,1);},prev.id,at); return;}
+    if(e.key==='ArrowUp'&&i>0){e.preventDefault(); focusLine(sc.lines[i-1].id); if(trainTab==='run') setStep(i-1); return;}
+    if(e.key==='ArrowDown'&&i<sc.lines.length-1){e.preventDefault(); focusLine(sc.lines[i+1].id); if(trainTab==='run') setStep(i+1); return;}
+  });
+  box.addEventListener('paste',function(e){
+    var inp=e.target.closest('.tpi'); if(!inp) return; var t=(e.clipboardData||window.clipboardData).getData('text'); if(t.indexOf('\n')<0) return;
+    e.preventDefault(); var sc=B.script, key=inp.closest('.tpl').dataset.l, i=sc.lines.map(function(l){return l.id;}).indexOf(key);
+    var parts=t.replace(/\r/g,'').split('\n'), c=inp.selectionStart, a=inp.value.slice(0,c), b=inp.value.slice(inp.selectionEnd), last;
+    editLines(function(s2){s2.lines[i].text=a+parts[0]; var add=parts.slice(1).map(function(x){return newLine(x);}); add[add.length-1].text+=b; last=add[add.length-1]; s2.lines.splice.apply(s2.lines,[i+1,0].concat(add));},null);
+    focusLine(last.id);
+  });
+  box.addEventListener('click',function(e){var n=e.target.closest('.tpn'); if(!n) return; if(trainTab!=='run') setTab('run'); setStep(+n.dataset.n);});
+  box.addEventListener('focusin',function(e){var row=e.target.closest('.tpl'); if(row) lineHover(row.dataset.l,true);});
+  box.addEventListener('focusout',function(e){var row=e.target.closest('.tpl'); if(row) lineHover(row.dataset.l,false); clearTimeout(commitT); commit();});
+  box.addEventListener('pointerover',function(e){var row=e.target.closest('.tpl'); if(row) lineHover(row.dataset.l,true);});
+  box.addEventListener('pointerout',function(e){var row=e.target.closest('.tpl'); if(row&&document.activeElement!==row.querySelector('.tpi')) lineHover(row.dataset.l,false);});
+}
+lineEvents($('tpLines')); lineEvents($('tpLines2'));
+$('tpFirst').onclick=function(){stopPlay();setStep(-1);};
+$('tpPrev').onclick=function(){stopPlay();setStep((B.script.step==null?B.script.lines.length-1:B.script.step)-1);};
+$('tpNext').onclick=function(){stopPlay();setStep((B.script.step==null?B.script.lines.length-1:B.script.step)+1);};
+$('tpLast').onclick=function(){stopPlay();setStep(B.script.lines.length-1);};
+$('tpPlay').onclick=function(){
+  if(playT){stopPlay();return;} var sc=B.script; if(!sc) return;
+  if(sc.step==null||sc.step>=sc.lines.length-1) setStep(-1);
+  $('tpPlay').textContent=_T('❚❚ 暫停');
+  playT=setInterval(function(){if(!B.script||B.script.step>=B.script.lines.length-1){stopPlay();return;} setStep(B.script.step+1);},800);
+};
+$('tpCheck').onclick=function(){
+  var sc=B.script; if(!sc) return;
+  var res=Trainer.check(sc.caseId,NLBoard.replay(sc.lines,null)), C=res.caseId&&Trainer.CASES[res.caseId];
+  $('tpReport').innerHTML='<div class="tprep"><div class="head">'+(res.ok?_T('✓ 這次的追蹤是對的'):_T('還有地方要再看看'))+'</div>'+
+    (C?'<div class="r"><span>'+esc(_T('題目：{t}',{t:C.id+'. '+C.title}))+(sc.caseId?'':' '+esc(_T('（從標題認出來的）')))+'</span></div>':'<div class="r"><span>'+esc(_T('自由練習：只對檢查句和回傳值。選一題（或寫「title: 1. Two Sum」）就能拿參考解答來對。'))+'</span></div>')+
+    res.items.map(function(x){return '<div class="r '+(x.ok?'ok':'no')+'"><b>'+(x.ok?'✓':'✗')+'</b><span>'+esc(x.msg)+(x.lines?' ('+x.lines.map(function(id){return '#'+scriptLineNo(id);}).join(', ')+')':'')+'</span></div>';}).join('')+
+    (res.ok?'<div class="r"><span>'+_T('下一步：到「③ 寫成 Go」把它寫成程式。')+'</span></div>':'')+'</div>';
+};
+function renderGo(){
+  var sc=B.script; if(!sc){$('tpCode').value='';return;}
+  var files=Trainer.goCode(sc.caseId,NLBoard.replay(sc.lines,null),sc.lines,{solution:goMode==='sol'});
+  $('tpCode').value=files[goFile]||'';
+  [].forEach.call(document.querySelectorAll('[data-gm]'),function(b){b.setAttribute('aria-pressed',b.dataset.gm===goMode?'true':'false');});
+  [].forEach.call(document.querySelectorAll('[data-gf]'),function(b){b.setAttribute('aria-pressed',b.dataset.gf===goFile?'true':'false');});
+}
+[].forEach.call(document.querySelectorAll('[data-gm]'),function(b){b.onclick=function(){goMode=b.dataset.gm;renderGo();};});
+[].forEach.call(document.querySelectorAll('[data-gf]'),function(b){b.onclick=function(){goFile=b.dataset.gf;renderGo();};});
+$('tpCopy').onclick=function(){var ta=$('tpCode'),done=function(){toast(_T('已複製'));};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(ta.value).then(done,function(){ta.select();});else ta.select();};
+$('tpSave').onclick=function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([$('tpCode').value],{type:'text/plain'}));a.download=goFile;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},0);};
+if(!HAS_NL) $('trainBtn').hidden=true;
 
 /* ---------- 開始 ---------- */
 (function init(){
   if(lsGet('drycanvas-help')!=='0') $('help').hidden=false;
+  if(HAS_NL&&lsGet('drycanvas-train')==='1') $('trainp').hidden=false;
   setTool('select');
   try{BOARDS=JSON.parse(lsGet('drycanvas-boards')||'[]')||[];}catch(e){BOARDS=[];}
   if(!BOARDS.length){
