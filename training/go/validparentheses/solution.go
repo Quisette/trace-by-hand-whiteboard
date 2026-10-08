@@ -5,7 +5,7 @@ package solution
 // Whiteboard trace:
 //
 //	title: 20. Valid Parentheses
-//	s = "([)]"
+//	string s = "([)]"
 //	stack st
 //	pointer i at s[0]
 //	c = s[i]

@@ -73,6 +73,64 @@ const shots = process.argv[2];
   B = await board(); assert.ok(item('seen'), 'undo restores the line and the dict');
   assert.equal(await page.locator('#tpLines .tpi').count(), 14);
 
+  // ---- loops: typing with auto-indent, stepping into round 2, Check, loop example, Go skeleton ----
+  const p2 = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  p2.on('pageerror', e => errors.push(e.message)); p2.on('console', m => { if (m.type() === 'error') errors.push(m.text()); }); p2.on('dialog', d => d.accept());
+  await p2.goto('file://' + path.join(__dirname, '..', 'public', 'index.html') + '?lang=en');
+  await p2.evaluate(() => { document.getElementById('help').hidden = true; });
+  await p2.click('#trainBtn');
+  await p2.locator('#tpLines .tpi').first().click();
+  const type = async (t) => { await p2.keyboard.type(t); };
+  await type('title: 1. Two Sum'); await p2.keyboard.press('Enter');
+  await type('array nums = [2, 7, 11, 15]'); await p2.keyboard.press('Enter');
+  await type('variable target = 9'); await p2.keyboard.press('Enter');
+  await type('dict seen'); await p2.keyboard.press('Enter');
+  await type('for i, x in enumerate(nums):'); await p2.keyboard.press('Enter');       // next line is indented by itself
+  await type('need = target - x'); await p2.keyboard.press('Enter');                  // stays indented
+  await type('if need in seen:'); await p2.keyboard.press('Enter');                   // one level deeper
+  await type('return [seen[need], i]'); await p2.keyboard.press('Enter');
+  await p2.keyboard.press('Shift+Tab');                                               // back out of the if
+  await type('put x -> i into seen');
+  const texts = await p2.$$eval('#tpLines .tpi', els => els.map(e => e.value));
+  assert.deepEqual(texts, ['title: 1. Two Sum', 'array nums = [2, 7, 11, 15]', 'variable target = 9', 'dict seen', 'for i, x in enumerate(nums):', '  need = target - x', '  if need in seen:', '    return [seen[need], i]', '  put x -> i into seen']);
+  const st3 = await p2.$$eval('#tpLines .tpst', els => els.map(e => e.className.replace('tpst ', '')));
+  assert.ok(st3.every(x => x === 'ok'), st3.join(','));
+  await p2.evaluate(() => document.activeElement && document.activeElement.blur());
+  await p2.click('.tptab[data-tp="run"]');
+  assert.equal((await p2.textContent('#tpStep')).trim(), '12 / 12');
+  await p2.click('#tpFirst');
+  for (let k = 0; k < 9; k++) await p2.click('#tpNext');                              // step 8: round 2 of the loop starts
+  assert.equal((await p2.textContent('#tpStep')).trim(), '9 / 12');
+  let B2 = await p2.evaluate(() => JSON.parse(localStorage.getItem('drycanvas-b-' + localStorage.getItem('drycanvas-cur'))));
+  const it2 = (n) => B2.items.find(i => i.name === n);
+  assert.equal(it2('i')._i, 1); assert.equal(it2('x').value, '7'); assert.deepEqual(it2('seen').rows, [['2', '0']]);
+  assert.ok(await p2.locator('#tpLines2 .tpl.cur').count() === 1 && /for i, x/.test(await p2.locator('#tpLines2 .tpl.cur .tpi').inputValue()), 'the loop header row is the current one');
+  assert.ok(/\(2\/4\)/.test(await p2.textContent('#tpLines2 .tpl.cur .tpsum')));
+  assert.ok(await p2.locator('[data-id$="#1"]').count() === 1, 'x is owned by the loop line (key …#1)');
+  assert.ok(/#5/.test(await p2.getAttribute('[data-id$="#1"]', 'data-line')), 'its badge shows line 5');
+  await p2.click('[data-id$="#1"] .varbox');                                          // select x: the toolbar offers a jump to the line, not delete
+  await p2.keyboard.press('Delete');
+  B2 = await p2.evaluate(() => JSON.parse(localStorage.getItem('drycanvas-b-' + localStorage.getItem('drycanvas-cur')))); assert.ok(it2('x'), 'x survived Delete');
+  await p2.click('#tpLast'); await p2.click('#tpCheck');
+  const rep2 = await p2.textContent('#tpReport'); assert.ok(/answer \[0,1\] is correct/.test(rep2) && /pointer path \[0,1\]/.test(rep2), rep2);
+  const skips = await p2.$$eval('#tpLines2 .tpst', els => els.map(e => e.className.replace('tpst ', '')));
+  assert.equal(skips.filter(x => x === 'skip').length, 0);
+  if (shots) await p2.screenshot({ path: path.join(shots, '7-loop-run.png') });
+  // loop example + Go skeleton
+  await p2.click('.tptab[data-tp="say"]'); await p2.click('#tpDemoLoop');
+  assert.equal((await p2.$$eval('#tpLines .tpi', els => els.length)), 9);
+  await p2.click('.tptab[data-tp="go"]');
+  const go = await p2.inputValue('#tpCode');
+  assert.ok(/for i, x := range nums \{/.test(go) && /if _, ok := seen\[need\]; ok \{/.test(go), go);
+  if (shots) await p2.screenshot({ path: path.join(shots, '8-loop-go.png') });
+  // valid parentheses loop example from a problem board: skipped lines are dimmed
+  await p2.click('.tptab[data-tp="say"]'); await p2.selectOption('#tpCase', 'valid-parentheses'); await p2.click('#tpDemoLoop');
+  const vp = await p2.$$eval('#tpLines .tpst', els => els.map(e => e.className.replace('tpst ', '')));
+  assert.equal(vp.filter(x => x === 'skip').length, 2, vp.join(','));   // two lines are never reached for ([)]: the return under "st is empty" and the final return
+  await p2.click('.tptab[data-tp="run"]'); await p2.click('#tpCheck');
+  assert.ok(/answer false is correct/.test(await p2.textContent('#tpReport')));
+  if (shots) await p2.screenshot({ path: path.join(shots, '9-vp-loop.png') });
+
   assert.deepEqual(errors, []);
   console.log('e2e ok');
   await browser.close();

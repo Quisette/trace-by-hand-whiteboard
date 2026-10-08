@@ -250,5 +250,13 @@
  "（從標題認出來的）": "(제목에서 인식함)",
  "自由練習：只對檢查句和回傳值。選一題（或寫「title: 1. Two Sum」）就能拿參考解答來對。": "자유 연습: 확인 문장과 반환값만 확인합니다. 문제를 고르거나 \"title: 1. Two Sum\"이라고 쓰면 참고 답안과 비교합니다.",
  "下一步：到「③ 寫成 Go」把它寫成程式。": "다음: \"③ Go로 쓰기\"에서 코드로 옮기세요.",
- "複製程式碼": "코드 복사"
+ "複製程式碼": "코드 복사",
+ "迴圈和判斷也行：<code>for i, x in enumerate(nums):</code>、<code>if need in seen:</code>、<code>else:</code>、<code>while st:</code>、<code>break</code>。下一行按 Tab 縮排，就是裡面的步驟；<code>return</code> 會讓整段停下來。": "반복문과 조건문도 됩니다: <code>for i, x in enumerate(nums):</code>、<code>if need in seen:</code>、<code>else:</code>、<code>while st:</code>、<code>break</code>. 다음 줄에서 Tab으로 들여쓰면 그 안의 단계가 됩니다. <code>return</code>은 스크립트 전체를 멈춥니다.",
+ "迴圈範例": "반복문 예제",
+ "迴圈": "반복",
+ "判斷": "분기",
+ "否則": "그 외",
+ "跳出": "빠져나감",
+ "繼續": "계속",
+ "沒有跑到：前面的 return、跳出或條件沒有走到這一行": "실행되지 않음: 앞의 return, break 또는 조건이 이 줄까지 오지 않았습니다"
 }

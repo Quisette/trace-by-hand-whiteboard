@@ -318,7 +318,7 @@ table.grid .ax{display:inline-block;min-width:12px;padding:0 2px;border-radius:3
 .tpi{border:0;background:transparent;font-family:var(--mono);font-size:12.5px;color:var(--ui-text);padding:4px 4px;min-width:0;width:100%;border-radius:4px}
 .tpi:focus{outline:none;background:var(--hover)}
 .tpst{font:700 12px var(--mono);text-align:center}
-.tpst.ok{color:var(--green)} .tpst.pass{color:var(--green)} .tpst.fail,.tpst.err{color:var(--red)} .tpst.comment{color:var(--ui-dim)}
+.tpst.skip{color:var(--ui-dim)} .tpst.ok{color:var(--green)} .tpst.pass{color:var(--green)} .tpst.fail,.tpst.err{color:var(--red)} .tpst.comment{color:var(--ui-dim)}
 .tpsum{grid-column:2/4;font:11px var(--mono);color:var(--ui-dim);padding:0 4px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tpsum .in{color:var(--purple);font-weight:600}
 .tpsum.bad{color:var(--red);white-space:normal}
@@ -402,7 +402,7 @@ table.grid .ax{display:inline-block;min-width:12px;padding:0 2px;border-radius:3
     <div class="tpbody" id="tpSay">
       <div class="tphint" id="tpHintSay"></div>
       <div class="tplines" id="tpLines"></div>
-      <div class="tpbar"><button class="tpb" id="tpAdd" type="button">＋ 一行</button><button class="tpb" id="tpDemo" type="button">載入範例</button><span class="grow"></span><span class="tphint" id="tpModel"></span></div>
+      <div class="tpbar"><button class="tpb" id="tpAdd" type="button">＋ 一行</button><button class="tpb" id="tpDemo" type="button">載入範例</button><button class="tpb" id="tpDemoLoop" type="button">迴圈範例</button><span class="grow"></span><span class="tphint" id="tpModel"></span></div>
     </div>
     <div class="tpbody" id="tpRun" hidden>
       <div class="tphint" id="tpHintRun"></div>
@@ -1602,8 +1602,9 @@ $('helpX').onclick=function(){$('help').hidden=true;try{localStorage.setItem('dr
 // 使用者可以拖、換顏色，但不能直接刪；改那一行就跟著改，刪那一行它就不見。
 var HAS_NL=typeof NLBoard!=='undefined'&&typeof Trainer!=='undefined';
 var trainTab='say', lastRun=null, goMode='skel', goFile='solution.go', playT=null, commitT=null;
-var INTENT_LABEL={create:_T('建立'),assign:_T('給值'),push:_T('推入'),pop:_T('彈出'),put:_T('放進字典'),remove:_T('移除'),mark:_T('標記'),assert:_T('檢查'),ret:_T('回傳')};
+var INTENT_LABEL={create:_T('建立'),assign:_T('給值'),push:_T('推入'),pop:_T('彈出'),put:_T('放進字典'),remove:_T('移除'),mark:_T('標記'),assert:_T('檢查'),ret:_T('回傳'),loop:_T('迴圈'),branch:_T('判斷'),else:_T('否則'),'break':_T('跳出'),'continue':_T('繼續')};
 $('tpHintSay').innerHTML=_T('一行一句話，白板會照著擺。例：<code>array nums = [2,7,11,15]</code>、<code>dict seen</code>、<code>pointer i at nums[0]</code>、<code>put x -> i into seen</code>、<code>把 3 推入 stack</code>。白板上的元件可以拖，但要刪掉就得改或刪那一行。');
+$('tpHintSay').innerHTML+='<br>'+_T('迴圈和判斷也行：<code>for i, x in enumerate(nums):</code>、<code>if need in seen:</code>、<code>else:</code>、<code>while st:</code>、<code>break</code>。下一行按 Tab 縮排，就是裡面的步驟；<code>return</code> 會讓整段停下來。');
 $('tpHintRun').innerHTML=_T('一行一步：白板會停在選到的那一行。檢查句（<code>7 is not in seen</code>、<code>st is empty</code>）會直接拿白板來對。');
 $('tpHintGo').innerHTML=_T('把白板上的資料結構翻成 Go：測試裡會放你在白板上跑過的那組例子。在本機跑 <code>go mod init solution &amp;&amp; go test ./...</code>。');
 function caseFromBoard(){var m=boardMeta(curBoard);return m&&m.pid&&HAS_NL?Trainer.byPid(m.pid):null;}
@@ -1612,7 +1613,8 @@ function ensureScript(){
   if(!B.script.lines.length) B.script.lines.push({id:'L'+(B.script.seq++),text:''});
   return B.script;
 }
-function scriptLineNo(key){var sc=B.script; if(sc) for(var i=0;i<sc.lines.length;i++) if(sc.lines[i].id===key) return i+1; return '?';}
+function lineKey(key){return String(key).split('#')[0];} // 一行可以產生好幾個元件（key 後面接 #1…）
+function scriptLineNo(key){key=lineKey(key); var sc=B.script; if(sc) for(var i=0;i<sc.lines.length;i++) if(sc.lines[i].id===key) return i+1; return '?';}
 function ownedToast(o){toast(_T('這是腳本第 {n} 行產生的：改或刪那一行它才會變',{n:scriptLineNo(o.src)})); trainOpen(true); focusLine(o.src);}
 function quietSave(){lastSnap=snapshot(); persist();}
 function laterCommit(){clearTimeout(commitT); commitT=setTimeout(commit,600);}
@@ -1708,51 +1710,55 @@ function trainRender(boardChanged){
   if(trainTab==='go') renderGo();
   trainStatus(); trainMarkSel();
 }
+function traceLen(){var sc=B.script; return sc?NLBoard.replay(sc.lines,null).trace.length:0;}
+function stepOfLine(run,n){for(var k=0;k<run.trace.length;k++) if(run.trace[k].n===n) return k; return run.trace.length-1;}
 function trainStatus(){
   if(!HAS_NL||$('trainp').hidden||!B.script) return;
-  var sc=B.script, run=NLBoard.replay(sc.lines,null), conf=[], box=activeLines();
-  run.results.forEach(function(r,i){
-    if(r.confidence!=null&&r.status!=='err') conf.push(r.confidence);
+  var sc=B.script, run=NLBoard.replay(sc.lines,null), conf=[], box=activeLines(), T=run.trace, stepping=trainTab==='run'&&sc.step!=null;
+  var k=sc.step==null?T.length-1:Math.min(sc.step,T.length-1), upto={};
+  if(stepping) for(var j=0;j<=k;j++) upto[T[j].n]=T[j];                // 每一行到這一步為止最新的結果
+  run.results.forEach(function(fin,i){
+    if(fin.confidence!=null&&fin.status!=='err') conf.push(fin.confidence);
     var row=box&&box.querySelector('[data-l="'+sc.lines[i].id+'"]'); if(!row) return;
-    var st=row.querySelector('.tpst'), sm=row.querySelector('.tpsum');
-    st.className='tpst '+r.status; st.textContent={ok:'●',pass:'✓',fail:'✗',err:'!',comment:'#',blank:''}[r.status]||'';
-    st.title=r.status==='err'?r.msg:'';
-    if(r.status==='blank'||r.status==='comment'){sm.hidden=true;}
+    var r=stepping&&upto[i]?upto[i]:fin, st=row.querySelector('.tpst'), sm=row.querySelector('.tpsum');
+    st.className='tpst '+r.status; st.textContent={ok:'●',pass:'✓',fail:'✗',err:'!',comment:'#',blank:'',skip:'–'}[r.status]||'';
+    st.title=r.status==='err'?r.msg:r.status==='skip'?_T('沒有跑到：前面的 return、跳出或條件沒有走到這一行'):'';
+    if(r.status==='blank'||r.status==='comment'||r.status==='skip'){sm.hidden=true;}
     else {sm.hidden=false; sm.className='tpsum'+(r.status==='err'||r.status==='fail'?' bad':'');
-      sm.innerHTML='<span class="in">'+esc(INTENT_LABEL[r.intent]||r.intent)+'</span> '+esc(r.sum||'')+(r.msg?' — '+esc(r.msg):'')+' · '+Math.round((r.p||0)*100)+'%';
-      sm.title='Jev: '+r.state;}
-    row.classList.toggle('cur',trainTab==='run'&&sc.step===i);
-    row.classList.toggle('after',trainTab==='run'&&sc.step!=null&&i>sc.step);
+      sm.innerHTML='<span class="in">'+esc(INTENT_LABEL[r.intent]||r.intent||'')+'</span> '+esc(r.sum||'')+(r.msg?' — '+esc(r.msg):'')+(r.p!=null&&r.intent!=='loop'&&r.intent!=='branch'?' · '+Math.round((r.p||0)*100)+'%':'')+(!stepping&&fin.runs>1?' · ×'+fin.runs:'');
+      sm.title='Jev: '+(r.state||'');}
+    row.classList.toggle('cur',stepping&&k>=0&&T[k].n===i);
+    row.classList.toggle('after',fin.status==='skip'||(stepping&&!upto[i]&&fin.status!=='blank'&&fin.status!=='comment'));
   });
   var avg=conf.length?Math.round(conf.reduce(function(a,b){return a+b;},0)/conf.length*100):0;
   $('tpModel').textContent=_T('Jev（本機）· 平均信心 {p}%',{p:avg});
-  var n=sc.lines.length, k=sc.step==null?n-1:sc.step;
-  $('tpStep').textContent=(k+1)+' / '+n;
-  $('tpFirst').disabled=$('tpPrev').disabled=k<0; $('tpNext').disabled=$('tpLast').disabled=k>=n-1;
+  $('tpStep').textContent=(k+1)+' / '+T.length;
+  $('tpFirst').disabled=$('tpPrev').disabled=k<0; $('tpNext').disabled=$('tpLast').disabled=k>=T.length-1;
 }
 function trainMarkSel(){
   if(!HAS_NL||$('trainp').hidden) return;
-  var it=sel&&byId(sel), key=it&&it.src;
+  var it=sel&&byId(sel), key=it&&it.src&&lineKey(it.src);
   [].forEach.call(document.querySelectorAll('.tpl'),function(r){r.classList.toggle('selc',!!key&&r.dataset.l===key);});
 }
 function focusLine(key){
+  key=lineKey(key);
   setTimeout(function(){var row=activeLines()&&activeLines().querySelector('[data-l="'+key+'"]'); if(row){row.scrollIntoView({block:'nearest'}); var inp=row.querySelector('.tpi'); inp.focus(); inp.setSelectionRange(inp.value.length,inp.value.length);}},0);
 }
-function lineHover(key,on){var el=itemsEl.querySelector('[data-id="s'+key+'"]'); if(el) el.classList.toggle('lnhl',on);}
+function lineHover(key,on){[].forEach.call(itemsEl.querySelectorAll('[data-id="s'+key+'"],[data-id^="s'+key+'#"]'),function(el){el.classList.toggle('lnhl',on);});}
 function setStep(k){
-  var sc=B.script; if(!sc) return; var n=sc.lines.length;
+  var sc=B.script; if(!sc) return; var n=traceLen();
   sc.step=Math.max(-1,Math.min(n-1,k)); scriptApply(); quietSave();
   var row=activeLines().querySelector('.tpl.cur'); if(row) row.scrollIntoView({block:'nearest'});
 }
 function stopPlay(){if(playT){clearInterval(playT);playT=null;$('tpPlay').textContent=_T('▷ 播放');}}
 function setTab(t){
   stopPlay(); trainTab=t; var sc=B.script;
-  if(sc&&t==='run'&&sc.step==null) sc.step=sc.lines.length-1;
+  if(sc&&t==='run'&&sc.step==null) sc.step=traceLen()-1;
   if(sc){scriptApply(); quietSave();}
   trainRender();
 }
 function editLines(fn,focusKey,caret){ // 改結構（加行、刪行）：馬上存成一步
-  var sc=ensureScript(); fn(sc); if(trainTab==='run'&&sc.step!=null) sc.step=Math.min(sc.step,sc.lines.length-1);
+  var sc=ensureScript(); fn(sc); if(trainTab==='run'&&sc.step!=null) sc.step=Math.min(sc.step,traceLen()-1);
   scriptApply(); commit(); trainRender();
   if(focusKey) setTimeout(function(){var row=activeLines().querySelector('[data-l="'+focusKey+'"]'); if(row){var inp=row.querySelector('.tpi'); inp.focus(); var c=caret==null?inp.value.length:caret; inp.setSelectionRange(c,c);}},0);
 }
@@ -1763,13 +1769,21 @@ $('tpX').onclick=function(){trainOpen(false);};
 [].forEach.call(document.querySelectorAll('.tptab'),function(b){b.onclick=function(){setTab(b.dataset.tp);};});
 $('tpCase').onchange=function(){var sc=ensureScript(); sc.caseId=this.value||null; commit(); if(trainTab==='go') renderGo(); $('tpReport').innerHTML='';};
 $('tpAdd').onclick=function(){var l; editLines(function(sc){l=newLine();sc.lines.push(l);},null); focusLine(l.id);};
-$('tpDemo').onclick=function(){
+function loadDemo(loop){
   var sc=ensureScript(), cid=sc.caseId||'two-sum', C=Trainer.CASES[cid];
   if(sc.lines.some(function(l){return l.text.trim();})&&!confirm(_T('要用範例取代目前的腳本嗎？（可以復原）'))) return;
   var inp=lastRun?C.inputs(lastRun.state):{err:1}; if(inp.err) inp=cid==='two-sum'?{nums:[2,7,11,15],target:9}:{s:'([)]'};
-  editLines(function(s2){s2.caseId=cid; s2.lines=Trainer.demo(cid,inp).map(function(t){return newLine(t);}); s2.pos={}; s2.poff={}; s2.next={c0:0,c1:0,cx:0}; s2.origin=null; s2.step=null;});
+  editLines(function(s2){s2.caseId=cid; s2.lines=Trainer.demo(cid,inp,loop).map(function(t){return newLine(t);}); s2.pos={}; s2.poff={}; s2.next={c0:0,c1:0,cx:0}; s2.origin=null; s2.step=null;});
   setTimeout(fit,30); toast(_T('已載入範例：到「② 跑一遍」一步一步看'));
-};
+}
+$('tpDemo').onclick=function(){loadDemo(false);};
+$('tpDemoLoop').onclick=function(){loadDemo(true);};
+function indentOf(t){return t.length-t.replace(/^ +/,'').length;}
+function opensBlock(t){var f=NLBoard.flowOf(t.trim()); return !!f&&['for','while','if','elif','else','repeat'].indexOf(f.kind)>=0&&!f.inline;}
+function setLineText(inp,text,caret){
+  var key=inp.closest('.tpl').dataset.l, sc=ensureScript(), l=sc.lines.filter(function(x){return x.id===key;})[0]; if(!l) return;
+  l.text=text; inp.value=text; inp.setSelectionRange(caret,caret); scriptApply(); laterCommit();
+}
 function lineEvents(box){
   box.addEventListener('input',function(e){
     var inp=e.target.closest('.tpi'); if(!inp) return; var key=inp.closest('.tpl').dataset.l, sc=ensureScript();
@@ -1779,14 +1793,21 @@ function lineEvents(box){
   box.addEventListener('keydown',function(e){
     var inp=e.target.closest('.tpi'); if(!inp||e.isComposing) return;
     var sc=B.script, key=inp.closest('.tpl').dataset.l, i=sc.lines.map(function(l){return l.id;}).indexOf(key);
-    if(e.key==='Enter'){e.preventDefault(); var c=inp.selectionStart, a=inp.value.slice(0,c), b=inp.value.slice(c), nl;
-      editLines(function(s2){s2.lines[i].text=a; nl=newLine(b); s2.lines.splice(i+1,0,nl); if(trainTab==='run'&&s2.step===i) s2.step=i+1;},null);
-      var row=activeLines().querySelector('[data-l="'+nl.id+'"]'); if(row){var ni=row.querySelector('.tpi'); ni.focus(); ni.setSelectionRange(0,0);} return;}
+    if(e.key==='Tab'){e.preventDefault(); var v0=inp.value, c0=inp.selectionStart;
+      if(e.shiftKey){var cut=Math.min(2,indentOf(v0)); if(cut) setLineText(inp,v0.slice(cut),Math.max(0,c0-cut));}
+      else setLineText(inp,'  '+v0,c0+2);
+      return;}
+    if(e.key==='Enter'){e.preventDefault(); var c=inp.selectionStart, a=inp.value.slice(0,c), b=inp.value.slice(c).replace(/^ +/,''), nl;
+      var pad=indentOf(inp.value)+(opensBlock(inp.value)&&!b.trim()&&c>=inp.value.trimEnd().length?2:0), padS=Array(pad+1).join(' ');  // 自動縮排：標題行（for / if …）下一行再縮兩格
+      editLines(function(s2){s2.lines[i].text=a; nl=newLine(padS+b); s2.lines.splice(i+1,0,nl);},null);
+      var row=activeLines().querySelector('[data-l="'+nl.id+'"]'); if(row){var ni=row.querySelector('.tpi'); ni.focus(); ni.setSelectionRange(pad,pad);} return;}
+    if(e.key==='Backspace'&&inp.selectionStart===inp.selectionEnd&&inp.selectionStart>0&&!inp.value.slice(0,inp.selectionStart).trim()){e.preventDefault(); // 在縮排裡按退格：少縮兩格
+      var cc=inp.selectionStart, rm=Math.min(2,cc); setLineText(inp,inp.value.slice(0,cc-rm)+inp.value.slice(cc),cc-rm); return;}
     if(e.key==='Backspace'&&inp.selectionStart===0&&inp.selectionEnd===0&&i>0){e.preventDefault();
-      var prev=sc.lines[i-1], at=prev.text.length, rest=inp.value;
+      var prev=sc.lines[i-1], at=prev.text.length, rest=inp.value.replace(/^ +/,'');
       editLines(function(s2){prev.text+=rest; s2.lines.splice(i,1);},prev.id,at); return;}
-    if(e.key==='ArrowUp'&&i>0){e.preventDefault(); focusLine(sc.lines[i-1].id); if(trainTab==='run') setStep(i-1); return;}
-    if(e.key==='ArrowDown'&&i<sc.lines.length-1){e.preventDefault(); focusLine(sc.lines[i+1].id); if(trainTab==='run') setStep(i+1); return;}
+    if(e.key==='ArrowUp'&&i>0){e.preventDefault(); focusLine(sc.lines[i-1].id); if(trainTab==='run') setStep(stepOfLine(NLBoard.replay(sc.lines,null),i-1)); return;}
+    if(e.key==='ArrowDown'&&i<sc.lines.length-1){e.preventDefault(); focusLine(sc.lines[i+1].id); if(trainTab==='run') setStep(stepOfLine(NLBoard.replay(sc.lines,null),i+1)); return;}
   });
   box.addEventListener('paste',function(e){
     var inp=e.target.closest('.tpi'); if(!inp) return; var t=(e.clipboardData||window.clipboardData).getData('text'); if(t.indexOf('\n')<0) return;
@@ -1795,7 +1816,7 @@ function lineEvents(box){
     editLines(function(s2){s2.lines[i].text=a+parts[0]; var add=parts.slice(1).map(function(x){return newLine(x);}); add[add.length-1].text+=b; last=add[add.length-1]; s2.lines.splice.apply(s2.lines,[i+1,0].concat(add));},null);
     focusLine(last.id);
   });
-  box.addEventListener('click',function(e){var n=e.target.closest('.tpn'); if(!n) return; if(trainTab!=='run') setTab('run'); setStep(+n.dataset.n);});
+  box.addEventListener('click',function(e){var n=e.target.closest('.tpn'); if(!n) return; if(trainTab!=='run') setTab('run'); setStep(stepOfLine(NLBoard.replay(B.script.lines,null),+n.dataset.n));});
   box.addEventListener('focusin',function(e){var row=e.target.closest('.tpl'); if(row) lineHover(row.dataset.l,true);});
   box.addEventListener('focusout',function(e){var row=e.target.closest('.tpl'); if(row) lineHover(row.dataset.l,false); clearTimeout(commitT); commit();});
   box.addEventListener('pointerover',function(e){var row=e.target.closest('.tpl'); if(row) lineHover(row.dataset.l,true);});
@@ -1803,14 +1824,14 @@ function lineEvents(box){
 }
 lineEvents($('tpLines')); lineEvents($('tpLines2'));
 $('tpFirst').onclick=function(){stopPlay();setStep(-1);};
-$('tpPrev').onclick=function(){stopPlay();setStep((B.script.step==null?B.script.lines.length-1:B.script.step)-1);};
-$('tpNext').onclick=function(){stopPlay();setStep((B.script.step==null?B.script.lines.length-1:B.script.step)+1);};
-$('tpLast').onclick=function(){stopPlay();setStep(B.script.lines.length-1);};
+$('tpPrev').onclick=function(){stopPlay();setStep((B.script.step==null?traceLen()-1:B.script.step)-1);};
+$('tpNext').onclick=function(){stopPlay();setStep((B.script.step==null?traceLen()-1:B.script.step)+1);};
+$('tpLast').onclick=function(){stopPlay();setStep(traceLen()-1);};
 $('tpPlay').onclick=function(){
   if(playT){stopPlay();return;} var sc=B.script; if(!sc) return;
-  if(sc.step==null||sc.step>=sc.lines.length-1) setStep(-1);
+  if(sc.step==null||sc.step>=traceLen()-1) setStep(-1);
   $('tpPlay').textContent=_T('❚❚ 暫停');
-  playT=setInterval(function(){if(!B.script||B.script.step>=B.script.lines.length-1){stopPlay();return;} setStep(B.script.step+1);},800);
+  playT=setInterval(function(){if(!B.script||B.script.step>=traceLen()-1){stopPlay();return;} setStep(B.script.step+1);},700);
 };
 $('tpCheck').onclick=function(){
   var sc=B.script; if(!sc) return;

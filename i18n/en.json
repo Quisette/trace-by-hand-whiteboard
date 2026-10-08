@@ -250,5 +250,13 @@
   "（從標題認出來的）": "(recognized from the title)",
   "自由練習：只對檢查句和回傳值。選一題（或寫「title: 1. Two Sum」）就能拿參考解答來對。": "Free practice: only check lines and the returned value are verified. Pick a problem (or write \"title: 1. Two Sum\") to compare with a reference solution.",
   "下一步：到「③ 寫成 Go」把它寫成程式。": "Next: open \"③ Write it in Go\" and turn it into code.",
-  "複製程式碼": "Copy code"
+  "複製程式碼": "Copy code",
+  "迴圈和判斷也行：<code>for i, x in enumerate(nums):</code>、<code>if need in seen:</code>、<code>else:</code>、<code>while st:</code>、<code>break</code>。下一行按 Tab 縮排，就是裡面的步驟；<code>return</code> 會讓整段停下來。": "Loops and branches work too: <code>for i, x in enumerate(nums):</code>、<code>if need in seen:</code>、<code>else:</code>、<code>while st:</code>、<code>break</code>. Press Tab to indent the next line and it becomes a step inside; <code>return</code> stops the whole script.",
+  "迴圈範例": "Loop example",
+  "迴圈": "loop",
+  "判斷": "branch",
+  "否則": "else",
+  "跳出": "break",
+  "繼續": "continue",
+  "沒有跑到：前面的 return、跳出或條件沒有走到這一行": "Not run: an earlier return, break or condition never reached this line"
 }

@@ -24,7 +24,7 @@ var NLBoard=(function(J){
     'move moves moved advance step increment decrement inc dec go goes left right next back forward update becomes become becoming change changes store record mark marked highlight unmark done visited cross '+
     'return returns answer result output is isn not no yes check verify whether does contains contain has empty top front pointer pointers array list string str var variable variables stack queue deque '+
     'dict map hashmap hash dictionary set hashset title note comment problem called named name value values key keys index at cell element item one equal equals same true false null none nil len size '+
-    'we our i\'ll ill should must first last call push_back pop_back popleft get still keep found find need needed').split(' ')).reduce(function(m,w){m[w]=1;return m;},{});
+    'we our i\'ll ill should must first last call push_back pop_back popleft get still keep found find need needed for each over across range enumerate while elif else otherwise break continue repeat times loop iterate foreach through peek').split(' ')).reduce(function(m,w){m[w]=1;return m;},{});
   var SOFT={i:1,x:1,j:1,k:1,need:1,top:1,left:1,right:1,result:1,answer:1,cur:1,prev:1,next:1,first:1,last:1,set:0}; // 常被拿來當名字的字
   function half(s){return String(s).replace(/[！-～]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0xfee0);}).replace(/　/g,' ').replace(/[「『“”]/g,'"').replace(/[」』]/g,'"').replace(/[，、]/g,',').replace(/[。；]/g,' ');}
   function lex(text){
@@ -41,7 +41,7 @@ var NLBoard=(function(J){
       }
       if((m=rest.match(/^\d+(\.\d+)?/))){out.push({k:'num',v:m[0],s:i,e:i+m[0].length}); i+=m[0].length; continue;}
       if((m=rest.match(/^[A-Za-z_][A-Za-z0-9_]*(?:'[a-z]+)?/))){out.push({k:'id',v:m[0],s:i,e:i+m[0].length}); i+=m[0].length; continue;}
-      if((m=rest.match(/^(->|=>|==|!=|<=|>=|\+\+|--|\+=|-=|→)/))){out.push({k:'sym',v:m[0]==='→'?'->':m[0],s:i,e:i+m[0].length}); i+=m[0].length; continue;}
+      if((m=rest.match(/^(->|=>|==|!=|<=|>=|&&|\|\||\+\+|--|\+=|-=|→)/))){out.push({k:'sym',v:m[0]==='→'?'->':m[0],s:i,e:i+m[0].length}); i+=m[0].length; continue;}
       if(J.isCJK(c)){out.push({k:'cjk',v:c,s:i,e:i+1}); i++; continue;}
       out.push({k:'sym',v:c,s:i,e:i+1}); i++;
     }
@@ -72,7 +72,7 @@ var NLBoard=(function(J){
   var INTENTS={
     create:['array ID = LIST','array ID LIST','make an array ID with LIST','create array ID','new array ID','list ID = LIST','string ID = STR','string ID','new stack ID','stack ID','empty stack ID','make a stack called ID','queue ID','create a queue ID','dict ID','make a dict called ID','hash map ID','map ID','set ID','a set ID','make a set called ID','variable ID = NUM','var ID = NUM','variable ID','pointer ID at ARR [ NUM ]','pointer ID on ARR','pointer ID at NUM','pointer ID','add a pointer ID','title','title :','problem :','note','note :','comment :',
       '陣 列 ID = LIST','数 组 ID = LIST','建 立 陣 列 ID','新 增 堆 疊 ID','堆 疊 ID','栈 ID','佇 列 ID','队 列 ID','字 典 ID','建 立 字 典 ID','集 合 ID','變 數 ID = NUM','变 量 ID = NUM','字 串 ID = STR','指 標 ID 指 向 ARR [ NUM ]','指 针 ID','題 目 :','便 利 貼 :','筆 記'],
-    assign:['ID = NUM','ID = ARR [ PTR ]','ID = STRG [ PTR ]','VAR = STRG [ PTR ]','ID = VAR - ID','VAR = NUM','VAR = VAR - VAR','VAR = ARR [ PTR ]','set VAR to NUM','set ID to NUM','let VAR be NUM','VAR becomes NUM','update VAR to NUM','change VAR to NUM','PTR = NUM','move PTR to NUM','PTR moves to NUM','move PTR to index NUM','advance PTR','increment PTR','PTR ++','PTR += NUM','PTR --','decrement PTR','move PTR right','move PTR left','step PTR forward','ARR [ NUM ] = NUM','VAR += NUM','VAR ++','ID = STR',
+    assign:['ID = NUM','ID = ARR [ PTR ]','ID = STRG [ PTR ]','ID = pop STK','VAR = pop STK','ID = STK . pop ( )','VAR = STK . pop ( )','ID = STK [ NUM ]','VAR = dequeue QUE','VAR = STRG [ PTR ]','ID = VAR - ID','VAR = NUM','VAR = VAR - VAR','VAR = ARR [ PTR ]','set VAR to NUM','set ID to NUM','let VAR be NUM','VAR becomes NUM','update VAR to NUM','change VAR to NUM','PTR = NUM','move PTR to NUM','PTR moves to NUM','move PTR to index NUM','advance PTR','increment PTR','PTR ++','PTR += NUM','PTR --','decrement PTR','move PTR right','move PTR left','step PTR forward','ARR [ NUM ] = NUM','VAR += NUM','VAR ++','ID = STR',
       '把 VAR 設 為 NUM','VAR 改 成 NUM','PTR 移 到 NUM','PTR 往 右','PTR 往 左','PTR 右 移','PTR 指 向 NUM','PTR 前 進'],
     push:['push NUM to STK','push NUM onto STK','push ARR [ PTR ] onto STK','push STR onto STK','STK push NUM','STK . push ( NUM )','append NUM to ARR','append NUM to QUE','enqueue NUM','enqueue NUM into QUE','add NUM to QUE','add NUM to SET','SET add NUM','SET . add ( NUM )','insert NUM into SET','push','append','enqueue',
       '把 NUM 推 入 STK','NUM 推 入 STK','推 入 STK','把 NUM 放 進 SET','NUM 加 入 QUE','NUM 加 入 SET','加 入 SET','壓 入 STK','压 入'],
@@ -114,9 +114,12 @@ var NLBoard=(function(J){
       {id:'delta',kind:'score',range:[-1,1],anchors:DELTA}
     ];
   }
-  function decide(stateTxt){return J.ask({state:stateTxt,questions:questions()}).answers;}
+  var DCACHE={}, DN=0;
+  function decide(stateTxt){var r=DCACHE[stateTxt]; if(r) return r; if(++DN>4000){DCACHE={};DN=0;} return DCACHE[stateTxt]=J.ask({state:stateTxt,questions:questions()}).answers;}
 
   /* ---------- 值 ---------- */
+  function truthy(v){if(Array.isArray(v)||typeof v==='string') return v.length>0&&v!=='false'; if(v&&typeof v==='object') return Object.keys(v).length>0; return !!v;}
+  function unq(s){return String(s).trim().replace(/^["']|["']$/g,'');}
   function num(v){if(typeof v==='number')return v; if(typeof v==='string'&&/^-?\d+(\.\d+)?$/.test(v.trim()))return +v; return v;}
   function fmt(v){
     if(v===undefined) return '';
@@ -126,17 +129,29 @@ var NLBoard=(function(J){
     return String(v);
   }
   function same(a,b){return fmt(num(a))===fmt(num(b));}
-  function listVals(src){ // "[2, 7, 11]" → ['2','7','11']
-    var inner=src.replace(/^\s*\[|\]\s*$/g,'').trim(); if(!inner) return [];
+  function splitItems(inner,raw){ // 逗號分隔，引號和括號裡的逗號不算
     var out=[],d=0,cur='',q=null;
     for(var i=0;i<inner.length;i++){var c=inner[i];
       if(q){cur+=c; if(c===q) q=null; continue;}
       if(c==='"'||c==="'"){q=c;cur+=c;continue;}
-      if(c==='['){d++;} if(c===']'){d--;}
+      if(c==='['||c==='{'||c==='(') d++; if(c===']'||c==='}'||c===')') d--;
       if(c===','&&!d){out.push(cur.trim());cur='';continue;}
       cur+=c;}
     if(cur.trim()) out.push(cur.trim());
-    return out.map(function(x){return x.replace(/^["']|["']$/g,'');});
+    return raw?out:out.map(function(x){return x.replace(/^["']|["']$/g,'');});
+  }
+  function listVals(src){ // "[2, 7, 11]" → ['2','7','11']
+    var inner=src.replace(/^\s*\[|\]\s*$/g,'').trim(); if(!inner) return [];
+    return splitItems(inner);
+  }
+  function dictLiteral(text){ // {")": "(", "]": "["} → [[')','('],[']','[']]
+    var t=half(text), i=-1, q=null, k, c;
+    for(k=0;k<t.length;k++){c=t[k]; if(q){if(c===q)q=null;continue;} if(c==='"'||c==="'"){q=c;continue;} if(c==='{'){i=k;break;}}
+    if(i<0) return null;
+    var d=0, j=-1; q=null;
+    for(k=i;k<t.length;k++){c=t[k]; if(q){if(c===q)q=null;continue;} if(c==='"'||c==="'"){q=c;continue;} if(c==='{')d++; else if(c==='}'){d--; if(!d){j=k;break;}}}
+    if(j<0) j=t.length;
+    return splitItems(t.slice(i+1,j),true).map(function(p){var sp=splitColon(p); if(sp.inline) return [unq(sp.head),unq(sp.inline)]; var kv=p.split(/\s*->\s*/); return [unq(kv[0]),unq(kv[1]||'')];});
   }
   function compValue(c){
     switch(c.type){
@@ -153,6 +168,11 @@ var NLBoard=(function(J){
     function peek(){return toks[p];}
     function eat(v){if(toks[p]&&toks[p].v===v){p++;return true;}return false;}
     function fail(m){throw new Error(m);}
+    var POPW=/^(pop|popleft|dequeue)$/, PEEKW=/^(peek|top|front)$/;
+    function member(v,c){if(Array.isArray(c))return c.some(function(x){return same(x,v);}); if(typeof c==='string')return c.indexOf(String(v))>=0; if(c&&typeof c==='object')return String(v) in c; return false;}
+    function popFrom(c){if(!c||!c.cells) fail('cannot pop from "'+(c&&c.name||'that')+'"'); if(!c.cells.length) fail(c.name+' is empty, nothing to pop');
+      var v=c.type==='queue'?c.cells.shift():c.cells.pop(); st.events.push({t:'pop',box:c.name,v:v,line:st.cur}); return num(v);}
+    function peekAt(c){if(!c||!c.cells||!c.cells.length) fail('"'+(c&&c.name||'that')+'" is empty'); return num(c.type==='queue'?c.cells[0]:c.cells[c.cells.length-1]);}
     function primary(){
       var t=toks[p++]; if(!t) fail('missing value');
       if(t.k==='num') return +t.v;
@@ -160,25 +180,41 @@ var NLBoard=(function(J){
       if(t.k==='bool') return t.v.toLowerCase()==='true';
       if(t.k==='list') return listVals(t.v).map(function(x){
         try{var sub=tag(lex(x),st); return sub.length===1&&sub[0].k==='id'?x:evaluate(sub,st);}catch(e){return num(x);}});
-      if(t.k==='comp') return compValue(t.c);
+      if(t.k==='comp'){var n1=toks[p],n2=toks[p+1];
+        if(n1&&n1.v==='.'&&n2&&n2.k==='word'&&(POPW.test(n2.v)||PEEKW.test(n2.v))){p+=2;if(eat('('))eat(')');return POPW.test(n2.v)?popFrom(t.c):peekAt(t.c);}
+        return compValue(t.c);}
       if(t.k==='fn'){eat('(');var v=expr();eat(')');return v&&v.length!=null?v.length:Object.keys(v||{}).length;}
       if(t.v==='('){var v2=expr();eat(')');return v2;}
+      if(t.k==='word'&&(POPW.test(t.v)||PEEKW.test(t.v))){var nt=toks[p]; if(nt&&nt.k==='word'&&nt.v==='of') nt=toks[++p];
+        if(nt&&nt.k==='comp'){p++; return POPW.test(t.v)?popFrom(nt.c):peekAt(nt.c);} fail('which stack or queue?');}
       if(t.k==='word'&&(t.v==='null'||t.v==='none'||t.v==='nil')) return null;
       if(t.k==='id') fail('unknown name "'+t.v+'"');
       fail('cannot read "'+t.v+'"');
     }
     function post(){var v=primary();
       while(peek()&&peek().v==='['){p++;var i=expr();eat(']');
-        if(Array.isArray(v)||typeof v==='string'){if(typeof i!=='number'||i<0||i>=v.length) fail('index '+fmt(i)+' is out of range'); v=num(v[i]);}
+        if(Array.isArray(v)||typeof v==='string'){if(typeof i==='number'&&i<0&&-i<=v.length) i=v.length+i; if(typeof i!=='number'||i<0||i>=v.length) fail('index '+fmt(i)+' is out of range'); v=num(v[i]);}
         else if(v&&typeof v==='object'){if(!(String(i) in v)) fail('key '+fmt(i)+' is not in the dict'); v=v[String(i)];}
         else fail('cannot index '+fmt(v));}
       return v;}
     function unary(){if(eat('-'))return -unary(); return post();}
     function mul(){var v=unary();for(;;){if(eat('*'))v=v*unary();else if(eat('/'))v=Math.trunc(v/unary());else if(eat('%'))v=v%unary();else return v;}}
     function add(){var v=mul();for(;;){if(eat('+'))v=v+mul();else if(eat('-'))v=v-mul();else return v;}}
-    function cmp(){var v=add(),t=peek();if(t&&['==','!=','<','>','<=','>='].indexOf(t.v)>=0){p++;var w=add();
-      return t.v==='=='?same(v,w):t.v==='!='?!same(v,w):t.v==='<'?v<w:t.v==='>'?v>w:t.v==='<='?v<=w:v>=w;}return v;}
-    function expr(){return cmp();}
+    function isW(t,w){return t&&t.k==='word'&&t.v===w;}
+    function empty_(v){return v==null||(Array.isArray(v)||typeof v==='string'?v.length===0:typeof v==='object'?Object.keys(v).length===0:false);}
+    function cmp(){var v=add(),t=peek();
+      if(isW(t,'not')&&isW(toks[p+1],'in')){p+=2;return !member(v,add());}
+      if(isW(t,'in')){p++;return member(v,add());}
+      if(isW(t,'is')||isW(t,'equals')||isW(t,'are')){p++; var ng=false; if(isW(peek(),'not')){p++;ng=true;}
+        if(isW(peek(),'empty')){p++;var em=empty_(v);return ng?!em:em;}
+        if(isW(peek(),'in')){p++;var mm=member(v,add());return ng?!mm:mm;}
+        var w0=add(), eq=same(v,w0); return ng?!eq:eq;}
+      if(t&&['==','!=','<','>','<=','>='].indexOf(t.v)>=0){p++;var w=add();
+        return t.v==='=='?same(v,w):t.v==='!='?!same(v,w):t.v==='<'?v<w:t.v==='>'?v>w:t.v==='<='?v<=w:v>=w;}return v;}
+    function not_(){var t=peek(); if((isW(t,'not')&&!isW(toks[p+1],'in'))||(t&&t.k==='sym'&&t.v==='!')){p++;return !truthy(not_());} return cmp();}
+    function and_(){var v=not_();for(;;){var t=peek(); if(isW(t,'and')||(t&&t.k==='sym'&&t.v==='&&')){p++;var w=not_();v=truthy(v)&&truthy(w);}else return v;}}
+    function or_(){var v=and_();for(;;){var t=peek(); if(isW(t,'or')||(t&&t.k==='sym'&&t.v==='||')){p++;var w=and_();v=truthy(v)||truthy(w);}else return v;}}
+    function expr(){return or_();}
     var list=[]; // 逗號分隔 → 清單
     if(!toks.length) fail('missing value');
     list.push(expr()); while(eat(',')) list.push(expr());
@@ -190,7 +226,10 @@ var NLBoard=(function(J){
   function newState(){return {comps:[],byName:{},answer:undefined,events:[],ptrColor:0};}
   function cloneState(st){var c=JSON.parse(JSON.stringify(st)); c.byName={}; c.comps.forEach(function(x){if(x.name)c.byName[x.name]=x;}); return c;}
   function addComp(st,c){
-    if(c.name&&st.byName[c.name]&&c.type!=='title'&&c.type!=='note') throw new Error('"'+c.name+'" already exists');
+    var ex=c.name&&st.byName[c.name];
+    if(ex&&c.type!=='title'&&c.type!=='note'){
+      if(ex.key!==c.key) throw new Error('"'+c.name+'" already exists');
+      st.comps[st.comps.indexOf(ex)]=c; st.byName[c.name]=c; return c;} // 同一行再跑一次（迴圈裡）：重設
     st.comps.push(c); if(c.name) st.byName[c.name]=c; return c;}
   function blank(type,key,line,name){
     var c={key:key,line:line,type:type,name:name||''};
@@ -220,8 +259,13 @@ var NLBoard=(function(J){
   function cjkSeq(toks,seq){ // 找連續的中文詞
     var s=toks.map(function(t){return t.k==='cjk'?t.v:'\u0000';}).join(''), i=s.indexOf(seq); if(i<0) return -1; return i;}
   function rawAfter(text,toks,i){return i<toks.length?half(text).slice(toks[i].s).trim():'';}
-  function exprToks(toks,from,to){ // [from, to) 之間能算的部分
-    var ts=toks.slice(from,to==null?toks.length:to).filter(function(t){return !(t.k==='word'&&FILL[t.v])&&!(t.k==='cjk')&&!(t.k==='sym'&&(t.v==='?'||t.v==='!'));});
+  var LDROP={a:1,an:1,the:1,value:1,values:1,it:1,its:1,then:1,now:1,so:1};
+  function exprToks(toks,from,to,logic){ // [from, to) 之間能算的部分；logic：保留 and / or / not / in / is / pop 這些運算用的字
+    var ts=toks.slice(from,to==null?toks.length:to).filter(function(t){
+      if(t.k==='cjk') return false;
+      if(t.k==='sym'&&(t.v==='?'||(t.v==='!'&&!logic))) return false;
+      if(t.k==='word') return logic?!LDROP[t.v]:!FILL[t.v];
+      return true;});
     while(ts.length&&ts[ts.length-1].k==='sym'&&ts[ts.length-1].v==='.') ts.pop();
     return ts;
   }
@@ -261,7 +305,7 @@ var NLBoard=(function(J){
     }
     if(type==='dict'){
       if(lit&&lit.k==='list') c2.rows=listVals(lit.v).map(function(p){var kv=p.split(/\s*(?::|->)\s*/);return [kv[0],kv[1]||''];});
-      var br=half(text).match(/\{([^}]*)\}/); if(br) c2.rows=br[1].split(',').filter(function(x){return x.trim();}).map(function(p){var kv=p.split(/\s*(?::|->)\s*/);return [kv[0].trim(),(kv[1]||'').trim()];});
+      var dl=dictLiteral(text); if(dl) c2.rows=dl;
       return {sum:'+ dict '+name,comp:c2};
     }
     if(type==='var'){
@@ -295,7 +339,7 @@ var NLBoard=(function(J){
     var lhs, rhs=null, op='=';
     if(oi>=0){
       op=toks[oi].v; lhs=toks.slice(0,oi).filter(function(t){return !(t.k==='word'&&(t.v==='let'||t.v==='set'||t.v==='now'||t.v==='then'||t.v==='so'))&&t.k!=='cjk';});
-      rhs=exprToks(toks,oi+1);
+      rhs=exprToks(toks,oi+1,null,true);
     } else {
       // set X to E / move X to E / X becomes E / 把 X 設為 E / X 移到 E
       var ti=-1; toks.forEach(function(t,i){if(ti<0&&(t.k==='comp'||t.k==='id'))ti=i;});
@@ -303,7 +347,7 @@ var NLBoard=(function(J){
       lhs=[toks[ti]];
       if(toks[ti+1]&&toks[ti+1].v==='['){var cl=-1;for(var q=ti+1;q<toks.length;q++)if(toks[q].v===']'){cl=q;break;} if(cl>0){lhs=toks.slice(ti,cl+1);ti=cl;}}
       var si=-1; for(var k=ti+1;k<toks.length;k++){var w=toks[k].v.toLowerCase(); if(['to','be','becomes','as','at','=','is'].indexOf(w)>=0||toks[k].k==='cjk'&&'為为成到向'.indexOf(w)>=0){si=k;}else if(si>=0)break;}
-      if(si>=0){rhs=exprToks(toks,si+1);}
+      if(si>=0){rhs=exprToks(toks,si+1,null,true);}
       if(!rhs||!rhs.length){
         var d=ans.delta.score; if(Math.abs(d)<0.5) return null;
         op=d>0?'++':'--';
@@ -347,6 +391,7 @@ var NLBoard=(function(J){
   };
   H.pop=function(L,toks,st){
     var box=comps(toks,['stack','queue','array'])[0]; if(!box) return null;
+    var eqi=at(toks,'='); if(eqi>=0&&eqi<toks.indexOf(box)) return null; // top = pop st：交給「給值」
     if(!box.c.cells.length) throw new Error(box.c.name+' is empty, nothing to pop');
     var v=box.c.type==='queue'?box.c.cells.shift():box.c.cells.pop();
     st.events.push({t:'pop',box:box.c.name,v:v,line:L.id});
@@ -410,7 +455,7 @@ var NLBoard=(function(J){
     var i=wordAt(toks,['return','returns','answer','result','output']), from=i+1;
     if(i<0){var c=cjkSeq(toks,'回傳'); if(c<0)c=cjkSeq(toks,'返回'); if(c<0)c=cjkSeq(toks,'答案'); if(c<0) return null; from=c+2;}
     while(toks[from]&&((toks[from].k==='word'&&['is','=','be'].indexOf(toks[from].v)>=0)||toks[from].v===':'||toks[from].v==='='||toks[from].k==='cjk')) from++;
-    var et=exprToks(toks,from); if(!et.length) throw new Error('return what?');
+    var et=exprToks(toks,from,null,true); if(!et.length) throw new Error('return what?');
     var v=evaluate(et,st); st.answer=v;
     var c2=keyed(st,L.id)||st.byName['return']||addComp(st,blank('var',L.id,L.id,'return')); c2.value=fmt(v); c2.ret=true;
     st.events.push({t:'return',v:fmt(v),line:L.id});
@@ -423,8 +468,10 @@ var NLBoard=(function(J){
     var text=(L.text||'').trim();
     if(!text) return {status:'blank'};
     if(/^(#|\/\/)/.test(text)) return {status:'comment'};
+    st.cur=L.id;
     var toks=tag(lex(text),st), state=stateText(toks), ans=decide(state);
     var probs=ans.intent.probs, tried=ORDER.slice().sort(function(a,b){return probs[b]-probs[a];}), lastErr=null;
+    if(/^(return|returns|回傳|回传|返回)(?![A-Za-z0-9_])/i.test(half(text))) tried=['ret'].concat(tried.filter(function(x){return x!=='ret';})); // 開頭就寫 return：一定是回傳
     for(var n=0;n<tried.length;n++){
       var intent=tried[n]; if(probs[intent]<0.02&&n>0) break;
       var snap=JSON.stringify(st);
@@ -443,16 +490,294 @@ var NLBoard=(function(J){
   }
   function restore(st,snap){var o=JSON.parse(snap); for(var k in o) st[k]=o[k]; st.byName={}; st.comps.forEach(function(c){if(c.name)st.byName[c.name]=c;});}
 
-  /* lines: [{id,text}]；step：看到第幾行（含）為止的板子，null＝全部 */
-  function replay(lines,step){
-    var st=newState(), results=[], at=step!=null&&step<0?newState():null;
-    lines.forEach(function(L,i){
-      var r=runLine(L,st); r.id=L.id; r.n=i; results.push(r);
-      if(step!=null&&i===step) at=cloneState(st);
-    });
-    var board=step!=null&&at?at:st;
-    return {results:results,state:st,board:board};
+  /* ---------- 流程：for / while / if / elif / else / repeat / break / continue ----------
+   * 縮排就是區塊（跟 Python 一樣）；標題行最後的「:」可有可無；也可以寫成一行：「if need in seen: return …」。
+   * 腳本被「跑」出來：每執行一次某一行就是一步（trace），所以迴圈裡的每一輪都能一步一步看。 */
+  var LIMIT_STEPS=3000, LIMIT_LOOP=1000;
+  function W(en,zh){return new RegExp('^(?:(?:'+en+')(?![A-Za-z0-9_])'+(zh?'|(?:'+zh+')':'')+')\\s*','i');}
+  var FLOWS=[
+    ['elif',W('elif|else\\s+if|otherwise\\s+if','否則如果|否则如果|不然如果|否則若|否则若')],
+    ['else',W('else|otherwise','否則|否则|不然')],
+    ['if',W('if','如果|若')],
+    ['while',W('while','當|当')],
+    ['for',W('for\\s+each|foreach|for|loop\\s+(?:over|through)|iterate\\s+(?:over|through)','對每個|對每一個|對於每個|針對每個|对每个|对每一个|遍歷|遍历')],
+    ['repeat',W('repeat','重複|重复')],
+    ['break',/^(?:break|stop\s+(?:the\s+)?loop|跳出|中斷|中断)\s*\.?$/i],
+    ['continue',/^(?:continue|skip|next\s+iteration|繼續|继续|跳過|跳过)\s*\.?$/i]
+  ];
+  var BLOCKY={for:1,while:1,if:1,elif:1,else:1,repeat:1};
+  function splitColon(rest){ // 標題和一行式的內容：第一個不在括號、引號裡的「:」
+    var d=0,q=null;
+    for(var i=0;i<rest.length;i++){var c=rest[i];
+      if(q){if(c===q)q=null;continue;}
+      if((c==='"'||c==="'")&&!(c==="'"&&i>0&&/[A-Za-z]/.test(rest[i-1]))){q=c;continue;}
+      if('([{'.indexOf(c)>=0) d++; else if(')]}'.indexOf(c)>=0) d--;
+      else if(c===':'&&d<=0) return {head:rest.slice(0,i).trim(),inline:rest.slice(i+1).trim()};}
+    return {head:rest.trim(),inline:''};
   }
-  return {replay:replay,runLine:runLine,lex:lex,tag:tag,stateText:stateText,evaluate:evaluate,fmt:fmt,num:num,same:same,newState:newState,decide:decide,TAG:TAG};
+  function flowOf(text){
+    var t=half(text).trim();
+    for(var i=0;i<FLOWS.length;i++){var m=FLOWS[i][1].exec(t); if(!m) continue;
+      var kind=FLOWS[i][0];
+      if(kind==='break'||kind==='continue') return {kind:kind,head:'',inline:''};
+      var sp=splitColon(t.slice(m[0].length)); return {kind:kind,head:sp.head,inline:sp.inline};}
+    return null;
+  }
+  function hasFlow(lines){return lines.some(function(l){var t=String(l.text||'').trim(); return !!t&&!/^(#|\/\/)/.test(t)&&!!flowOf(t);});}
+  function mkNode(i,L,text,ind,inline){
+    var fl=flowOf(text), kind=fl?fl.kind:'plain';
+    if(inline&&fl&&kind!=='break'&&kind!=='continue'){fl=null;kind='plain';} // 一行式只放一句、break 或 continue
+    return {i:i,L:L,indent:ind,body:[],kind:kind,head:fl?fl.head:'',text:text};
+  }
+  function parseProgram(lines){
+    var root={body:[],indent:-1}, stack=[root], stat={};
+    lines.forEach(function(L,i){
+      var raw=String(L.text==null?'':L.text).replace(/\t/g,'  '), t=raw.trim();
+      if(!t){stat[i]='blank';return;}
+      if(/^(#|\/\/)/.test(t)){stat[i]='comment';return;}
+      var ind=raw.length-raw.replace(/^ +/,'').length, nd=mkNode(i,L,t,ind,false), fl=nd.kind!=='plain'?flowOf(t):null;
+      while(stack.length>1&&stack[stack.length-1].indent>=ind) stack.pop();
+      stack[stack.length-1].body.push(nd);
+      if(fl&&fl.inline) nd.body.push(mkNode(i,L,fl.inline,ind+2,true));
+      if(BLOCKY[nd.kind]) stack.push(nd);
+    });
+    return {body:root.body,stat:stat};
+  }
+
+  /* ---------- 條件：A in D、S is empty、x > 3、a and not b … ---------- */
+  function balanced(ts){var d=0;for(var i=0;i<ts.length;i++){if(ts[i].v==='(')d++;else if(ts[i].v===')'){d--;if(d===0&&i<ts.length-1)return false;}}return d===0;}
+  function splitTop(ts,isOp){var parts=[[]],d=0;ts.forEach(function(t){if(t.v==='('||t.v==='[')d++;else if(t.v===')'||t.v===']')d--; if(!d&&isOp(t)) parts.push([]); else parts[parts.length-1].push(t);});return parts;}
+  function isAnd(t){return (t.k==='word'&&t.v==='and')||(t.k==='sym'&&t.v==='&&');}
+  function isOr(t){return (t.k==='word'&&t.v==='or')||(t.k==='sym'&&t.v==='||');}
+  function condOne(ts,L,st){
+    var neg=false;
+    while(ts.length&&((ts[0].k==='word'&&ts[0].v==='not')||(ts[0].k==='sym'&&ts[0].v==='!'))){neg=!neg;ts=ts.slice(1);}
+    if(!ts.length) throw new Error('missing condition');
+    if(ts[0].v==='('&&ts[ts.length-1].v===')'&&balanced(ts)){var r0=condEval(ts.slice(1,-1),L,st);return {val:neg?!r0.val:r0.val,sum:(neg?'¬':'')+'('+r0.sum+')'};}
+    var r=H.assert(L,ts,st,decide(stateText(ts))), val, sum;   // 檢查句的說法：in / is empty / == …（Jev 判斷有沒有「不」）
+    if(r&&typeof r.check==='boolean'){val=r.check;sum=r.sum;}
+    else {var xs=exprToks(ts,0,null,true), v=evaluate(xs,st); val=truthy(v); sum=xs.map(function(t){return t.k==='comp'&&(t.c.type==='var'||t.c.type==='pointer')?fmt(compValue(t.c)):t.k==='str'?'"'+t.v+'"':t.k==='comp'?t.c.name:t.v;}).join(' ');}
+    return {val:neg?!val:val,sum:(neg?'¬ ':'')+sum};
+  }
+  function condEval(ts,L,st){
+    var ors=splitTop(ts,isOr), sums=[], val=false;
+    for(var i=0;i<ors.length&&!val;i++){
+      var ands=splitTop(ors[i],isAnd), as=[], av=true;
+      for(var j=0;j<ands.length;j++){var r=condOne(ands[j],L,st); as.push(r.sum); if(!r.val){av=false;break;}}
+      sums.push(as.join(' ∧ ')); val=av;}
+    return {val:val,sum:sums.join(' ∨ ')};
+  }
+  function condText(text,L,st){
+    var t=half(text).replace(/\s*(?:並且|并且|而且)\s*/g,' and ').replace(/\s*(?:或者|或)\s*/g,' or ');
+    var ts=tag(lex(t),st); if(!ts.length) throw new Error('missing condition');
+    return condEval(ts,L,st);
+  }
+
+  /* ---------- for 迴圈：每一輪要設哪些變數 ---------- */
+  var STRUCT={in:1,over:1,across:1,range:1,enumerate:1,each:1,of:1,from:1,to:1,through:1};
+  var LOOPKINDS={ // Jev 的選擇題：這個 for 是哪一種？
+    each:['ID in ARR','each ID in ARR','ID in STRG','each ID in STRG','ID in STK','ID in QUE','ID in SET','ID in MAP','ID in LIST','ID in STR','ID , ID in MAP','ID in MAP . items ( )'],
+    index:['PTR in ARR','PTR in STRG','ID over ARR','ID across ARR','index ID of ARR','each index ID in ARR','PTR over ARR','ID over STRG'],
+    range:['ID in range ( NUM )','ID in range ( NUM , NUM )','ID in range ( len ( ARR ) )','ID in range ( VAR )','ID from NUM to NUM','ID = NUM to NUM','PTR in range ( len ( ARR ) )'],
+    enumerate:['ID , ID in enumerate ( ARR )','ID , ID in enumerate ( STRG )','PTR , ID in enumerate ( ARR )','ID , VAR in enumerate ( ARR )']
+  };
+  var LCACHE={};
+  function decideLoop(state){
+    return LCACHE[state]||(LCACHE[state]=J.ask({state:state,questions:[{id:'loop',kind:'choice',options:Object.keys(LOOPKINDS).map(function(k){return {id:k,hints:LOOPKINDS[k]};})}]}).answers.loop);
+  }
+  function normFor(head){ // 中文標題先換成英文的說法
+    return half(head).replace(/\s*(?:裡|里|中)\s*$/,'').replace(/\s*在\s*/g,' in ').replace(/\s*[從从]\s*/g,' from ').replace(/\s*(?:到|至)\s*/g,' to ').replace(/^\s*each\s+/,'each ').trim();
+  }
+  function nameOf(t,src){return t.k==='comp'?t.c.name:src.slice(t.s,t.e);}
+  function loopVar(st,tok,key,L,arr,src){ // 第一次跑建立元件（屬於這一行），之後每輪只改值
+    var name=nameOf(tok,src);
+    return function(v){
+      var c=st.byName[name];
+      if(!c){
+        if(arr){c=blank('pointer',key,L.id,name);c.target=arr.key;c.color=[2,1,3,4][st.ptrColor++%4];c.idx=0;}
+        else c=blank('var',key,L.id,name);
+        c.loopVar=true; addComp(st,c);
+      }
+      if(c.type==='pointer'){c.idx=v; var a=keyed(st,c.target); st.events.push({t:'move',ptr:name,arr:a?a.name:null,idx:v,line:L.id});}
+      else if(c.type==='var') c.value=fmt(v);
+      else throw new Error('"'+name+'" is a '+c.type+' on the board, it cannot be a loop variable');
+    };
+  }
+  function planFor(nd,st){
+    var src=normFor(nd.head), L={id:nd.L.id,text:nd.head}, key=nd.L.id, toks=tag(lex(src),st), state=stateText(toks);
+    var t=toks.slice(); while(t.length&&t[0].k==='word'&&t[0].v==='each') t.shift();
+    var usage='Try "for x in nums", "for i in range(n)", "for i, x in enumerate(nums)" or "for i over nums"';
+    if(!t.length) throw new Error('loop over what? '+usage);
+    var idxMode=false;
+    if(t[0].k==='word'&&t[0].v==='index'&&t[1]&&!(t[1].k==='word'&&STRUCT[t[1].v])&&t.some(function(x){return x.k==='word'&&(x.v==='of'||x.v==='in');})){idxMode=true;t.shift();}
+    var di=-1;
+    for(var i=0;i<t.length&&di<0;i++){var x=t[i];
+      if((x.k==='word'&&(x.v==='in'||x.v==='over'||x.v==='across'||x.v==='from'||(idxMode&&x.v==='of')))||(x.k==='sym'&&x.v==='=')) di=i;}
+    if(di<1) throw new Error('did not understand the loop "'+nd.head+'". '+usage);
+    var names=t.slice(0,di).filter(function(x){return !(x.k==='sym'&&x.v===',');}), div=t[di].v, rest=t.slice(di+1);
+    if(!names.length||names.some(function(x){return !(x.k==='id'||x.k==='comp'||(x.k==='word'&&!STRUCT[x.v]));})) throw new Error('the loop variable must be a plain name. '+usage);
+    var lk=decideLoop(state), pj=lk.probs[lk.choice], cf=lk.confidence;
+    function nm(k){return nameOf(names[k],src);}
+    function restText(r){return r.length?src.slice(r[0].s,r[r.length-1].e):'';}
+    function arrOf(r){return r.length===1&&r[0].k==='comp'&&(r[0].c.type==='array'||r[0].c.type==='string')?r[0].c:null;}
+    function ex(r){return evaluate(exprToks(r,0,null,true),st);}
+    function whole(v,what){if(typeof v!=='number'||v!==Math.floor(v)) throw new Error(what+' must be a whole number, got '+fmt(v)); return v;}
+    function plan(n,apply,label){return {n:n,apply:apply,label:label,p:pj,conf:cf};}
+    function overPlan(arr){
+      if(names.length!==1) throw new Error('one name please: for i over '+arr.name);
+      var set=loopVar(st,names[0],key,L,arr,src);
+      return plan(arr.cells.length,function(k){set(k);},function(k){return nm(0)+' → '+arr.name+'['+k+'] = '+arr.cells[k];});
+    }
+    function numPlan(vals){
+      if(names.length!==1) throw new Error('one name please. '+usage);
+      var set=loopVar(st,names[0],key,L,null,src);
+      return plan(vals.length,function(k){set(vals[k]);},function(k){return nm(0)+' = '+vals[k];});
+    }
+    // for i over nums / for index i of nums：指標一格一格走過陣列
+    if(div==='over'||div==='across'||idxMode){var a0=arrOf(rest); if(!a0) throw new Error('"'+restText(rest)+'" is not an array or string on the board'); return overPlan(a0);}
+    // for i from 0 to 5
+    if(div==='from'||div==='='){
+      var ti=-1; rest.forEach(function(x,k){if(ti<0&&x.k==='word'&&(x.v==='to'||x.v==='through')) ti=k;});
+      if(ti<1) throw new Error('missing "to", e.g. for i from 0 to 5');
+      var A=whole(ex(rest.slice(0,ti)),'the start'), Z=whole(ex(rest.slice(ti+1)),'the end'), vals=[], dd=A<=Z?1:-1;
+      for(var v=A;dd>0?v<=Z:v>=Z;v+=dd){vals.push(v); if(vals.length>LIMIT_LOOP) throw new Error('more than '+LIMIT_LOOP+' rounds');}
+      return numPlan(vals);
+    }
+    // for i in range(n) / range(a, b) / range(a, b, step)
+    if(rest.length&&rest[0].k==='word'&&rest[0].v==='range'){
+      if(!(rest[1]&&rest[1].v==='('&&rest[rest.length-1].v===')')) throw new Error('range needs brackets: range(n) or range(a, b)');
+      var args=splitTop(rest.slice(2,-1),function(y){return y.k==='sym'&&y.v===',';}).map(function(a){return whole(ex(a),'range()');}), a1=0, b1, s1=1;
+      if(args.length===1) b1=args[0]; else {a1=args[0];b1=args[1]; if(args.length>2) s1=args[2];}
+      if(!s1) throw new Error('the range step cannot be 0');
+      var vals2=[]; for(var v2=a1;s1>0?v2<b1:v2>b1;v2+=s1){vals2.push(v2); if(vals2.length>LIMIT_LOOP) throw new Error('more than '+LIMIT_LOOP+' rounds');}
+      return numPlan(vals2);
+    }
+    // for i, x in enumerate(nums)
+    if(rest.length&&rest[0].k==='word'&&rest[0].v==='enumerate'){
+      if(names.length!==2) throw new Error('enumerate gives two names: for i, x in enumerate(nums)');
+      if(!(rest[1]&&rest[1].v==='('&&rest[rest.length-1].v===')')) throw new Error('enumerate needs brackets: enumerate(nums)');
+      var a2=arrOf(rest.slice(2,-1)); if(!a2) throw new Error('enumerate(…) needs an array or string that is on the board');
+      var vals3=compValue(a2), setI=loopVar(st,names[0],key,L,a2,src), setV=loopVar(st,names[1],key+'#1',L,null,src);
+      return plan(vals3.length,function(k){setI(k);setV(vals3[k]);},function(k){return nm(0)+' = '+k+', '+nm(1)+' = '+fmt(vals3[k]);});
+    }
+    // for x in nums / for k, v in seen / for k, v in seen.items() / for p in i（指標＋陣列）
+    var suffix=null, r2=rest;
+    if(r2.length>=5){var tail=r2.slice(-4); if(tail[0].v==='.'&&tail[2].v==='('&&tail[3].v===')'&&/^(items|keys|values)$/i.test(String(tail[1].v))){suffix=String(tail[1].v).toLowerCase();r2=r2.slice(0,-4);}}
+    var single=arrOf(r2);
+    if(names.length===1&&names[0].k==='comp'&&names[0].c.type==='pointer'&&single&&!suffix) return overPlan(single); // 已經有的指標 in 陣列 → 走索引
+    var val=ex(r2), isMap=val&&typeof val==='object'&&!Array.isArray(val);
+    if(names.length===2){
+      if(!isMap) throw new Error('two names need a dict: for k, v in seen (for an array use enumerate)');
+      var ks=Object.keys(val), s1v=loopVar(st,names[0],key,L,null,src), s2v=loopVar(st,names[1],key+'#1',L,null,src);
+      return plan(ks.length,function(k){s1v(ks[k]);s2v(val[ks[k]]);},function(k){return nm(0)+' = '+ks[k]+', '+nm(1)+' = '+fmt(val[ks[k]]);});
+    }
+    if(names.length!==1) throw new Error('one name per loop, or enumerate(...) for index and value');
+    var items;
+    if(Array.isArray(val)) items=val.slice();
+    else if(typeof val==='string') items=val.split('').map(num);
+    else if(isMap){items=Object.keys(val); if(suffix==='values') items=items.map(function(k){return val[k];});}
+    else throw new Error('cannot loop over '+fmt(val));
+    var setX=loopVar(st,names[0],key,L,null,src);
+    return plan(items.length,function(k){setX(items[k]);},function(k){return nm(0)+' = '+fmt(items[k]);});
+  }
+
+  /* ---------- 跑整份腳本 ---------- */
+  var RANK={ok:1,pass:2,fail:3,err:4};
+  /* lines: [{id,text}]；step：第幾步（含）為止的板子（每執行一行算一步），null＝全部。回傳 trace＝每一步 */
+  function replay(lines,step){
+    var st=newState(), prog=parseProgram(lines), trace=[], agg={}, halted=false, STOP={};
+    var at=step!=null&&step<0?newState():null;
+    function note(nd,res){
+      res.n=nd.i; res.id=nd.L.id; trace.push(res);
+      var cur=agg[nd.i], rk=RANK[res.status]||0;
+      if(!cur){cur=agg[nd.i]={}; for(var k in res)cur[k]=res[k]; cur.runs=1;}
+      else {var r0=cur.runs+1; if(rk>=(RANK[cur.status]||0)) for(var k2 in res)cur[k2]=res[k2]; cur.runs=r0;}
+      if(step!=null&&trace.length-1===step) at=cloneState(st);
+      if(trace.length>=LIMIT_STEPS) throw STOP;
+    }
+    function okStep(nd,intent,sum,extra){var r={status:'ok',intent:intent,sum:sum,msg:'',p:1,confidence:1,state:''}; if(extra)for(var k in extra)r[k]=extra[k]; note(nd,r);}
+    function errStep(nd,msg,intent){note(nd,{status:'err',intent:intent||'flow',sum:'',msg:msg,p:1,confidence:1,state:''});}
+    function stmt(nd){
+      var res=runLine({id:nd.L.id,text:nd.text},st); note(nd,res);
+      if(res.intent==='ret'&&res.status!=='err'){halted=true;return 'return';}
+      return null;
+    }
+    function runFor(nd){
+      var plan; try{plan=planFor(nd,st);}catch(e){errStep(nd,e.message,'loop');return null;}
+      if(!plan.n){okStep(nd,'loop','nothing to loop over (0 rounds)',{of:0});return null;}
+      for(var k=0;k<plan.n;k++){
+        try{plan.apply(k);}catch(e){errStep(nd,e.message,'loop');return null;}
+        okStep(nd,'loop',plan.label(k)+'   ('+(k+1)+'/'+plan.n+')',{iter:k+1,of:plan.n,p:plan.p,confidence:plan.conf});
+        var sig=runBlock(nd.body,true);
+        if(sig==='return') return 'return';
+        if(sig==='break') break;
+      }
+      return null;
+    }
+    function runRepeat(nd){
+      var n; try{n=evaluate(exprToks(tag(lex(half(nd.head).replace(/\s*(?:times|time|次)\s*$/i,'')),st),0,null,true),st);}catch(e){errStep(nd,e.message,'loop');return null;}
+      if(typeof n!=='number'||n!==Math.floor(n)||n<0||n>LIMIT_LOOP){errStep(nd,'repeat needs a whole number from 0 to '+LIMIT_LOOP+', got '+fmt(n),'loop');return null;}
+      for(var k=0;k<n;k++){
+        okStep(nd,'loop','round '+(k+1)+' of '+n,{iter:k+1,of:n});
+        var sig=runBlock(nd.body,true);
+        if(sig==='return') return 'return';
+        if(sig==='break') break;
+      }
+      if(!n) okStep(nd,'loop','0 rounds',{of:0});
+      return null;
+    }
+    function runWhile(nd){
+      for(var k=0;;k++){
+        if(k>=LIMIT_LOOP){errStep(nd,'ran more than '+LIMIT_LOOP+' rounds: does something in the loop change the condition?','loop');return null;}
+        var r; try{r=condText(nd.head,{id:nd.L.id,text:nd.head},st);}catch(e){errStep(nd,e.message,'loop');return null;}
+        okStep(nd,'loop',r.sum+(r.val?'   →  yes':'   →  no'),{iter:k+1});
+        if(!r.val) return null;
+        var sig=runBlock(nd.body,true);
+        if(sig==='return') return 'return';
+        if(sig==='break') return null;
+      }
+    }
+    function runBlock(list,inLoop){
+      var chain=null; // null：前面沒有 if；'open'：前面的條件都沒成立；'done'：已經有一個分支跑過了
+      for(var k=0;k<list.length;k++){
+        var nd=list[k], sig=null;
+        if(halted) return 'return';
+        st.cur=nd.L.id;
+        switch(nd.kind){
+          case 'if': case 'elif': case 'else':
+            if(nd.kind==='if') chain=null;
+            if(nd.kind!=='if'&&chain==null){errStep(nd,nd.kind+' has no matching if above it','branch');break;}
+            if(nd.kind!=='if'&&chain==='done') break;               // 前面已經有分支跑過：這一行沒跑到
+            if(nd.kind==='else'){okStep(nd,'else','otherwise');chain=null;sig=runBlock(nd.body,inLoop);break;}
+            var r; try{r=condText(nd.head,{id:nd.L.id,text:nd.head},st);}catch(e){errStep(nd,e.message,'branch');chain='done';break;}
+            okStep(nd,'branch',r.sum+(r.val?'   →  yes':'   →  no'));
+            chain=r.val?'done':'open'; if(r.val) sig=runBlock(nd.body,inLoop);
+            break;
+          case 'for': chain=null; sig=runFor(nd); break;
+          case 'while': chain=null; sig=runWhile(nd); break;
+          case 'repeat': chain=null; sig=runRepeat(nd); break;
+          case 'break': case 'continue':
+            chain=null;
+            if(!inLoop){errStep(nd,nd.kind+' only works inside a loop');break;}
+            okStep(nd,nd.kind,nd.kind); sig=nd.kind; break;
+          default: chain=null; sig=stmt(nd);
+        }
+        if(sig) return sig;
+      }
+      return null;
+    }
+    try{runBlock(prog.body,false);}
+    catch(e){
+      if(e!==STOP) throw e;
+      var last=trace[trace.length-1]; if(last&&agg[last.n]){agg[last.n].status='err'; agg[last.n].msg='stopped after '+LIMIT_STEPS+' steps: is there an endless loop?';}
+    }
+    var results=lines.map(function(L,i){
+      if(prog.stat[i]) return {id:L.id,n:i,status:prog.stat[i]};
+      var a=agg[i]; if(a){a.id=L.id;a.n=i;return a;}
+      return {id:L.id,n:i,status:'skip',intent:null,sum:'',msg:'',runs:0};
+    });
+    return {results:results,state:st,board:step!=null&&at?at:st,trace:trace};
+  }
+  return {replay:replay,runLine:runLine,normFor:normFor,flowOf:flowOf,parseProgram:parseProgram,hasFlow:hasFlow,lex:lex,tag:tag,stateText:stateText,evaluate:evaluate,fmt:fmt,num:num,same:same,newState:newState,decide:decide,TAG:TAG};
 })(typeof Jev!=='undefined'?Jev:require('./jev.js'));
 if(typeof module!=='undefined'&&module.exports) module.exports=NLBoard;

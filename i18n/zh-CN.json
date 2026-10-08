@@ -250,5 +250,13 @@
   "（從標題認出來的）": "（从标题识别出来的）",
   "自由練習：只對檢查句和回傳值。選一題（或寫「title: 1. Two Sum」）就能拿參考解答來對。": "自由练习：只对检查句和返回值。选一题（或写「title: 1. Two Sum」）就能拿参考解答来对。",
   "下一步：到「③ 寫成 Go」把它寫成程式。": "下一步：到「③ 写成 Go」把它写成程序。",
-  "複製程式碼": "复制代码"
+  "複製程式碼": "复制代码",
+  "迴圈和判斷也行：<code>for i, x in enumerate(nums):</code>、<code>if need in seen:</code>、<code>else:</code>、<code>while st:</code>、<code>break</code>。下一行按 Tab 縮排，就是裡面的步驟；<code>return</code> 會讓整段停下來。": "循环和判断也行：<code>for i, x in enumerate(nums):</code>、<code>if need in seen:</code>、<code>else:</code>、<code>while st:</code>、<code>break</code>。下一行按 Tab 缩进，就是里面的步骤；<code>return</code> 会让整段停下来。",
+  "迴圈範例": "循环示例",
+  "迴圈": "循环",
+  "判斷": "判断",
+  "否則": "否则",
+  "跳出": "跳出",
+  "繼續": "继续",
+  "沒有跑到：前面的 return、跳出或條件沒有走到這一行": "没有跑到：前面的 return、跳出或条件没有走到这一行"
 }

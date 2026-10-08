@@ -122,6 +122,99 @@ test('the problem is guessed from the title line', () => {
   assert.equal(c.caseId, 'two-sum'); assert.ok(c.ok);
 });
 
+
+/* ---------- loops, branches, common syntax ---------- */
+const val = (r, name) => { const c = comp(r.state, name); return c && (c.value !== undefined ? c.value : c.cells || c.rows || c.idx); };
+const LOOP_CASES = [
+  ['for each value', ['array a = [3,1,4]', 'total = 0', 'for x in a:', '  total += x'], r => { assert.equal(val(r, 'total'), '8'); assert.equal(val(r, 'x'), '4'); assert.equal(r.results[3].runs, 3); }],
+  ['for in range(a, b)', ['total = 0', 'for i in range(1, 5):', '  total += i'], r => assert.equal(val(r, 'total'), '10')],
+  ['for in range(n) and a step', ['t = 0', 'for i in range(3): t += 1', 'u = 0', 'for j in range(5, 0, -2): u += j'], r => { assert.equal(val(r, 't'), '3'); assert.equal(val(r, 'u'), '9'); }],
+  ['for i from a to b (inclusive)', ['t = 0', 'for k from 1 to 3: t += k'], r => assert.equal(val(r, 't'), '6')],
+  ['for i over an array: a pointer walks it', ['array nums = [4,5,6]', 'for i over nums:', '  x = nums[i]'], r => { assert.equal(comp(r.state, 'i').type, 'pointer'); assert.equal(val(r, 'i'), 2); assert.equal(val(r, 'x'), '6'); assert.deepEqual(r.state.events.filter(e => e.t === 'move').map(e => e.idx), [0, 1, 2]); }],
+  ['an existing pointer walks the array it points at', ['array nums = [4,5,6]', 'pointer p at nums[0]', 'for p in nums:', '  x = nums[p]'], r => { assert.equal(val(r, 'p'), 2); assert.equal(val(r, 'x'), '6'); }],
+  ['enumerate over a string', ['s = "abc"', 'for i, c in enumerate(s):', '  last = c'], r => { assert.equal(val(r, 'i'), 2); assert.equal(val(r, 'c'), 'c'); assert.equal(comp(r.state, 'i').key, 'L1'); assert.equal(comp(r.state, 'c').key, 'L1#1'); }],
+  ['dict pairs', ['dict d', 'put 1 -> 10 into d', 'put 2 -> 20 into d', 'sum = 0', 'for k, v in d.items():', '  sum += v', 'ks = 0', 'for k2 in d:', '  ks += k2'], r => { assert.equal(val(r, 'sum'), '30'); assert.equal(val(r, 'ks'), '3'); }],
+  ['string and list literals', ['n = 0', 'for ch in "xyz":', '  n++', 't = 0', 'for x in [1, 2, 3]:', '  t += x'], r => { assert.equal(val(r, 'n'), '3'); assert.equal(val(r, 't'), '6'); }],
+  ['loop variable named like a keyword', ['array items = [1,2]', 't = 0', 'for item in items:', '  t += item'], r => assert.equal(val(r, 't'), '3')],
+  ['while with a condition', ['n = 3', 'c = 0', 'while n > 0:', '  n -= 1', '  c++'], r => { assert.equal(val(r, 'n'), '0'); assert.equal(val(r, 'c'), '3'); }],
+  ['while a stack is not empty', ['stack st', 'push 1 onto st', 'push 2 onto st', 'n = 0', 'while st:', '  pop st', '  n++'], r => { assert.deepEqual(comp(r.state, 'st').cells, []); assert.equal(val(r, 'n'), '2'); }],
+  ['repeat N times', ['c = 0', 'repeat 4 times', '  c++', '重複 2 次', '  c++'], r => assert.equal(val(r, 'c'), '6')],
+  ['break and continue', ['array a = [1,2,3,4,5]', 'sum = 0', 'for x in a:', '  if x == 2: continue', '  if x == 5: break', '  sum += x'], r => assert.equal(val(r, 'sum'), '8')],
+  ['if / elif / else runs one branch', ['x = 5', 'if x > 10:', '  r = 1', 'elif x > 3:', '  r = 2', 'else:', '  r = 3'], r => { assert.equal(val(r, 'r'), '2'); assert.deepEqual([2, 4, 5, 6].map(i => r.results[i].status), ['ok', 'ok', 'skip', 'skip'].map((x, k) => k === 0 ? 'skip' : x === 'ok' && k === 1 ? 'ok' : x)); }],
+  ['else branch', ['x = 1', 'if x > 3:', '  r = 1', 'else:', '  r = 3'], r => { assert.equal(val(r, 'r'), '3'); assert.equal(r.results[2].status, 'skip'); }],
+  ['nested loops', ['t = 0', 'for i in range(3):', '  for j in range(2):', '    t += 1'], r => { assert.equal(val(r, 't'), '6'); assert.equal(r.results[3].runs, 6); }],
+  ['one-line bodies', ['a = 0', 'for i in range(3): a += i', 'if a == 3: b = 1', 'else: b = 2'], r => { assert.equal(val(r, 'a'), '3'); assert.equal(val(r, 'b'), '1'); assert.equal(r.results[3].status, 'skip'); }],
+  ['conditions: and / or / not / in / not in / is empty', ['array a = [1,2]', 'dict d', 'put 1 -> 5 into d', 'x = 0', 'if 1 in d and not a is empty: x = 1', 'if 3 in d or x == 1: x = 2', 'if 3 not in d and x == 2: x = 3', 'if x != 3 or a is empty: x = 9'], r => assert.equal(val(r, 'x'), '3')],
+  ['a string character in a literal', ['s = "(a"', 'n = 0', 'for c in s:', '  if c in "([{": n++'], r => assert.equal(val(r, 'n'), '1')],
+  ['negative index, pop and peek as values', ['stack st', 'push 1 onto st', 'push 2 onto st', 'push 3 onto st', 'a = st[-1]', 'b = pop st', 'c = st.pop()', 'd = peek st'], r => { assert.deepEqual(['a', 'b', 'c', 'd'].map(n => val(r, n)), ['3', '3', '2', '1']); assert.deepEqual(comp(r.state, 'st').cells, ['1']); }],
+  ['dict literal with quotes and braces inside', ['dict m = {")": "(", "}": "{", "k": 3}'], r => assert.deepEqual(comp(r.state, 'm').rows, [[')', '('], ['}', '{'], ['k', '3']])],
+  ['chinese loops and branches', ['陣列 a = [1,2,3]', 'sum = 0', '對每個 x 在 a 裡', '  sum += x', '如果 sum 等於 6', '  回傳 true', '否則', '  回傳 false'], r => { assert.equal(r.state.answer, true); assert.equal(r.results[7].status, 'skip'); }],
+  ['chinese while / repeat / break', ['n = 0', '當 n < 5', '  n++', '  如果 n 等於 3', '    跳出'], r => assert.equal(val(r, 'n'), '3')],
+];
+LOOP_CASES.forEach(([name, lines, check]) => test('syntax: ' + name, () => {
+  const r = run(lines);
+  r.results.forEach((x, i) => assert.notEqual(x.status, 'err', `line ${i} "${lines[i]}": ${x.msg}`));
+  check(r);
+}));
+
+test('return stops the whole script, the rest is "not run"', () => {
+  const r = run(['x = 1', 'array a = [1,2]', 'for v in a:', '  return v', 'x = 2']);
+  assert.equal(r.state.answer, 1); assert.equal(val(r, 'x'), '1');
+  assert.equal(r.results[4].status, 'skip');
+  assert.equal(r.trace.length, 4);
+});
+test('flow errors are per line and readable', () => {
+  const e = (lines, i, re) => { const r = run(lines); assert.equal(r.results[i].status, 'err', JSON.stringify(r.results[i])); assert.ok(re.test(r.results[i].msg), r.results[i].msg); return r; };
+  e(['break'], 0, /only works inside a loop/);
+  e(['else', '  x = 1'], 0, /no matching if/);
+  e(['for x in nowhere', '  y = 1'], 0, /unknown name "nowhere"/);
+  e(['for x'], 0, /did not understand the loop/);
+  e(['array a = [1]', 'for i, x in a:'], 1, /two names need a dict/);
+  e(['for i in range(2.5):'], 0, /whole number/);
+  e(['if', '  x = 1'], 0, /missing condition/);
+  const r = e(['n = 0', 'while true:', '  n++'], 1, /ran more than 1000 rounds/); assert.equal(val(r, 'n'), '1000');
+  const r2 = run(['n = 0', 'repeat 1000 times', '  repeat 1000 times', '    n++']);
+  assert.equal(r2.trace.length, 3000); assert.ok(r2.results.some(x => x.status === 'err' && /stopped after 3000 steps/.test(x.msg)));
+});
+test('every executed line is a step; the board can be shown at any step', () => {
+  const lines = Trainer.demo('two-sum', DEMOS['two-sum'], true), r = run(lines);
+  assert.equal(r.trace.length, 12);
+  const iter2 = r.trace.findIndex(t => /\(2\/4\)/.test(t.sum || ''));
+  assert.equal(iter2, 8);
+  let b = NL.replay(L(lines), 7).board;                    // after "put x -> i into seen" of round 1
+  assert.equal(comp(b, 'i').idx, 0); assert.deepEqual(comp(b, 'seen').rows, [['2', '0']]);
+  b = NL.replay(L(lines), iter2).board;                    // round 2 has just started
+  assert.equal(comp(b, 'i').idx, 1); assert.equal(comp(b, 'x').value, '7');
+  b = NL.replay(L(lines), -1).board; assert.equal(b.comps.length, 0);
+});
+test('components made by a loop belong to its header line', () => {
+  const r = run(Trainer.demo('two-sum', DEMOS['two-sum'], true));
+  assert.deepEqual(['i', 'x', 'need'].map(n => comp(r.state, n).key), ['L4', 'L4#1', 'L5']);
+  assert.ok(comp(r.state, 'i').loopVar && comp(r.state, 'x').loopVar);
+  assert.ok(!comp(r.state, 'need').loopVar);
+});
+test('loop examples run, pass the checker, and wrong versions are caught', () => {
+  [[ 'two-sum', { nums: [2, 7, 11, 15], target: 9 }], ['two-sum', { nums: [3, 2, 4], target: 6 }], ['two-sum', { nums: [3, 3], target: 6 }], ['two-sum', { nums: [1, 5, 3, 7], target: 10 }]].forEach(([id, inp]) => {
+    const r = run(Trainer.demo(id, inp, true)); const c = Trainer.check(id, r);
+    assert.ok(c.ok, JSON.stringify(inp) + JSON.stringify(c.items));
+  });
+  ['()', '([)]', '{[]}', ']', '(((', '()[]{}', '(]', '{[}'].forEach(s => {
+    const lines = Trainer.demo('valid-parentheses', { s }, true), r = run(lines), c = Trainer.check('valid-parentheses', r);
+    r.results.forEach((x, i) => assert.notEqual(x.status, 'err', `${s} line ${i} "${lines[i]}": ${x.msg}`));
+    assert.equal(r.state.answer, Trainer.CASES['valid-parentheses'].solve({ s }).answer, s);
+    assert.ok(c.ok, s + JSON.stringify(c.items));
+  });
+  const bad = Trainer.demo('two-sum', DEMOS['two-sum'], true).map(t => t.replace('put x -> i into seen', 'put x -> 5 into seen'));
+  const c = Trainer.check('two-sum', run(bad)); assert.ok(!c.ok); assert.ok(c.items.some(x => !x.ok && /answer \[5,1\] is wrong/.test(x.msg)), JSON.stringify(c.items));
+  const bad2 = Trainer.demo('valid-parentheses', { s: '([)]' }, true).map(t => t.replace('if top != pair[c]:', 'if top == pair[c]:'));
+  assert.ok(!Trainer.check('valid-parentheses', run(bad2)).ok);
+});
+test('jev picks the loop shape', () => {
+  const kinds = { 'ID in ARR': 'each', 'PTR in ARR': 'index', 'ID over ARR': 'index', 'ID in range ( NUM )': 'range', 'ID from NUM to NUM': 'range', 'ID , ID in enumerate ( ARR )': 'enumerate', 'ID , ID in MAP': 'each' };
+  Object.keys(kinds).forEach(k => assert.equal(Jev.ask({ state: k, questions: [{ id: 'q', kind: 'choice', options: [
+    { id: 'each', hints: ['ID in ARR', 'ID , ID in MAP'] }, { id: 'index', hints: ['PTR in ARR', 'ID over ARR'] }, { id: 'range', hints: ['ID in range ( NUM )', 'ID from NUM to NUM'] }, { id: 'enumerate', hints: ['ID , ID in enumerate ( ARR )'] }] }] }).answers.q.choice, kinds[k], k));
+});
+
 /* ---------- Go ---------- */
 const hasGo = (() => { try { cp.execSync('go version', { stdio: 'ignore' }); return true; } catch (e) { return false; } })();
 const GO_DIRS = { 'two-sum': 'twosum', 'valid-parentheses': 'validparentheses' };
@@ -150,6 +243,26 @@ Object.keys(DEMOS).forEach(id => {
     let res = cp.spawnSync('go', ['test', './...'], { cwd: dir, encoding: 'utf8' });
     assert.notEqual(res.status, 0, 'skeleton should not pass yet');
     assert.ok(!/build failed|syntax error|declared and not used/.test(res.stdout + res.stderr), res.stdout + res.stderr);
+  });
+});
+
+Object.keys(DEMOS).forEach(id => {
+  const lines = L(Trainer.demo(id, DEMOS[id], true)), r = NL.replay(lines, null);
+  test(`${id}: loop version → Go skeleton mirrors the script's loops and compiles`, () => {
+    const files = Trainer.goCode(id, r, lines, {}), code = files['solution.go'];
+    assert.ok(/for i, x := range nums \{|for i := 0; i < len\(s\); i\+\+ \{/.test(code), code);
+    assert.ok(/if _, ok := seen\[need\]; ok \{|if _, ok := pair\[c\]; ok \{/.test(code), code);
+    if (id === 'valid-parentheses') assert.ok(/\} else \{/.test(code) && /if len\(st\) == 0 \{/.test(code) && /if top != pair\[c\] \{/.test(code), code);
+    if (!hasGo) return;
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'tbh-'));
+    fs.writeFileSync(path.join(dir, 'go.mod'), 'module solution\n\ngo 1.21\n');
+    for (const f in files) fs.writeFileSync(path.join(dir, f), files[f]);
+    cp.execSync('go vet ./...', { cwd: dir, stdio: 'pipe' });
+    cp.execSync('gofmt -l .', { cwd: dir, stdio: 'pipe' });
+    const res = cp.spawnSync('go', ['test', './...'], { cwd: dir, encoding: 'utf8' });
+    assert.notEqual(res.status, 0); assert.ok(!/build failed|syntax error|declared and not used/.test(res.stdout + res.stderr), res.stdout + res.stderr);
+    const sol = Trainer.goCode(id, r, lines, { solution: true }); for (const f in sol) fs.writeFileSync(path.join(dir, f), sol[f]);
+    cp.execSync('go test ./...', { cwd: dir, stdio: 'pipe' });
   });
 });
 

@@ -250,5 +250,13 @@
  "（從標題認出來的）": "（タイトルから認識）",
  "自由練習：只對檢查句和回傳值。選一題（或寫「title: 1. Two Sum」）就能拿參考解答來對。": "自由練習：チェック文と返り値だけを確認します。問題を選ぶ（または「title: 1. Two Sum」と書く）と模範解答と比較できます。",
  "下一步：到「③ 寫成 Go」把它寫成程式。": "次は「③ Go で書く」でコードにしましょう。",
- "複製程式碼": "コードをコピー"
+ "複製程式碼": "コードをコピー",
+ "迴圈和判斷也行：<code>for i, x in enumerate(nums):</code>、<code>if need in seen:</code>、<code>else:</code>、<code>while st:</code>、<code>break</code>。下一行按 Tab 縮排，就是裡面的步驟；<code>return</code> 會讓整段停下來。": "ループや分岐も書けます：<code>for i, x in enumerate(nums):</code>、<code>if need in seen:</code>、<code>else:</code>、<code>while st:</code>、<code>break</code>。次の行を Tab でインデントすると、その中のステップになります。<code>return</code> はスクリプト全体を止めます。",
+ "迴圈範例": "ループの例",
+ "迴圈": "ループ",
+ "判斷": "分岐",
+ "否則": "それ以外",
+ "跳出": "抜ける",
+ "繼續": "続ける",
+ "沒有跑到：前面的 return、跳出或條件沒有走到這一行": "実行されていません：前の return、break、条件がこの行まで届きませんでした"
 }

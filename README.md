@@ -31,6 +31,19 @@ Open **✎ Practice script** in the left panel. It turns a LeetCode problem into
 3. **Write it in Go** — a skeleton (or the reference solution) with the board's data structures declared, plus a
    table test that includes the example you traced. `training/go/` holds the output for the two built-in examples.
 
+**Common syntax** (indentation makes a block, a trailing `:` is optional, and a body can also sit on the same line):
+
+| | |
+|---|---|
+| loops | `for x in nums:` · `for i, x in enumerate(nums):` · `for i over nums:` (a pointer walks the array) · `for i in range(n)` / `range(a, b, step)` · `for i from 1 to 5` · `for k, v in seen.items():` · `while n > 0:` · `while st:` · `repeat 3 times` |
+| branches | `if need in seen:` · `elif x > 3:` · `else:` · conditions can use `and` / `or` / `not`, `in` / `not in`, `is empty`, `== != < > <= >=` |
+| jumps | `break` · `continue` · `return …` (stops the whole script; lines after it are shown as not run) |
+| values | `a = st[-1]` · `top = pop st` / `top = st.pop()` · `peek st` · `len(nums)` · `x += 1` / `x++` |
+| Chinese | `對每個 x 在 nums 裡` · `如果 … 否則` · `當 n > 0` · `重複 3 次` · `跳出` · `繼續` |
+
+Every executed line is one step, so each round of a loop can be stepped through ("Trace it" shows `i = 1, x = 7 (2/4)`);
+the Go skeleton mirrors the script's `for` / `if` / `else` structure with the steps as comments.
+
 Every component made by a line belongs to that line: you can drag it, recolor it or copy it (a copy is an ordinary
 component), but it can only be deleted by editing or deleting its line.
 
