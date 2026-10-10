@@ -258,5 +258,6 @@
   "否則": "else",
   "跳出": "break",
   "繼續": "continue",
-  "沒有跑到：前面的 return、跳出或條件沒有走到這一行": "Not run: an earlier return, break or condition never reached this line"
+  "沒有跑到：前面的 return、跳出或條件沒有走到這一行": "Not run: an earlier return, break or condition never reached this line",
+  "Jev（{url}）· 平均信心 {p}%": "Jev ({url}) · avg. confidence {p}%"
 }

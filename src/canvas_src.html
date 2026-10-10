@@ -1601,6 +1601,18 @@ $('helpX').onclick=function(){$('help').hidden=true;try{localStorage.setItem('dr
 // 腳本存在 B.script（跟著白板存檔、可以復原）。每一行產生的元件 id＝'s'+行的 id、src＝行的 id：
 // 使用者可以拖、換顏色，但不能直接刪；改那一行就跟著改，刪那一行它就不見。
 var HAS_NL=typeof NLBoard!=='undefined'&&typeof Trainer!=='undefined';
+/* ?jev=http://127.0.0.1:8787 → 腳本的句子改問這個 Jev 相容的 API（官方的 api.typesafe.ai，或 node tools/jev-server.js）。
+ * 本機先答、畫面不會等；API 的答案回來後換掉本機的，腳本重跑一次。 */
+var JEV_URL=(location.search.match(/[?&]jev=([^&]+)/)||[])[1], JEV=null, jevT=null, jevBusy=false, jevLast=null;
+if(HAS_NL&&JEV_URL&&typeof JevClient!=='undefined'){try{JEV=new JevClient({apiKey:lsGet('drycanvas-jev-key')||'local',baseUrl:decodeURIComponent(JEV_URL),retry:{maxRetries:1},timeout:8});}catch(e){JEV=null;}}
+function jevSync(){
+  if(!JEV||jevBusy) return;
+  clearTimeout(jevT);
+  jevT=setTimeout(function(){
+    jevBusy=true;
+    NLBoard.prime(JEV).then(function(r){jevBusy=false; jevLast=r; if(r.updated) scriptApply(); else trainStatus();},function(){jevBusy=false;});
+  },350);
+}
 var trainTab='say', lastRun=null, goMode='skel', goFile='solution.go', playT=null, commitT=null;
 var INTENT_LABEL={create:_T('建立'),assign:_T('給值'),push:_T('推入'),pop:_T('彈出'),put:_T('放進字典'),remove:_T('移除'),mark:_T('標記'),assert:_T('檢查'),ret:_T('回傳'),loop:_T('迴圈'),branch:_T('判斷'),else:_T('否則'),'break':_T('跳出'),'continue':_T('繼續')};
 $('tpHintSay').innerHTML=_T('一行一句話，白板會照著擺。例：<code>array nums = [2,7,11,15]</code>、<code>dict seen</code>、<code>pointer i at nums[0]</code>、<code>put x -> i into seen</code>、<code>把 3 推入 stack</code>。白板上的元件可以拖，但要刪掉就得改或刪那一行。');
@@ -1674,7 +1686,7 @@ function scriptApply(){
   });
   if(ptrs.length){renderEdges(); placeToolbar();}
   if(fresh.length&&!playT) reveal(fresh);
-  trainStatus();
+  trainStatus(); jevSync();
 }
 function reveal(ids){ // 新出現的元件在畫面外 → 平移畫面讓它看得到
   var br=board.getBoundingClientRect(), dx=0, dy=0, pad=24;
@@ -1731,7 +1743,8 @@ function trainStatus(){
     row.classList.toggle('after',fin.status==='skip'||(stepping&&!upto[i]&&fin.status!=='blank'&&fin.status!=='comment'));
   });
   var avg=conf.length?Math.round(conf.reduce(function(a,b){return a+b;},0)/conf.length*100):0;
-  $('tpModel').textContent=_T('Jev（本機）· 平均信心 {p}%',{p:avg});
+  $('tpModel').textContent=JEV?_T('Jev（{url}）· 平均信心 {p}%',{url:String(JEV.baseUrl).replace(/^https?:\/\//,''),p:avg}):_T('Jev（本機）· 平均信心 {p}%',{p:avg});
+  $('tpModel').title=JEV&&jevLast?'asked '+jevLast.asked+' · answered '+jevLast.updated+' · failed '+jevLast.failed:'';
   $('tpStep').textContent=(k+1)+' / '+T.length;
   $('tpFirst').disabled=$('tpPrev').disabled=k<0; $('tpNext').disabled=$('tpLast').disabled=k>=T.length-1;
 }

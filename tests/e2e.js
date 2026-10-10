@@ -131,6 +131,30 @@ const shots = process.argv[2];
   assert.ok(/answer false is correct/.test(await p2.textContent('#tpReport')));
   if (shots) await p2.screenshot({ path: path.join(shots, '9-vp-loop.png') });
 
+  // ---- ?jev=<url>: the page asks a Jev-compatible API; its answers replace the local ones ----
+  const { createServer } = require('../tools/jev-server.js'), Jev = require('../src/jev.js');
+  const srv = createServer({ quiet: true, onRequest: (req) => {
+    if (req.method !== 'POST') return undefined;
+    const out = Jev.systemOne(JSON.parse(req.body.toString()));
+    if (out.answers.intent && out.answers.intent.choice === 'create') { const pr = out.answers.intent.probabilities; Object.keys(pr).forEach(k => { pr[k] = 0; }); pr.create = 0.77; pr.assign = 0.23; }
+    return { status: 200, headers: { 'content-type': 'application/json', 'access-control-allow-origin': '*' }, body: out };
+  } });
+  await new Promise(r => srv.listen(0, '127.0.0.1', r));
+  const jevUrl = `http://127.0.0.1:${srv.address().port}`;
+  const p3 = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  p3.on('pageerror', e => errors.push(e.message)); p3.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+  await p3.goto('file://' + path.join(__dirname, '..', 'public', 'index.html') + '?lang=en&jev=' + encodeURIComponent(jevUrl));
+  await p3.evaluate(() => { document.getElementById('help').hidden = true; });
+  await p3.click('#trainBtn');
+  await p3.locator('#tpLines .tpi').first().click();
+  await p3.keyboard.type('array nums = [1, 2]');
+  await p3.waitForFunction(() => /77%/.test(document.querySelector('#tpLines .tpsum').textContent), null, { timeout: 8000 });   // the API's probability, not the local 100%
+  assert.ok(srv.requestLog.some(l => l.method === 'POST' && l.path === '/v1/systemone' && l.status === 200), 'the page called POST /v1/systemone');
+  assert.ok(/127\.0\.0\.1/.test(await p3.textContent('#tpModel')), await p3.textContent('#tpModel'));
+  assert.ok((await p3.$$eval('#tpLines .tpst', els => els.map(e => e.className)))[0].includes('ok'));
+  await new Promise(r => srv.close(r));
+  if (shots) await p3.screenshot({ path: path.join(shots, '10-jev-api.png') });
+
   assert.deepEqual(errors, []);
   console.log('e2e ok');
   await browser.close();

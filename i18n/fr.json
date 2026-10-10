@@ -258,5 +258,6 @@
   "否則": "sinon",
   "跳出": "sortir",
   "繼續": "continuer",
-  "沒有跑到：前面的 return、跳出或條件沒有走到這一行": "Non exécutée : un return, un break ou une condition plus haut n’a pas atteint cette ligne"
+  "沒有跑到：前面的 return、跳出或條件沒有走到這一行": "Non exécutée : un return, un break ou une condition plus haut n’a pas atteint cette ligne",
+  "Jev（{url}）· 平均信心 {p}%": "Jev ({url}) · confiance moyenne {p} %"
 }

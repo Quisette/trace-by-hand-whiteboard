@@ -10,17 +10,17 @@ const L = (arr) => arr.map((t, i) => ({ id: 'L' + i, text: t }));
 const run = (arr, step) => NL.replay(L(arr), step == null ? null : step);
 const comp = (st, name) => st.comps.find(c => c.name === name);
 
-/* ---------- Jev ---------- */
-test('jev answers typed questions in one pass', () => {
-  const r = Jev.ask({ state: 'move PTR to NUM', questions: [
-    { id: 'intent', kind: 'choice', options: [{ id: 'assign', hints: ['move PTR to NUM'] }, { id: 'push', hints: ['push NUM onto STK'] }] },
-    { id: 'neg', kind: 'noul', yes: ['not'], no: ['is'] },
-    { id: 'delta', kind: 'score', range: [-1, 1], anchors: [{ at: 1, hints: ['PTR ++'] }, { at: 0, hints: ['move PTR to NUM'] }] }] });
-  assert.equal(r.answers.intent.choice, 'assign');
-  assert.ok(r.answers.intent.probs.assign > 0.9);
-  assert.ok(r.answers.intent.confidence > 0.5);
-  assert.equal(r.answers.neg.value, false);
-  assert.ok(Math.abs(r.answers.delta.score) < 0.3);
+/* ---------- Jev (System One wire format; the HTTP side is tested in tests/jev-api.js) ---------- */
+test('jev answers typed questions in one call, in the real answer shapes', () => {
+  const r = Jev.systemOne({ state: 'move PTR to NUM', model: 'jev-latest', questions: {
+    intent: { type: 'choice', criteria: { assign: ['move PTR to NUM'], push: ['push NUM onto STK'] } },
+    neg: { type: 'noul', criteria: { true: ['not'], false: ['is'] } },
+    delta: { type: 'score', criteria: [['PTR --'], ['move PTR to NUM'], ['PTR ++']] } } });
+  assert.equal(r.answers.intent.type, 'choice'); assert.equal(r.answers.intent.choice, 'assign');
+  assert.ok(r.answers.intent.probabilities.assign > 0.9); assert.ok(r.answers.intent.confidence > 0.5);
+  assert.equal(r.answers.neg.type, 'noul'); assert.ok(r.answers.neg.noul <= 0.5); assert.deepEqual(Object.keys(r.answers.neg).sort(), ['noul', 'type']);
+  assert.equal(r.answers.delta.type, 'score'); assert.ok(Math.abs(r.answers.delta.score - 1) < 0.3);
+  assert.deepEqual(Object.keys(r.answers.delta.probabilities), ['0', '1', '2']);
   assert.ok(!('text' in r.answers.intent), 'no free text');
 });
 
@@ -210,10 +210,11 @@ test('loop examples run, pass the checker, and wrong versions are caught', () =>
   assert.ok(!Trainer.check('valid-parentheses', run(bad2)).ok);
 });
 test('jev picks the loop shape', () => {
+  const criteria = { each: ['ID in ARR', 'ID , ID in MAP'], index: ['PTR in ARR', 'ID over ARR'], range: ['ID in range ( NUM )', 'ID from NUM to NUM'], enumerate: ['ID , ID in enumerate ( ARR )'] };
   const kinds = { 'ID in ARR': 'each', 'PTR in ARR': 'index', 'ID over ARR': 'index', 'ID in range ( NUM )': 'range', 'ID from NUM to NUM': 'range', 'ID , ID in enumerate ( ARR )': 'enumerate', 'ID , ID in MAP': 'each' };
-  Object.keys(kinds).forEach(k => assert.equal(Jev.ask({ state: k, questions: [{ id: 'q', kind: 'choice', options: [
-    { id: 'each', hints: ['ID in ARR', 'ID , ID in MAP'] }, { id: 'index', hints: ['PTR in ARR', 'ID over ARR'] }, { id: 'range', hints: ['ID in range ( NUM )', 'ID from NUM to NUM'] }, { id: 'enumerate', hints: ['ID , ID in enumerate ( ARR )'] }] }] }).answers.q.choice, kinds[k], k));
+  Object.keys(kinds).forEach(k => assert.equal(Jev.systemOne({ state: k, model: 'jev-latest', questions: { q: { type: 'choice', criteria } } }).answers.q.choice, kinds[k], k));
 });
+
 
 /* ---------- Go ---------- */
 const hasGo = (() => { try { cp.execSync('go version', { stdio: 'ignore' }); return true; } catch (e) { return false; } })();

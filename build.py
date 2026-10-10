@@ -1,7 +1,7 @@
 """Build public/index.html from src/canvas_src.html.
 
 - Embeds the LeetCode problem list (data/problems.csv) into /*PROBLEMS*/[]
-- Inlines src/jev.js, src/nlboard.js, src/trainer.js into /*MODULES*/ (practice script)
+- Inlines src/jev.js, src/jev-client.js, src/nlboard.js, src/trainer.js into /*MODULES*/ (practice script)
 - Embeds UI translations (i18n/<lang>.json, keys = Traditional Chinese source strings) into /*I18N*/{}
 
 Usage: python3 build.py
@@ -29,7 +29,7 @@ for lang in LANGS:
     if missing:
         print(f'[{lang}] missing {len(missing)} keys, e.g. {missing[:3]}')
     i18n[lang] = {k: v for k, v in d.items() if k in keys and v}
-mods = '\n'.join(open(os.path.join(HERE, 'src', m), encoding='utf-8').read() for m in ('jev.js', 'nlboard.js', 'trainer.js'))
+mods = '\n'.join(open(os.path.join(HERE, 'src', m), encoding='utf-8').read() for m in ('jev.js', 'jev-client.js', 'nlboard.js', 'trainer.js'))
 assert page.count('/*MODULES*/') == 1
 page = page.replace('/*MODULES*/', mods.replace('</script', '<\\/script'))
 page = page.replace('/*I18N*/{}', json.dumps(i18n, ensure_ascii=False, separators=(',', ':')))

@@ -102,20 +102,51 @@ var NLBoard=(function(J){
     note:['note','comment','sticky','便 利 貼','筆 記','說 明','备 注','メ モ']
   };
   var NEG={yes:['not','isn\'t','is not','not in','no','!=','false','不','沒 有','没 有','非','不 在','不 是'],no:['is','in','yes','==','在','是','有']};
-  var DELTA=[{at:1,hints:['increment PTR','PTR ++','advance PTR','move PTR right','move PTR forward','step PTR forward','PTR moves right','next','PTR 往 右','PTR 右 移','PTR 前 進','下 一 格']},
-             {at:-1,hints:['decrement PTR','PTR --','move PTR left','move PTR back','PTR moves left','PTR 往 左','PTR 左 移','PTR 後 退','上 一 格']},
-             {at:0,hints:['set PTR to NUM','PTR = NUM','move PTR to NUM','PTR 移 到 NUM']}];
-  function spaced(h){return h;} // 範例裡的中日韓字已經用空白隔開
-  function questions(){
-    return [
-      {id:'intent',kind:'choice',options:Object.keys(INTENTS).map(function(k){return {id:k,hints:INTENTS[k].map(spaced)};})},
-      {id:'ctype',kind:'choice',options:Object.keys(CTYPES).map(function(k){return {id:k,hints:CTYPES[k]};})},
-      {id:'neg',kind:'noul',yes:NEG.yes,no:NEG.no,prior:-0.04},
-      {id:'delta',kind:'score',range:[-1,1],anchors:DELTA}
-    ];
+  var STEP_LEFT=['decrement PTR','PTR --','move PTR left','move PTR back','PTR moves left','PTR 往 左','PTR 左 移','PTR 後 退','上 一 格'],
+      STEP_SET=['set PTR to NUM','PTR = NUM','move PTR to NUM','PTR 移 到 NUM'],
+      STEP_RIGHT=['increment PTR','PTR ++','advance PTR','move PTR right','move PTR forward','step PTR forward','PTR moves right','next','PTR 往 右','PTR 右 移','PTR 前 進','下 一 格'];
+
+  /* ---------- 問 Jev 的題目 ----------
+   * 都是 System One 的格式（type / instructions / criteria），所以同一份問題可以丟給本機的 src/jev.js，
+   * 也可以丟給任何 Jev 相容的 API（見 prime）。同一個狀態句一次問完所有題目。
+   * 本機比對器看 criteria 裡的範例句；instructions 是寫給真正的模型看的。 */
+  var QSETS={
+    line:{
+      intent:{type:'choice',instructions:'What does this whiteboard sentence do?',criteria:INTENTS},
+      ctype:{type:'choice',instructions:'Which kind of component does the sentence mention or create?',criteria:CTYPES},
+      neg:{type:'noul',instructions:'Is the sentence negated, as in "not in", "is not" or "!="?',criteria:{true:NEG.yes,false:NEG.no}},
+      delta:{type:'score',instructions:'How does the pointer move? 0 = one step left, 1 = jumps to a given index, 2 = one step right.',criteria:[STEP_LEFT,STEP_SET,STEP_RIGHT]}
+    },
+    loop:{loop:{type:'choice',instructions:'What kind of for loop is this header?',criteria:null}} // criteria 在 LOOPKINDS 定義後補上
+  };
+  var CACHE={line:{},loop:{}}, MISS={}, NCACHE=0;
+  function infer(kind,state){ // 同一個狀態句的答案是固定的：算一次就記起來
+    var r=CACHE[kind][state]; if(r) return r;
+    if(++NCACHE>4000){CACHE={line:{},loop:{}};NCACHE=0;}
+    r=J.systemOne({state:state,model:J.ALIAS,questions:QSETS[kind]}).answers;
+    CACHE[kind][state]=r; MISS[kind+'\u0000'+state]=1; return r;
   }
-  var DCACHE={}, DN=0;
-  function decide(stateTxt){var r=DCACHE[stateTxt]; if(r) return r; if(++DN>4000){DCACHE={};DN=0;} return DCACHE[stateTxt]=J.ask({state:stateTxt,questions:questions()}).answers;}
+  function decide(stateTxt){return infer('line',stateTxt);}
+  function decideLoop(stateTxt){return infer('loop',stateTxt).loop;}
+  /* 到目前為止是「本機」答的狀態句，改問一個真的 Jev API（或任何相容的伺服器）。client 是 src/jev-client.js 的
+   * JevClient（或有同樣 systemOne 的東西）；它的答案會換掉快取，之後重跑腳本就用它的答案。形狀不對的答案不收。 */
+  function prime(client,opts){
+    opts=opts||{};
+    var keys=Object.keys(MISS), updated=0, failed=0, i=0; MISS={};
+    function shaped(a,kind){
+      if(kind==='loop') return !!(a.loop&&a.loop.type==='choice'&&a.loop.probabilities&&a.loop.choice);
+      return !!(a.intent&&a.intent.type==='choice'&&a.intent.probabilities&&a.ctype&&a.ctype.type==='choice'&&a.ctype.probabilities&&a.neg&&a.neg.type==='noul'&&typeof a.neg.noul==='number'&&a.delta&&a.delta.type==='score'&&typeof a.delta.score==='number');
+    }
+    function one(k){
+      var at=k.indexOf('\u0000'), kind=k.slice(0,at), state=k.slice(at+1);
+      return client.systemOne({state:state,questions:QSETS[kind]}).then(function(resp){
+        if(resp&&resp.answers&&shaped(resp.answers,kind)){CACHE[kind][state]=resp.answers;updated++;} else failed++;
+      },function(){failed++;});
+    }
+    function worker(){return i>=keys.length?Promise.resolve():one(keys[i++]).then(worker);}
+    var ws=[]; for(var w=0;w<Math.min(opts.concurrency||4,keys.length);w++) ws.push(worker());
+    return Promise.all(ws).then(function(){return {asked:keys.length,updated:updated,failed:failed};});
+  }
 
   /* ---------- 值 ---------- */
   function truthy(v){if(Array.isArray(v)||typeof v==='string') return v.length>0&&v!=='false'; if(v&&typeof v==='object') return Object.keys(v).length>0; return !!v;}
@@ -277,7 +308,7 @@ var NLBoard=(function(J){
     // 類型字要真的出現（避免「i = 3」被當成建立）
     var typeWordIdx=-1;
     toks.forEach(function(t,i){if(typeWordIdx<0&&(t.k==='word'||t.k==='cjk'||t.k==='id')){var lw=t.v.toLowerCase();
-      for(var ty in CTYPES){ if(CTYPES[ty].some(function(h){return h.replace(/ /g,'')===lw||(t.k==='cjk'&&h.replace(/ /g,'').indexOf(lw)===0&&cjkSeq(toks,h.replace(/ /g,''))>=0);})){ typeWordIdx=i; if(ty!==type&&ans.ctype.probs[ty]>0.05) type=ty; break; } } }});
+      for(var ty in CTYPES){ if(CTYPES[ty].some(function(h){return h.replace(/ /g,'')===lw||(t.k==='cjk'&&h.replace(/ /g,'').indexOf(lw)===0&&cjkSeq(toks,h.replace(/ /g,''))>=0);})){ typeWordIdx=i; if(ty!==type&&ans.ctype.probabilities[ty]>0.05) type=ty; break; } } }});
     if(typeWordIdx<0) return null;
     if(type==='title'||type==='note'){
       var after=typeWordIdx+1; if(toks[after]&&toks[after].k==='sym'&&toks[after].v===':') after++;
@@ -349,7 +380,7 @@ var NLBoard=(function(J){
       var si=-1; for(var k=ti+1;k<toks.length;k++){var w=toks[k].v.toLowerCase(); if(['to','be','becomes','as','at','=','is'].indexOf(w)>=0||toks[k].k==='cjk'&&'為为成到向'.indexOf(w)>=0){si=k;}else if(si>=0)break;}
       if(si>=0){rhs=exprToks(toks,si+1,null,true);}
       if(!rhs||!rhs.length){
-        var d=ans.delta.score; if(Math.abs(d)<0.5) return null;
+        var d=ans.delta.score-1; if(Math.abs(d)<0.5) return null;   // 0 = 往左一格，1 = 跳到指定的位置，2 = 往右一格
         op=d>0?'++':'--';
       }
     }
@@ -429,7 +460,7 @@ var NLBoard=(function(J){
     return {sum:(done?'✓ ':'★ ')+arr.c.name+'['+idx+']'};
   };
   H.assert=function(L,toks,st,ans){
-    var neg=ans.neg.value, box=comps(toks,['dict','set','stack','queue','array','string'])[0];
+    var neg=ans.neg.noul>0.5, box=comps(toks,['dict','set','stack','queue','array','string'])[0];
     var empty=wordAt(toks,['empty'])>=0||cjkSeq(toks,'空')>=0;
     if(box&&empty){var n=box.c.type==='dict'?box.c.rows.length:box.c.cells.length, ok=(n===0)!==neg;
       return {sum:(neg?'¬ ':'')+box.c.name+' empty?',check:ok,msg:ok?'':box.c.name+' has '+n+' item(s)'};}
@@ -470,7 +501,7 @@ var NLBoard=(function(J){
     if(/^(#|\/\/)/.test(text)) return {status:'comment'};
     st.cur=L.id;
     var toks=tag(lex(text),st), state=stateText(toks), ans=decide(state);
-    var probs=ans.intent.probs, tried=ORDER.slice().sort(function(a,b){return probs[b]-probs[a];}), lastErr=null;
+    var probs=ans.intent.probabilities, tried=ORDER.slice().sort(function(a,b){return probs[b]-probs[a];}), lastErr=null;
     if(/^(return|returns|回傳|回传|返回)(?![A-Za-z0-9_])/i.test(half(text))) tried=['ret'].concat(tried.filter(function(x){return x!=='ret';})); // 開頭就寫 return：一定是回傳
     for(var n=0;n<tried.length;n++){
       var intent=tried[n]; if(probs[intent]<0.02&&n>0) break;
@@ -581,10 +612,7 @@ var NLBoard=(function(J){
     range:['ID in range ( NUM )','ID in range ( NUM , NUM )','ID in range ( len ( ARR ) )','ID in range ( VAR )','ID from NUM to NUM','ID = NUM to NUM','PTR in range ( len ( ARR ) )'],
     enumerate:['ID , ID in enumerate ( ARR )','ID , ID in enumerate ( STRG )','PTR , ID in enumerate ( ARR )','ID , VAR in enumerate ( ARR )']
   };
-  var LCACHE={};
-  function decideLoop(state){
-    return LCACHE[state]||(LCACHE[state]=J.ask({state:state,questions:[{id:'loop',kind:'choice',options:Object.keys(LOOPKINDS).map(function(k){return {id:k,hints:LOOPKINDS[k]};})}]}).answers.loop);
-  }
+  QSETS.loop.loop.criteria=LOOPKINDS;
   function normFor(head){ // 中文標題先換成英文的說法
     return half(head).replace(/\s*(?:裡|里|中)\s*$/,'').replace(/\s*在\s*/g,' in ').replace(/\s*[從从]\s*/g,' from ').replace(/\s*(?:到|至)\s*/g,' to ').replace(/^\s*each\s+/,'each ').trim();
   }
@@ -616,7 +644,7 @@ var NLBoard=(function(J){
     if(di<1) throw new Error('did not understand the loop "'+nd.head+'". '+usage);
     var names=t.slice(0,di).filter(function(x){return !(x.k==='sym'&&x.v===',');}), div=t[di].v, rest=t.slice(di+1);
     if(!names.length||names.some(function(x){return !(x.k==='id'||x.k==='comp'||(x.k==='word'&&!STRUCT[x.v]));})) throw new Error('the loop variable must be a plain name. '+usage);
-    var lk=decideLoop(state), pj=lk.probs[lk.choice], cf=lk.confidence;
+    var lk=decideLoop(state), pj=lk.probabilities[lk.choice], cf=lk.confidence;
     function nm(k){return nameOf(names[k],src);}
     function restText(r){return r.length?src.slice(r[0].s,r[r.length-1].e):'';}
     function arrOf(r){return r.length===1&&r[0].k==='comp'&&(r[0].c.type==='array'||r[0].c.type==='string')?r[0].c:null;}
@@ -778,6 +806,6 @@ var NLBoard=(function(J){
     });
     return {results:results,state:st,board:step!=null&&at?at:st,trace:trace};
   }
-  return {replay:replay,runLine:runLine,normFor:normFor,flowOf:flowOf,parseProgram:parseProgram,hasFlow:hasFlow,lex:lex,tag:tag,stateText:stateText,evaluate:evaluate,fmt:fmt,num:num,same:same,newState:newState,decide:decide,TAG:TAG};
+  return {replay:replay,prime:prime,runLine:runLine,normFor:normFor,flowOf:flowOf,parseProgram:parseProgram,hasFlow:hasFlow,lex:lex,tag:tag,stateText:stateText,evaluate:evaluate,fmt:fmt,num:num,same:same,newState:newState,decide:decide,TAG:TAG};
 })(typeof Jev!=='undefined'?Jev:require('./jev.js'));
 if(typeof module!=='undefined'&&module.exports) module.exports=NLBoard;

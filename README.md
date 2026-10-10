@@ -47,26 +47,41 @@ the Go skeleton mirrors the script's `for` / `if` / `else` structure with the st
 Every component made by a line belongs to that line: you can drag it, recolor it or copy it (a copy is an ordinary
 component), but it can only be deleted by editing or deleting its line.
 
-Sentences are understood by a local, Jev-style "System One" decider (`src/jev.js`). Like TypeSafe's Jev it never
-writes text: it answers typed questions about the tagged sentence (a **Choice** of intent and component type, a
-**Noul** yes/no for negation, a **Score** for which way a pointer steps) with probabilities and a confidence, all in one
-pass. It is an exemplar matcher over tokens and character trigrams that runs in the browser — no network, no
-weights. `src/nlboard.js` turns the answers into board operations; `src/trainer.js` holds the cases, the checker
-and the Go generator.
+Sentences are understood by **Jev**, TypeSafe's "System One" model, which never writes text: it answers typed questions
+about some content (a **Choice** of intent and component type, a **Noul** yes/no for negation, a **Score** for which way a
+pointer steps) with probabilities, all in one call. The whiteboard asks Jev in its real API format
+(`POST /v1/systemone`, see [docs/jev-api.md](docs/jev-api.md) for the survey of that API), and ships a local engine
+that implements the same contract so everything works offline: `src/jev.js` is an exemplar matcher over tokens and
+character trigrams (no network, no weights) and `tools/jev-server.js` serves it over HTTP, so the **official
+`typesafe-sdk`** (or any Jev client) can point at it:
+
+```bash
+node tools/jev-server.js --port 8787                       # Jev-compatible API on http://127.0.0.1:8787
+open public/index.html?jev=http://127.0.0.1:8787           # the whiteboard asks that API; local answers show first, the API's replace them
+TYPESAFE_BASE_URL=http://127.0.0.1:8787 TYPESAFE_API_KEY=x python your_script.py   # the official Python SDK
+```
+
+`?jev=` accepts any compatible base URL, including the hosted `https://api.typesafe.ai` (set a key with
+`localStorage['drycanvas-jev-key']`; the browser needs the service's CORS policy to allow the call).
+`src/nlboard.js` turns the answers into board operations; `src/trainer.js` holds the cases, the checker and the Go generator.
 
 ## Project structure
 
 ```
 src/canvas_src.html   # the app (single file: HTML + CSS + JS)
-src/jev.js            # local Jev-style System One decider (Choice / Noul / Score)
+src/jev.js            # Jev's System One API contract + a local engine behind it (validation, answers, HTTP surface)
+src/jev-client.js     # JevClient: fetch client with the official SDK's behaviour (auth, retries, typed errors)
+tools/jev-server.js   # zero-dependency HTTP server for the local engine (POST /v1/systemone, GET /v1/models)
+docs/jev-api.md       # survey of the real Jev API, assumptions, how the local engine reads a question
 src/nlboard.js        # practice script: sentence → typed questions → board operations
 src/trainer.js        # LeetCode cases, trace checker, Go generator
-tests/run.js          # node tests (engine, interpreter, checker, generated Go via go test)
+tests/run.js          # node tests (interpreter, checker, generated Go via go test)
+tests/jev-api.js      # Jev API tests: wire format, validation, server + client, NLBoard.prime, official models / SDK (SDK_PYTHON)
 tests/e2e.js          # browser test of the practice script (Playwright)
 training/go/          # Go generated from the built-in example traces
 i18n/                 # UI translations; keys are the Traditional Chinese source strings
 data/problems.csv     # LeetCode problem list (id, title, slug, difficulty)
-build.py              # builds public/index.html (embeds problems + translations)
+build.py              # builds public/index.html (embeds problems, translations and the JS modules)
 public/index.html     # built, self-contained page
 wrangler.jsonc        # Cloudflare Workers static-assets deploy config
 ```
@@ -82,6 +97,7 @@ Opening `public/index.html` directly in a browser also works.
 
 ```bash
 node tests/run.js                                   # add --write to refresh training/go/
+node tests/jev-api.js                               # SDK_PYTHON=/path/to/python adds the official models and SDK
 python3 build.py && NODE_PATH=$(npm root -g) node tests/e2e.js
 (cd training/go && go test ./...)
 ```
